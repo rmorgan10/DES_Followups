@@ -1,0 +1,75 @@
+# SB-anamoly noise-model used in  arXiv:1507.05137,
+#    http://adsabs.harvard.edu/abs/2015arXiv150705137K'
+#
+# This file can be used by the simulation to increase scatter
+# (but not errors) with sim-input key
+#    HOSTNOISE_FILE:  DES_Y1reproc2_SBNOISEMODEL.DAT
+#
+# and also to inflate the errors in any snana program via
+#  &SNLCINP
+#    FUDGE_HOSTNOISE_FILE = 'DES_Y1reproc2_SBNOISEMODEL.DAT'
+#
+
+
+NOISEMODEL_NAME: SB_ERRSCALE 
+
+# SBMAG    = mag/arcsec^2 in template at SN location 
+#          = 27.5 - 2.5*log10(FLUXCAL_SB) 
+# ERRSCALE: fluxerr -> fluxerr x ERRSCALE 
+
+LIBID: 1 
+BAND: g    FIELD: NULL 
+#          SBMAG  ERRSCALE  
+HOSTNOISE:  20.50  4.60 
+HOSTNOISE:  21.50  2.70 
+HOSTNOISE:  22.50  1.78 
+HOSTNOISE:  23.50  1.40 
+HOSTNOISE:  24.50  1.09 
+HOSTNOISE:  25.50  1.02 
+HOSTNOISE:  26.50  0.99 
+HOSTNOISE:  27.50  1.00 
+HOSTNOISE:  28.50  0.99 
+
+
+LIBID: 2 
+BAND: r   FIELD: NULL 
+#          SBMAG  ERRSCALE  
+HOSTNOISE:  20.50  3.45 
+HOSTNOISE:  21.50  2.05 
+HOSTNOISE:  22.50  1.43 
+HOSTNOISE:  23.50  1.23 
+HOSTNOISE:  24.50  1.07 
+HOSTNOISE:  25.50  1.02 
+HOSTNOISE:  26.50  1.00 
+HOSTNOISE:  27.50  1.00 
+HOSTNOISE:  28.50  1.13 
+
+
+LIBID: 3 
+BAND: i   FIELD: NULL 
+#          SBMAG  ERRSCALE  
+HOSTNOISE:  20.50  3.32 
+HOSTNOISE:  21.50  1.85 
+HOSTNOISE:  22.50  1.35 
+HOSTNOISE:  23.50  1.13 
+HOSTNOISE:  24.50  1.06 
+HOSTNOISE:  25.50  1.01 
+HOSTNOISE:  26.50  1.01 
+HOSTNOISE:  27.50  1.00 
+HOSTNOISE:  28.50  1.07 
+
+
+LIBID: 4 
+BAND: z  FIELD: NULL 
+#          SBMAG  ERRSCALE  
+HOSTNOISE:  20.50  2.23 
+HOSTNOISE:  21.50  1.40 
+HOSTNOISE:  22.50  1.19 
+HOSTNOISE:  23.50  1.08 
+HOSTNOISE:  24.50  1.03 
+HOSTNOISE:  25.50  1.03 
+HOSTNOISE:  26.50  1.01 
+HOSTNOISE:  27.50  1.01 
+HOSTNOISE:  28.50  1.01 
+
+

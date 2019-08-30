@@ -1,0 +1,216 @@
+ BRIEF_DESCRIPTION: simulate RANDOM SNe with GENMODEL = NON1A 
+
+  HOST MACHINE: des50.fnal.gov 
+  USERNAME:  rmorgan 
+  SNDATA_ROOT:  /data/des41.b/data/SNDATA_ROOT 
+  SNANA_DIR:     /cvmfs/des.opensciencegrid.org/eeups/fnaleups/Linux64/SNANA/v10_74c 
+  SNANA_VERSION: v10_74c 
+  Current Dir:  /home/s1/rmorgan/DES_Followups/events/GW190728/sims 
+
+ FULL_DESCRIPTION: 
+	 SIMLIB filename  : SIMLIB.txt (start at LIBID=0) 
+	 SIMLIB SURVEY    : DES  (TELESCOPE=CTIO, MINOBS=1) 
+	 SIMLIB UNITS     : ARCSEC_FWHM for PSF,  ADU_PER_SQPIXEL for SKYSIG 
+	 SIMLIB MSKOPT   : 32 
+	 NEWMJD_DIF       : 10.08  minutes (defines trigger epoch)
+	 Generation VERSION: rmorgan_DESGW_GW190728_CC 
+	 Generation source : RANDOM 
+	 Generation FILTERS: griz 
+	 KCOR lookup tables: DES/kcor_DES_grizY.fits 
+	 Flux-smearing is ON 
+	 Reported flux-uncertainty includes SKY+GALAXY+SOURCE
+	 Zeropt-smearing is ON 
+	 Host-galaxy shot-noise  is OFF 
+	 Host-galaxy image-noise  is OFF 
+	 MilkyWay extinction  is ON  
+	    Color law: CCM89+ODonell94  (OPT_MWCOLORLAW=94) 
+	    E(B-V): FILE value (SIMLIB or data header)   (OPT_MWEBV=1)
+	    sigma(MWEBV) = 0.16*MWEBV + 0.00  
+	    shift(MWEBV) = 0.000 mag 
+
+ *********************************** 
+   SIMULATED VOLUME, TIME, RATE(POWERLAW)
+	 Survey dOmega  = 1.9241e-02 steradians  ( 0.00612 PI) 
+	 Redshift range =  0.0050 -  1.0000
+	 <redsfhit>     =  0.7039  (volume-weighted) 
+	 Survey Volume  = 2.3129e+08  sr*(MPc/h70)^3 
+	 Survey Time    =  0.2466  years/season 
+	 Co-moving Time =  0.1447  years/season  [ T/(1+<z>) ] 
+	 Co-moving V*T  = 3.3470e+07  sr*(MPc/h70)^3 * yr / season 
+	 POWERLAW MODEL:  6.80e-05*(1+z)^3.60  (0.0 < z < 4.0) 
+	    MODEL-RATE(z=0.01) = 6.923e-05/Mpc^3/yr    
+	    MODEL-RATE(z=0.21) = 1.331e-04/Mpc^3/yr    
+	    MODEL-RATE(z=0.41) = 2.313e-04/Mpc^3/yr    
+	    MODEL-RATE(z=0.60) = 3.734e-04/Mpc^3/yr    
+	    MODEL-RATE(z=0.80) = 5.699e-04/Mpc^3/yr    
+	 Number of EVENTS per season =  1.599e+04 
+	 NGEN_SEASON=10.00 --> NGENTOT_LC=159869 
+
+
+  GENERATION RANGES: 
+	 Generate Redshift :  0.005 to  1.000  using  POWERLAW distribution. 
+	 REDSHIFT_FINAL is ZCMB_GEN smeared by :  0.00100 
+	 Peculiar Velocity Gaussian sigma: 0.0 km/sec
+	 griz   ZP   offsets :  0.000  0.000  0.000  0.000 
+	 griz  MODEL offsets :  0.000  0.000  0.000  0.000 
+	 griz  exposure times: 1.5000 1.5000 1.5000 1.5000 
+	 griz  exposure MSKOPT=7 => ZPT  SKYSIG  READNOISE  
+	 RA       :   0.00 to 360.00  deg
+	 PEAKMJD  :  58632.0 to  58722.0   
+	 PEAKMJD-estimate  : Gauss smear, sigma= 0.10 days
+	 Trest    :  -100.00 to   100.00  days 
+	 RISETIME-SHIFT(days) SIGMA(lo,hi) : 0.0 , 0.0  (Mean= 0.0) 
+	 FALLTIME-SHIFT(days) SIGMA(lo,hi) : 0.0 , 0.0  (Mean= 0.0) 
+	 Shape-par(NULL): Peak=0.00  SIG-+= 0.000,0.000  SKEW=0.00,0.00  BND=0.00,0.00
+
+  Host Extinction Parameters: NONE  (AV=0) 
+
+  Z-dependent SN-parameter shifts:  None. 
+
+  Intrinsic MAG-smearing models (sigma clip -3.0 to  3.0) : 
+   Model 1: Coherent MAG-smearing (GENMAG_SMEAR) :  0.001  
+   Model 2: passband MAG-smearing is OFF 
+   Model 3:  model-smear is OFF  
+   Model 4: intrinsic scatter matrix is OFF 
+   Model 5: GENMAG_SMEAR_USRFUN is  OFF 
+
+  AVWARP_OVERFLOWS:  NONE. 
+
+  Cosmology Parameters: 
+	 H0 =  70.00 km/s per MPc 
+	 Omega_{M,L} =  0.30,  0.70   w = -1.00  
+
+ --------------------------------------------------- 
+  Software-Pipeline Search Efficiency (MINOBS=2) from 
+
+  Spectroscopic Efficiency : 
+	 No spec-eff option specified ==> 100% efficiency. 
+
+  Unconfirmed zHOST Efficiency : 100% 
+
+  APPLY_SEARCHEFF_OPT:  0 => Do NOT Apply trigger efficiency  
+ --------------------------------------------------- 
+
+  HOSTLIB Summary: None. 
+
+  Fudges on SIMLIB Seeing Conditions: NONE. 
+
+ ============ END OF SIMULATION SUMMARY ============== 
+
+  Random Number Sync: 
+	 RANDOM SEED: 12945   (RANLIST_START_GENSMEAR: 1)
+	 FIRST/LAST Random Number (List=1): 0.204429 0.065765  
+	 FIRST/LAST Random Number (List=2): 0.291181 0.126010  
+	 FIRST/LAST Random Number (List=3): 0.846520 0.583534  
+
+  Generation Statistics (total CPU=16.3 minutes): 
+	 Generated 159869 simulated light curves (164/sec) 
+	 Wrote     159869 simulated light curves to SNDATA files (164/sec). 
+  Spectroscopic-type: 159869 -> 159869 (before -> after cuts)
+  Photometric-type:   0 -> 0 (before -> after cuts)
+  Rejection Statistics: 
+	     0 rejected by NEPOCH<1 
+	     0 rejected by GENRANGEs 
+	     0 rejected by SEARCH-TRIGGER 
+	     0 rejected by CUTWIN-SELECTION 
+  SEARCH+CUTS Efficiency:  1.0000 +-  0.0000 
+
+  Number of SNe per season AFTER CUTS :  15987 +-    40 
+
+
+  NON1A USER INPUTS vs. INDEX: 
+ INDEX(TYPE)       WGT   MAGOFF MAGSMEAR   SNTYPE
+ ----------------------------------------------------------------------------
+ 201 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-000018.SED
+ 204 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-003818.SED
+ 208 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-013376.SED
+ 210 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-014450.SED
+ 213 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-014599.SED
+ 214 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-015031.SED
+ 215 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-015320.SED
+ 216 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-015339.SED
+ 219 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-017564.SED
+ 220 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-017862.SED
+ 221 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018109.SED
+ 222 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018297.SED
+ 223 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018408.SED
+ 224 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018441.SED
+ 225 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018457.SED
+ 226 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018590.SED
+ 227 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018596.SED
+ 228 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018700.SED
+ 229 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018713.SED
+ 230 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018734.SED
+ 231 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018793.SED
+ 232 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018834.SED
+ 233 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-018892.SED
+ 235 (  IIP)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-020038.SED
+ 206 (  IIN)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-012842.SED
+ 209 (  IIN)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-013449.SED
+ 002 (  IIL)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/Nugent+Scolnic_IIL.SED
+ 103 (   Ib)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/CSP-2004gv.SED
+ 104 (   Ib)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/CSP-2006ep.SED
+ 105 (   Ib)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/CSP-2007Y.SED
+ 202 (   Ib)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-000020.SED
+ 203 (   Ib)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-002744.SED
+ 212 (   Ib)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-014492.SED
+ 234 (   Ib)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-019323.SED
+ 021 (  Ibc)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SNLS-04D1la.SED
+ 022 (   Ic)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SNLS-04D4jv.SED
+ 101 (   Ic)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/CSP-2004fe.SED
+ 102 (   Ic)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/CSP-2004gq.SED
+ 205 (   Ic)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-004012.SED
+ 207 (   Ic)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-013195.SED
+ 211 (   Ic)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-014475.SED
+ 217 (   Ic)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-015475.SED
+ 218 (   Ic)     0.000    0.000    0.000    0.000  /data/des41.b/data/SNDATA_ROOT/snsed/NON1A/SDSS-017548.SED
+
+  NON1A-SUMMARY vs. INDEX: 
+                  NGEN    NGEN   SEARCH   
+ INDEX(TYPE)      written total  Effic    CID-range 
+ ----------------------------------------------------------------------------
+ 201 (       IIP)  3930   3930   1.000      1 -  3930
+ 204 (       IIP)  3930   3930   1.000   3931 -  7860
+ 208 (       IIP)  3930   3930   1.000   7861 - 11790
+ 210 (       IIP)  3930   3930   1.000  11791 - 15720
+ 213 (       IIP)  3930   3930   1.000  15721 - 19650
+ 214 (       IIP)  3930   3930   1.000  19651 - 23580
+ 215 (       IIP)  3930   3930   1.000  23581 - 27510
+ 216 (       IIP)  3930   3930   1.000  27511 - 31440
+ 219 (       IIP)  3930   3930   1.000  31441 - 35370
+ 220 (       IIP)  3930   3930   1.000  35371 - 39300
+ 221 (       IIP)  3930   3930   1.000  39301 - 43230
+ 222 (       IIP)  3930   3930   1.000  43231 - 47160
+ 223 (       IIP)  3930   3930   1.000  47161 - 51090
+ 224 (       IIP)  3930   3930   1.000  51091 - 55020
+ 225 (       IIP)  3930   3930   1.000  55021 - 58950
+ 226 (       IIP)  3930   3930   1.000  58951 - 62880
+ 227 (       IIP)  3930   3930   1.000  62881 - 66810
+ 228 (       IIP)  3930   3930   1.000  66811 - 70740
+ 229 (       IIP)  3930   3930   1.000  70741 - 74670
+ 230 (       IIP)  3930   3930   1.000  74671 - 78600
+ 231 (       IIP)  3930   3930   1.000  78601 - 82530
+ 232 (       IIP)  3930   3930   1.000  82531 - 86460
+ 233 (       IIP)  3930   3930   1.000  86461 - 90390
+ 235 (       IIP)  3930   3930   1.000  90391 - 94320
+ 206 (       IIN)  3195   3195   1.000  94321 - 97515
+ 209 (       IIN)  3195   3195   1.000  97516 -100710
+ 002 (       IIL)  12781  12781   1.000 100711 -113491
+ 103 (        Ib)  3195   3195   1.000 113492 -116686
+ 104 (        Ib)  3195   3195   1.000 116687 -119881
+ 105 (        Ib)  3195   3195   1.000 119882 -123076
+ 202 (        Ib)  3195   3195   1.000 123077 -126271
+ 203 (        Ib)  3195   3195   1.000 126272 -129466
+ 212 (        Ib)  3195   3195   1.000 129467 -132661
+ 234 (        Ib)  3195   3195   1.000 132662 -135856
+ 021 (       Ibc)  2668   2668   1.000 135857 -138524
+ 022 (        Ic)  2668   2668   1.000 138525 -141192
+ 101 (        Ic)  2668   2668   1.000 141193 -143860
+ 102 (        Ic)  2668   2668   1.000 143861 -146528
+ 205 (        Ic)  2668   2668   1.000 146529 -149196
+ 207 (        Ic)  2668   2668   1.000 149197 -151864
+ 211 (        Ic)  2668   2668   1.000 151865 -154532
+ 217 (        Ic)  2668   2668   1.000 154533 -157200
+ 218 (        Ic)  2669   2669   1.000 157201 -159869
+
+	 ===== END OF README FILE ====== 

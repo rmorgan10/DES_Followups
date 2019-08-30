@@ -1,0 +1,105 @@
+ BRIEF_DESCRIPTION: simulate RANDOM SNe with GENMODEL = LCLIB 
+
+  HOST MACHINE: des50.fnal.gov 
+  USERNAME:  rmorgan 
+  SNDATA_ROOT:  /data/des41.b/data/SNDATA_ROOT 
+  SNANA_DIR:     /cvmfs/des.opensciencegrid.org/eeups/fnaleups/Linux64/SNANA/v10_74c 
+  SNANA_VERSION: v10_74c 
+  Current Dir:  /home/s1/rmorgan/DES_Followups/events/GW190728/sims 
+
+ FULL_DESCRIPTION: 
+	 SIMLIB filename  : SIMLIB.txt (start at LIBID=0) 
+	 SIMLIB SURVEY    : DES  (TELESCOPE=CTIO, MINOBS=1) 
+	 SIMLIB UNITS     : ARCSEC_FWHM for PSF,  ADU_PER_SQPIXEL for SKYSIG 
+	 NEWMJD_DIF       : 10.08  minutes (defines trigger epoch)
+	 Generation VERSION: rmorgan_DESGW_GW190728_AGN 
+	 Generation source : RANDOM 
+	 Generation FILTERS: griz 
+	 KCOR lookup tables: DES/kcor_DES_grizY.fits 
+	 Flux-smearing is ON 
+	 Reported flux-uncertainty includes SKY+GALAXY+SOURCE
+	 Zeropt-smearing is ON 
+	 Host-galaxy shot-noise  is OFF 
+	 Host-galaxy image-noise  is OFF 
+	 MilkyWay extinction  is ON  
+	    Color law: CCM89+ODonell94  (OPT_MWCOLORLAW=94) 
+	    E(B-V): FILE value (SIMLIB or data header)   (OPT_MWEBV=1)
+	    sigma(MWEBV) = 0.16*MWEBV + 0.00  
+	    shift(MWEBV) = 0.000 mag 
+
+ *********************************** 
+   SIMULATED RATE(COSBPOLY)
+	 dN/dcosb = 1.00 
+	 Number of EVENTS per season = 10000  (NGENTOT_LC)
+
+
+  GENERATION RANGES: 
+	 Generate Redshift :  0.000 to  0.000  using  COSBPOLY distribution. 
+	 REDSHIFT_FINAL is ZCMB_GEN smeared by :  0.00000 
+	 v(cmb)=0 -> REDSHIFT_HELIO=REDSHIFT_CMB (legacy option)
+	 Peculiar Velocity Gaussian sigma: 0.0 km/sec
+	 griz   ZP   offsets :  0.000  0.000  0.000  0.000 
+	 griz  MODEL offsets :  0.000  0.000  0.000  0.000 
+	 griz  exposure times: 1.5000 1.5000 1.5000 1.5000 
+	 griz  exposure MSKOPT=7 => ZPT  SKYSIG  READNOISE  
+	 RA       : -360.00 to 360.00  deg
+	 PEAKMJD  :  58632.0 to  58632.0   
+	 PEAKMJD-estimate  : Gauss smear, sigma= 0.00 days
+	 Trest    :     0.00 to    90.00  days 
+	 RISETIME-SHIFT(days) SIGMA(lo,hi) : 0.0 , 0.0  (Mean= 0.0) 
+	 FALLTIME-SHIFT(days) SIGMA(lo,hi) : 0.0 , 0.0  (Mean= 0.0) 
+	 Shape-par(NULL): Peak=0.00  SIG-+= 0.000,0.000  SKEW=0.00,0.00  BND=0.00,0.00
+
+  Z-dependent SN-parameter shifts:  None. 
+
+  Intrinsic MAG-smearing models (sigma clip -3.0 to  3.0) : 
+   Model 1: Coherent MAG-smearing (GENMAG_SMEAR) :  0.000  
+   Model 2: passband MAG-smearing is OFF 
+   Model 3:  model-smear is OFF  
+   Model 4: intrinsic scatter matrix is OFF 
+   Model 5: GENMAG_SMEAR_USRFUN is  OFF 
+
+  AVWARP_OVERFLOWS:  NONE. 
+
+  Cosmology Parameters: 
+	 H0 =  70.00 km/s per MPc 
+	 Omega_{M,L} =  0.30,  0.70   w = -1.00  
+
+ --------------------------------------------------- 
+  Software-Pipeline Search Efficiency (MINOBS=2) from 
+
+  Spectroscopic Efficiency : 
+	 No spec-eff option specified ==> 100% efficiency. 
+
+  Unconfirmed zHOST Efficiency : 100% 
+
+  APPLY_SEARCHEFF_OPT:  0 => Do NOT Apply trigger efficiency  
+ --------------------------------------------------- 
+
+  HOSTLIB Summary: None. 
+
+  Fudges on SIMLIB Seeing Conditions: NONE. 
+
+ ============ END OF SIMULATION SUMMARY ============== 
+
+  Random Number Sync: 
+	 RANDOM SEED: 12945   (RANLIST_START_GENSMEAR: 1)
+	 FIRST/LAST Random Number (List=1): 0.204429 0.354896  
+	 FIRST/LAST Random Number (List=2): 0.291181 0.875048  
+	 FIRST/LAST Random Number (List=3): 0.846520 0.590894  
+
+  Generation Statistics (total CPU=1.8 minutes): 
+	 Generated 10000 simulated light curves (95/sec) 
+	 Wrote     10000 simulated light curves to SNDATA files (95/sec). 
+  Spectroscopic-type: 10000 -> 10000 (before -> after cuts)
+  Photometric-type:   0 -> 0 (before -> after cuts)
+  Rejection Statistics: 
+	     0 rejected by NEPOCH<1 
+	     0 rejected by GENRANGEs 
+	     0 rejected by SEARCH-TRIGGER 
+	     0 rejected by CUTWIN-SELECTION 
+  SEARCH+CUTS Efficiency:  1.0000 +-  0.0001 
+
+  Number of SNe per season AFTER CUTS :      0 +-     0 
+
+	 ===== END OF README FILE ====== 
