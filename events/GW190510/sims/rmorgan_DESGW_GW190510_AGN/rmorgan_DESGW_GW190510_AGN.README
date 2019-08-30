@@ -40,7 +40,7 @@
 	 Peculiar Velocity Gaussian sigma: 0.0 km/sec
 	 griz   ZP   offsets :  0.000  0.000  0.000  0.000 
 	 griz  MODEL offsets :  0.000  0.000  0.000  0.000 
-	 griz  exposure times: 0.7500 0.7500 0.7500 0.7500 
+	 griz  exposure times: 0.6670 0.6670 0.6670 0.6670 
 	 griz  exposure MSKOPT=7 => ZPT  SKYSIG  READNOISE  
 	 RA       : -360.00 to 360.00  deg
 	 PEAKMJD  :  58553.0 to  58553.0   
@@ -84,13 +84,13 @@
 
   Random Number Sync: 
 	 RANDOM SEED: 12945   (RANLIST_START_GENSMEAR: 1)
-	 FIRST/LAST Random Number (List=1): 0.204429 0.149844  
+	 FIRST/LAST Random Number (List=1): 0.204429 0.731842  
 	 FIRST/LAST Random Number (List=2): 0.291181 0.875048  
 	 FIRST/LAST Random Number (List=3): 0.846520 0.590894  
 
-  Generation Statistics (total CPU=2.1 minutes): 
-	 Generated 10000 simulated light curves (78/sec) 
-	 Wrote     10000 simulated light curves to SNDATA files (78/sec). 
+  Generation Statistics (total CPU=1.8 minutes): 
+	 Generated 10000 simulated light curves (93/sec) 
+	 Wrote     10000 simulated light curves to SNDATA files (93/sec). 
   Spectroscopic-type: 10000 -> 10000 (before -> after cuts)
   Photometric-type:   0 -> 0 (before -> after cuts)
   Rejection Statistics: 

@@ -30,21 +30,21 @@
 
  *********************************** 
    SIMULATED VOLUME, TIME, RATE(POWERLAW)
-	 Survey dOmega  = 6.9210e-03 steradians  ( 0.00220 PI) 
+	 Survey dOmega  = 6.5150e-03 steradians  ( 0.00207 PI) 
 	 Redshift range =  0.0050 -  1.0000
 	 <redsfhit>     =  0.7039  (volume-weighted) 
-	 Survey Volume  = 8.3196e+07  sr*(MPc/h70)^3 
+	 Survey Volume  = 7.8315e+07  sr*(MPc/h70)^3 
 	 Survey Time    =  0.2466  years/season 
 	 Co-moving Time =  0.1447  years/season  [ T/(1+<z>) ] 
-	 Co-moving V*T  = 1.2039e+07  sr*(MPc/h70)^3 * yr / season 
+	 Co-moving V*T  = 1.1333e+07  sr*(MPc/h70)^3 * yr / season 
 	 POWERLAW MODEL:  6.80e-05*(1+z)^3.60  (0.0 < z < 4.0) 
 	    MODEL-RATE(z=0.01) = 6.923e-05/Mpc^3/yr    
 	    MODEL-RATE(z=0.21) = 1.331e-04/Mpc^3/yr    
 	    MODEL-RATE(z=0.41) = 2.313e-04/Mpc^3/yr    
 	    MODEL-RATE(z=0.60) = 3.734e-04/Mpc^3/yr    
 	    MODEL-RATE(z=0.80) = 5.699e-04/Mpc^3/yr    
-	 Number of EVENTS per season =  5751 
-	 NGEN_SEASON=10.00 --> NGENTOT_LC=57505 
+	 Number of EVENTS per season =  5413 
+	 NGEN_SEASON=10.00 --> NGENTOT_LC=54131 
 
 
   GENERATION RANGES: 
@@ -53,7 +53,7 @@
 	 Peculiar Velocity Gaussian sigma: 0.0 km/sec
 	 griz   ZP   offsets :  0.000  0.000  0.000  0.000 
 	 griz  MODEL offsets :  0.000  0.000  0.000  0.000 
-	 griz  exposure times: 0.7500 0.7500 0.7500 0.7500 
+	 griz  exposure times: 0.6670 0.6670 0.6670 0.6670 
 	 griz  exposure MSKOPT=7 => ZPT  SKYSIG  READNOISE  
 	 RA       :   0.00 to 360.00  deg
 	 PEAKMJD  :  58553.0 to  58643.0   
@@ -99,14 +99,14 @@
 
   Random Number Sync: 
 	 RANDOM SEED: 12945   (RANLIST_START_GENSMEAR: 1)
-	 FIRST/LAST Random Number (List=1): 0.204429 0.692372  
-	 FIRST/LAST Random Number (List=2): 0.291181 0.021909  
-	 FIRST/LAST Random Number (List=3): 0.846520 0.669062  
+	 FIRST/LAST Random Number (List=1): 0.204429 0.618418  
+	 FIRST/LAST Random Number (List=2): 0.291181 0.750300  
+	 FIRST/LAST Random Number (List=3): 0.846520 0.926437  
 
-  Generation Statistics (total CPU=8.0 minutes): 
-	 Generated 57505 simulated light curves (120/sec) 
-	 Wrote     57505 simulated light curves to SNDATA files (120/sec). 
-  Spectroscopic-type: 57505 -> 57505 (before -> after cuts)
+  Generation Statistics (total CPU=5.5 minutes): 
+	 Generated 54131 simulated light curves (165/sec) 
+	 Wrote     54131 simulated light curves to SNDATA files (165/sec). 
+  Spectroscopic-type: 54131 -> 54131 (before -> after cuts)
   Photometric-type:   0 -> 0 (before -> after cuts)
   Rejection Statistics: 
 	     0 rejected by NEPOCH<1 
@@ -115,7 +115,7 @@
 	     0 rejected by CUTWIN-SELECTION 
   SEARCH+CUTS Efficiency:  1.0000 +-  0.0000 
 
-  Number of SNe per season AFTER CUTS :   5751 +-    24 
+  Number of SNe per season AFTER CUTS :   5413 +-    23 
 
 
   NON1A USER INPUTS vs. INDEX: 
@@ -169,48 +169,48 @@
                   NGEN    NGEN   SEARCH   
  INDEX(TYPE)      written total  Effic    CID-range 
  ----------------------------------------------------------------------------
- 201 (       IIP)  1414   1414   1.000      1 -  1414
- 204 (       IIP)  1414   1414   1.000   1415 -  2828
- 208 (       IIP)  1414   1414   1.000   2829 -  4242
- 210 (       IIP)  1414   1414   1.000   4243 -  5656
- 213 (       IIP)  1414   1414   1.000   5657 -  7070
- 214 (       IIP)  1414   1414   1.000   7071 -  8484
- 215 (       IIP)  1414   1414   1.000   8485 -  9898
- 216 (       IIP)  1414   1414   1.000   9899 - 11312
- 219 (       IIP)  1414   1414   1.000  11313 - 12726
- 220 (       IIP)  1414   1414   1.000  12727 - 14140
- 221 (       IIP)  1414   1414   1.000  14141 - 15554
- 222 (       IIP)  1414   1414   1.000  15555 - 16968
- 223 (       IIP)  1414   1414   1.000  16969 - 18382
- 224 (       IIP)  1414   1414   1.000  18383 - 19796
- 225 (       IIP)  1414   1414   1.000  19797 - 21210
- 226 (       IIP)  1414   1414   1.000  21211 - 22624
- 227 (       IIP)  1414   1414   1.000  22625 - 24038
- 228 (       IIP)  1414   1414   1.000  24039 - 25452
- 229 (       IIP)  1414   1414   1.000  25453 - 26866
- 230 (       IIP)  1414   1414   1.000  26867 - 28280
- 231 (       IIP)  1414   1414   1.000  28281 - 29694
- 232 (       IIP)  1414   1414   1.000  29695 - 31108
- 233 (       IIP)  1414   1414   1.000  31109 - 32522
- 235 (       IIP)  1414   1414   1.000  32523 - 33936
- 206 (       IIN)  1149   1149   1.000  33937 - 35085
- 209 (       IIN)  1149   1149   1.000  35086 - 36234
- 002 (       IIL)  4597   4597   1.000  36235 - 40831
- 103 (        Ib)  1149   1149   1.000  40832 - 41980
- 104 (        Ib)  1149   1149   1.000  41981 - 43129
- 105 (        Ib)  1149   1149   1.000  43130 - 44278
- 202 (        Ib)  1149   1149   1.000  44279 - 45427
- 203 (        Ib)  1149   1149   1.000  45428 - 46576
- 212 (        Ib)  1149   1149   1.000  46577 - 47725
- 234 (        Ib)  1149   1149   1.000  47726 - 48874
- 021 (       Ibc)   960    960   1.000  48875 - 49834
- 022 (        Ic)   960    960   1.000  49835 - 50794
- 101 (        Ic)   960    960   1.000  50795 - 51754
- 102 (        Ic)   960    960   1.000  51755 - 52714
- 205 (        Ic)   960    960   1.000  52715 - 53674
- 207 (        Ic)   960    960   1.000  53675 - 54634
- 211 (        Ic)   960    960   1.000  54635 - 55594
- 217 (        Ic)   960    960   1.000  55595 - 56554
- 218 (        Ic)   951    951   1.000  56555 - 57505
+ 201 (       IIP)  1331   1331   1.000      1 -  1331
+ 204 (       IIP)  1331   1331   1.000   1332 -  2662
+ 208 (       IIP)  1331   1331   1.000   2663 -  3993
+ 210 (       IIP)  1331   1331   1.000   3994 -  5324
+ 213 (       IIP)  1331   1331   1.000   5325 -  6655
+ 214 (       IIP)  1331   1331   1.000   6656 -  7986
+ 215 (       IIP)  1331   1331   1.000   7987 -  9317
+ 216 (       IIP)  1331   1331   1.000   9318 - 10648
+ 219 (       IIP)  1331   1331   1.000  10649 - 11979
+ 220 (       IIP)  1331   1331   1.000  11980 - 13310
+ 221 (       IIP)  1331   1331   1.000  13311 - 14641
+ 222 (       IIP)  1331   1331   1.000  14642 - 15972
+ 223 (       IIP)  1331   1331   1.000  15973 - 17303
+ 224 (       IIP)  1331   1331   1.000  17304 - 18634
+ 225 (       IIP)  1331   1331   1.000  18635 - 19965
+ 226 (       IIP)  1331   1331   1.000  19966 - 21296
+ 227 (       IIP)  1331   1331   1.000  21297 - 22627
+ 228 (       IIP)  1331   1331   1.000  22628 - 23958
+ 229 (       IIP)  1331   1331   1.000  23959 - 25289
+ 230 (       IIP)  1331   1331   1.000  25290 - 26620
+ 231 (       IIP)  1331   1331   1.000  26621 - 27951
+ 232 (       IIP)  1331   1331   1.000  27952 - 29282
+ 233 (       IIP)  1331   1331   1.000  29283 - 30613
+ 235 (       IIP)  1331   1331   1.000  30614 - 31944
+ 206 (       IIN)  1082   1082   1.000  31945 - 33026
+ 209 (       IIN)  1082   1082   1.000  33027 - 34108
+ 002 (       IIL)  4327   4327   1.000  34109 - 38435
+ 103 (        Ib)  1082   1082   1.000  38436 - 39517
+ 104 (        Ib)  1082   1082   1.000  39518 - 40599
+ 105 (        Ib)  1082   1082   1.000  40600 - 41681
+ 202 (        Ib)  1082   1082   1.000  41682 - 42763
+ 203 (        Ib)  1082   1082   1.000  42764 - 43845
+ 212 (        Ib)  1082   1082   1.000  43846 - 44927
+ 234 (        Ib)  1082   1082   1.000  44928 - 46009
+ 021 (       Ibc)   903    903   1.000  46010 - 46912
+ 022 (        Ic)   903    903   1.000  46913 - 47815
+ 101 (        Ic)   903    903   1.000  47816 - 48718
+ 102 (        Ic)   903    903   1.000  48719 - 49621
+ 205 (        Ic)   903    903   1.000  49622 - 50524
+ 207 (        Ic)   903    903   1.000  50525 - 51427
+ 211 (        Ic)   903    903   1.000  51428 - 52330
+ 217 (        Ic)   903    903   1.000  52331 - 53233
+ 218 (        Ic)   898    898   1.000  53234 - 54131
 
 	 ===== END OF README FILE ====== 

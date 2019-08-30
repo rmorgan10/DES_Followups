@@ -30,13 +30,13 @@
 
  *********************************** 
    SIMULATED VOLUME, TIME, RATE(POWERLAW2)
-	 Survey dOmega  = 6.9210e-03 steradians  ( 0.00220 PI) 
+	 Survey dOmega  = 6.5150e-03 steradians  ( 0.00207 PI) 
 	 Redshift range =  0.0150 -  1.0000
 	 <redsfhit>     =  0.7040  (volume-weighted) 
-	 Survey Volume  = 8.3195e+07  sr*(MPc/h70)^3 
+	 Survey Volume  = 7.8315e+07  sr*(MPc/h70)^3 
 	 Survey Time    =  0.2466  years/season 
 	 Co-moving Time =  0.1447  years/season  [ T/(1+<z>) ] 
-	 Co-moving V*T  = 1.2039e+07  sr*(MPc/h70)^3 * yr / season 
+	 Co-moving V*T  = 1.1333e+07  sr*(MPc/h70)^3 * yr / season 
 	 POWERLAW MODEL:  2.60e-05*(1+z)^1.50  (0.0 < z < 1.0) 
 	 POWERLAW MODEL:  7.35e-05*(1+z)^0.00  (1.0 < z < 2.0) 
 	    MODEL-RATE(z=0.01) = 2.659e-05/Mpc^3/yr    
@@ -44,8 +44,8 @@
 	    MODEL-RATE(z=0.42) = 4.376e-05/Mpc^3/yr    
 	    MODEL-RATE(z=0.61) = 5.336e-05/Mpc^3/yr    
 	    MODEL-RATE(z=0.81) = 6.358e-05/Mpc^3/yr    
-	 Number of EVENTS per season =   695 
-	 NGEN_SEASON=10.00 --> NGENTOT_LC=6948 
+	 Number of EVENTS per season =   654 
+	 NGEN_SEASON=10.00 --> NGENTOT_LC=6540 
 
 
   GENERATION RANGES: 
@@ -54,7 +54,7 @@
 	 Peculiar Velocity Gaussian sigma: 0.0 km/sec
 	 griz   ZP   offsets :  0.000  0.000  0.000  0.000 
 	 griz  MODEL offsets :  0.000  0.000  0.000  0.000 
-	 griz  exposure times: 0.7500 0.7500 0.7500 0.7500 
+	 griz  exposure times: 0.6670 0.6670 0.6670 0.6670 
 	 griz  exposure MSKOPT=7 => ZPT  SKYSIG  READNOISE  
 	 RA       :   0.00 to 360.00  deg
 	 PEAKMJD  :  58553.0 to  58643.0   
@@ -102,22 +102,22 @@
 
   Random Number Sync: 
 	 RANDOM SEED: 12945   (RANLIST_START_GENSMEAR: 1)
-	 FIRST/LAST Random Number (List=1): 0.204429 0.758083  
-	 FIRST/LAST Random Number (List=2): 0.291181 0.868237  
-	 FIRST/LAST Random Number (List=3): 0.846520 0.153062  
+	 FIRST/LAST Random Number (List=1): 0.204429 0.925917  
+	 FIRST/LAST Random Number (List=2): 0.291181 0.234734  
+	 FIRST/LAST Random Number (List=3): 0.846520 0.884933  
 
-  Generation Statistics (total CPU=0.9 minutes): 
-	 Generated  6948 simulated light curves (124/sec) 
-	 Wrote      6948 simulated light curves to SNDATA files (124/sec). 
-  Spectroscopic-type: 6948 -> 6948 (before -> after cuts)
+  Generation Statistics (total CPU=0.7 minutes): 
+	 Generated  6540 simulated light curves (168/sec) 
+	 Wrote      6540 simulated light curves to SNDATA files (168/sec). 
+  Spectroscopic-type: 6540 -> 6540 (before -> after cuts)
   Photometric-type:   0 -> 0 (before -> after cuts)
   Rejection Statistics: 
 	     0 rejected by NEPOCH<1 
 	     0 rejected by GENRANGEs 
 	     0 rejected by SEARCH-TRIGGER 
 	     0 rejected by CUTWIN-SELECTION 
-  SEARCH+CUTS Efficiency:  1.0000 +-  0.0001 
+  SEARCH+CUTS Efficiency:  1.0000 +-  0.0002 
 
-  Number of SNe per season AFTER CUTS :    695 +-     8 
+  Number of SNe per season AFTER CUTS :    654 +-     8 
 
 	 ===== END OF README FILE ====== 

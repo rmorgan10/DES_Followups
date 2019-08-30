@@ -29,10 +29,10 @@
 
  *********************************** 
    SIMULATED VOLUME, TIME, RATE(POWERLAW)
-	 Survey dOmega  = 6.9210e-03 steradians  ( 0.00220 PI) 
+	 Survey dOmega  = 6.5150e-03 steradians  ( 0.00207 PI) 
 	 Redshift range =  0.0310 -  0.0710
 	 <redsfhit>     =  0.0559  (volume-weighted) 
-	 Survey Volume  = 5.6473e+04  sr*(MPc/h70)^3 
+	 Survey Volume  = 5.3160e+04  sr*(MPc/h70)^3 
 	 Survey Time    =  0.0000  years/season 
 	 Co-moving Time =  0.0000  years/season  [ T/(1+<z>) ] 
 	 Co-moving V*T  = 0.0000e+00  sr*(MPc/h70)^3 * yr / season 
@@ -46,7 +46,7 @@
 	 Peculiar Velocity Gaussian sigma: 0.0 km/sec
 	 griz   ZP   offsets :  0.000  0.000  0.000  0.000 
 	 griz  MODEL offsets :  0.000  0.000  0.000  0.000 
-	 griz  exposure times: 0.7500 0.7500 0.7500 0.7500 
+	 griz  exposure times: 0.6670 0.6670 0.6670 0.6670 
 	 griz  exposure MSKOPT=7 => ZPT  SKYSIG  READNOISE  
 	 RA       : -360.00 to 360.00  deg
 	 PEAKMJD  :  58613.1 to  58613.1   
@@ -92,13 +92,13 @@
 
   Random Number Sync: 
 	 RANDOM SEED: 12945   (RANLIST_START_GENSMEAR: 1)
-	 FIRST/LAST Random Number (List=1): 0.204429 0.810779  
+	 FIRST/LAST Random Number (List=1): 0.204429 0.125597  
 	 FIRST/LAST Random Number (List=2): 0.291181 0.528912  
 	 FIRST/LAST Random Number (List=3): 0.846520 0.590894  
 
-  Generation Statistics (total CPU=10.1 minutes): 
-	 Generated 10000 simulated light curves (17/sec) 
-	 Wrote     10000 simulated light curves to SNDATA files (17/sec). 
+  Generation Statistics (total CPU=9.3 minutes): 
+	 Generated 10000 simulated light curves (18/sec) 
+	 Wrote     10000 simulated light curves to SNDATA files (18/sec). 
   Spectroscopic-type: 10000 -> 10000 (before -> after cuts)
   Photometric-type:   0 -> 0 (before -> after cuts)
   Rejection Statistics: 
