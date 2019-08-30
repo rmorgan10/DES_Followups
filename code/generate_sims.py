@@ -47,3 +47,6 @@ os.system('snlc_sim.exe SIMGEN_DES_SALT2.input')
 os.system('mv ' + sim_dir_prefix + 'Ia  .')
 
 
+#tar sims directory when finished
+os.chdir('..')
+os.system('tar -czf sims.tar.gz sims')
