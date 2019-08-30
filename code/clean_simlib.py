@@ -68,8 +68,17 @@ for libid in libid_starts:
 for ii in sorted(lines_to_delete, reverse=True):
     del lines[ii]
 
+# Overwrite field lines in simlib to be an int 0-9
+outlines = []
+for line in lines:
+    if line[0:6] == 'FIELD:':
+        outlines.append('FIELD: 1')
+    else:
+        outlines.append(line)
+
+
 # Write output SIMLIB file
 outfile = open(outfile_name, 'w+')
-for line in lines:
+for line in outlines:
     print >>outfile, line, 
 outfile.close()
