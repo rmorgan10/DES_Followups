@@ -1,0 +1,55 @@
+SURVEY:    DES 
+SNID:      567430
+SNTYPE:      0     #  
+FILTERS:   griz 
+PIXSIZE:   0.27    # arcsec 
+NXPIX:     2048  
+NYPIX:     4096  
+FAKE:      0 
+RA:        314.312375  deg
+DECL:      16.120024  deg
+MWEBV:     0.090  # SFD98   
+MWEBV_ERR: 0.015  # MWEBV/6  
+REDSHIFT_HELIO:  -9.0000  +-  -9.0000    #  
+REDSHIFT_FINAL:  -9.0000  +-  -9.0000    # CMB
+
+HOSTGAL_SB_FLUXCAL: -999.00 0.00 -999.00 -999.00    # griz FLUXCAL/asec^2 
+
+PRIVATE(DES_snid):            567430 
+PRIVATE(DES_cand_type):         0   (OK                  )
+PRIVATE(DES_transient_status):  0  
+PRIVATE(DES_ccdnum):            40  # first CCDNUM in query 
+PRIVATE(DES_numepochs):         0  # read from SNCAND 
+PRIVATE(DES_numepochs_ml):      0  # read from SNCAND 
+PRIVATE(DES_numepochs_ml_Y0):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y1):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y2):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y3):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y4):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y5):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y6):      0  # computed 
+PRIVATE(DES_mjd_trigger):       0.000 # computed
+PRIVATE(DES_mjd_latest_ml):     0.000 # computed 
+PRIVATE(DES_latest_nite_ml):    0   # read from SNCAND
+PRIVATE(DES_nobs_offccd):       0  # computed 
+PRIVATE(DES_nobs_photerr):      0  # (Nobs with PHOTLAG & 1016) 
+PRIVATE(DES_hostgal_gradient_g):  -888.00 
+PRIVATE(DES_hostgal_gradient_r):  -888.00 
+PRIVATE(DES_hostgal_gradient_i):  -888.00 
+PRIVATE(DES_hostgal_gradient_z):  -888.00 
+
+
+# ------------------ 
+NOBS: 5 
+NVAR: 18 
+VARLIST: MJD  FLT  FIELD FLUXCAL  FLUXCALERR PHOTFLAG PHOTPROB ZPFLUX PSF SKYSIG SKYSIG_T GAIN XPIX YPIX  NITE EXPNUM CCDNUM OBJID  
+
+# Begin Y801 obs 
+
+OBS:   58693.145  r  WS   5.1993e+02   3.1190e+01  12288   0.840  31.717 3.503 43.9 140.7 1.00 696.42 1837.95  20190728  879971   40   27270910  
+OBS:   58693.198  r  WS   1.0241e+03   3.6124e+01  12288   0.778  31.730 2.259 45.2 138.6 1.00 666.93 1837.81  20190728  880007   40   26084998  
+OBS:   58694.138  r  WS   1.0099e+03   3.4092e+01  12288   0.895  31.706 2.611 44.4 141.1 1.00 687.38 1830.58  20190729  880435   40   27099521  
+OBS:   58697.309  r  WS   1.0047e+03   3.1015e+01  12288   0.887  31.719 3.081 43.3 142.2 1.00 734.25 1854.82  20190801  881875   40   26910253  
+OBS:   58699.302  r  WS   5.6379e+02   3.3172e+01  12288   0.825  31.700 3.544 48.0 139.9 1.00 710.38 1899.42  20190803  882706   40   28340167  
+
+# END 

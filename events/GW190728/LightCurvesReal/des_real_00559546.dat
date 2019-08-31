@@ -1,0 +1,59 @@
+SURVEY:    DES 
+SNID:      559546
+SNTYPE:      0     #  
+FILTERS:   griz 
+PIXSIZE:   0.27    # arcsec 
+NXPIX:     2048  
+NYPIX:     4096  
+FAKE:      0 
+RA:        311.575293  deg
+DECL:      6.419574  deg
+MWEBV:     0.089  # SFD98   
+MWEBV_ERR: 0.015  # MWEBV/6  
+REDSHIFT_HELIO:  -9.0000  +-  -9.0000    #  
+REDSHIFT_FINAL:  -9.0000  +-  -9.0000    # CMB
+
+HOSTGAL_SB_FLUXCAL: -999.00 0.00 -999.00 -999.00    # griz FLUXCAL/asec^2 
+
+PRIVATE(DES_snid):            559546 
+PRIVATE(DES_cand_type):         0   (OK                  )
+PRIVATE(DES_transient_status):  0  
+PRIVATE(DES_ccdnum):            19  # first CCDNUM in query 
+PRIVATE(DES_numepochs):         0  # read from SNCAND 
+PRIVATE(DES_numepochs_ml):      0  # read from SNCAND 
+PRIVATE(DES_numepochs_ml_Y0):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y1):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y2):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y3):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y4):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y5):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y6):      0  # computed 
+PRIVATE(DES_mjd_trigger):       0.000 # computed
+PRIVATE(DES_mjd_latest_ml):     0.000 # computed 
+PRIVATE(DES_latest_nite_ml):    0   # read from SNCAND
+PRIVATE(DES_nobs_offccd):       0  # computed 
+PRIVATE(DES_nobs_photerr):      0  # (Nobs with PHOTLAG & 1016) 
+PRIVATE(DES_hostgal_gradient_g):  -888.00 
+PRIVATE(DES_hostgal_gradient_r):  -888.00 
+PRIVATE(DES_hostgal_gradient_i):  -888.00 
+PRIVATE(DES_hostgal_gradient_z):  -888.00 
+
+
+# ------------------ 
+NOBS: 9 
+NVAR: 18 
+VARLIST: MJD  FLT  FIELD FLUXCAL  FLUXCALERR PHOTFLAG PHOTPROB ZPFLUX PSF SKYSIG SKYSIG_T GAIN XPIX YPIX  NITE EXPNUM CCDNUM OBJID  
+
+# Begin Y801 obs 
+
+OBS:   58693.114  r  WS   1.0540e+02   1.1594e+01  12288   0.882  31.748 3.619 36.2 25.3 1.05 612.01 193.03  20190728  879950   19   26223445  
+OBS:   58693.161  r  WS   7.3625e+01   7.1548e+00  12290   0.864  31.768 2.384 34.5 22.7 0.98 626.35 3725.83  20190728  879982   23   27925821  
+OBS:   58693.167  r  WS   1.0025e+02   7.1726e+00  12288   0.857  31.760 2.452 32.4 25.7 1.05 586.72 225.95  20190728  879986   19   27593364  
+OBS:   58694.100  r  WS   1.0023e+02   7.7799e+00  12288   0.820  31.735 2.364 37.3 22.2 0.98 679.51 3601.87  20190729  880410   23   26628268  
+OBS:   58694.106  r  WS   1.0947e+02   7.2980e+00  12288   0.885  31.726 2.270 35.4 25.0 1.05 576.79 143.32  20190729  880414   19   26609006  
+OBS:   58697.273  r  WS   7.7861e+01   8.5145e+00  12290   0.922  31.778 3.031 32.7 23.0 0.98 675.52 3679.37  20190801  881850   23   26680810  
+OBS:   58697.279  r  WS   1.1227e+02   8.4722e+00  12288   0.960  31.767 2.957 32.2 25.8 1.05 639.64 180.66  20190801  881854   19   26562977  
+OBS:   58699.265  r  WS   6.9949e+01   8.5052e+00  12290   0.703  31.774 2.756 36.8 23.0 0.98 709.93 3730.61  20190803  882681   23   28209636  
+OBS:   58699.271  r  WS   1.2269e+02   7.5981e+00  12288   0.918  31.761 2.495 34.4 25.8 1.05 610.81 243.35  20190803  882685   19   28432691  
+
+# END 

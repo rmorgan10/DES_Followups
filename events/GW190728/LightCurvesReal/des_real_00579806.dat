@@ -1,0 +1,68 @@
+SURVEY:    DES 
+SNID:      579806
+SNTYPE:      0     #  
+FILTERS:   griz 
+PIXSIZE:   0.27    # arcsec 
+NXPIX:     2048  
+NYPIX:     4096  
+FAKE:      0 
+RA:        319.571013  deg
+DECL:      18.837588  deg
+MWEBV:     0.105  # SFD98   
+MWEBV_ERR: 0.017  # MWEBV/6  
+REDSHIFT_HELIO:  0.2934  +-  0.1073    # zPHOT(host) 
+REDSHIFT_FINAL:  0.2920  +-  0.1073    # CMB
+
+HOSTGAL_SB_FLUXCAL: -999.00 0.00 -999.00 -999.00    # griz FLUXCAL/asec^2 
+
+HOSTGAL_NMATCH:  1     # NMATCH with DDLR<4.00 
+HOSTGAL_NMATCH2: 1     # NMATCH with DDLR<7.00 
+HOSTGAL_OBJID:   55611     # DLR_RANK=-1
+HOSTGAL_PHOTOZ:  0.2934 +-  0.1073
+HOSTGAL_SPECZ:   -9.0000 +-  -9.0000
+HOSTGAL_RA:      319.571486    # degrees
+HOSTGAL_DEC:     18.835589    # degrees
+HOSTGAL_SNSEP:   7.374    # arcsec
+HOSTGAL_DDLR:    -9.000    # SNSEP/DLR 
+HOSTGAL_MAG:     888.00 888.00 20.05 888.00    # Aper_4 
+HOSTGAL_MAGERR:  888.00 888.00 888.00 888.00 
+HOSTGAL_CONFUSION:  9999.000
+
+PRIVATE(DES_snid):            579806 
+PRIVATE(DES_cand_type):         0   (OK                  )
+PRIVATE(DES_transient_status):  0  
+PRIVATE(DES_ccdnum):            53  # first CCDNUM in query 
+PRIVATE(DES_numepochs):         0  # read from SNCAND 
+PRIVATE(DES_numepochs_ml):      0  # read from SNCAND 
+PRIVATE(DES_numepochs_ml_Y0):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y1):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y2):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y3):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y4):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y5):      0  # computed 
+PRIVATE(DES_numepochs_ml_Y6):      0  # computed 
+PRIVATE(DES_mjd_trigger):       0.000 # computed
+PRIVATE(DES_mjd_latest_ml):     0.000 # computed 
+PRIVATE(DES_latest_nite_ml):    0   # read from SNCAND
+PRIVATE(DES_nobs_offccd):       0  # computed 
+PRIVATE(DES_nobs_photerr):      0  # (Nobs with PHOTLAG & 1016) 
+PRIVATE(DES_hostgal_gradient_g):  -888.00 
+PRIVATE(DES_hostgal_gradient_r):  -888.00 
+PRIVATE(DES_hostgal_gradient_i):  -888.00 
+PRIVATE(DES_hostgal_gradient_z):  -888.00 
+
+
+# ------------------ 
+NOBS: 5 
+NVAR: 18 
+VARLIST: MJD  FLT  FIELD FLUXCAL  FLUXCALERR PHOTFLAG PHOTPROB ZPFLUX PSF SKYSIG SKYSIG_T GAIN XPIX YPIX  NITE EXPNUM CCDNUM OBJID  
+
+# Begin Y801 obs 
+
+OBS:   58693.155  r  WS   1.5469e+03   1.9063e+01  12288   0.960  31.767 2.675 34.2 29.9 1.06 1661.70 2886.13  20190728  879978   53   27374576  
+OBS:   58693.208  r  WS   1.5573e+03   1.9014e+01  12288   0.960  31.790 2.724 35.8 30.5 1.06 1654.87 2901.55  20190728  880014   53   27911788  
+OBS:   58694.148  r  WS   1.5981e+03   2.0101e+01  12288   0.950  31.757 2.836 36.6 29.8 1.06 1661.47 2849.54  20190729  880442   53   26411025  
+OBS:   58697.319  r  WS   1.5099e+03   2.5285e+01  12288   0.877  31.774 4.066 34.6 30.0 1.06 1707.14 2901.50  20190801  881882   53   28091753  
+OBS:   58699.312  r  WS   1.6157e+03   2.0523e+01  12288   0.930  31.756 2.981 40.0 29.6 1.06 1693.09 2937.64  20190803  882713   53   28413034  
+
+# END 
