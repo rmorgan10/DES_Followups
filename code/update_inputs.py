@@ -36,7 +36,7 @@ objs = ['AGN', 'KN', 'CC', 'Ia']
 # - solid_angle (conversion: .00082 sterradians = 3 sqdeg )
 # - mjd explode (kn only)
 
-exp_time = str(round(df['EXPTIME_(sec)'].values[0] / 60.0, 3))
+exp_time = '1' #str(round(df['EXPTIME_(sec)'].values[0] / 60.0, 3))
 mjd_min = str(int(float(df['MJD_EXPLODE'].values[0])) - 60)
 mjd_max = str(int(float(df['MJD_EXPLODE'].values[0])) + 30)
 mjd_exp = str(df['MJD_EXPLODE'].values[0])
