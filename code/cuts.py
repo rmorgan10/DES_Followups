@@ -63,11 +63,20 @@ class CutList:
         else:
             return False
 
-    def at_least_five_type_2_or_type_1_detections(self, lc, md):
+    def at_least_five_type_2_or_type_1_detections_with_ml_above_08(self, lc, md):
         photflags = np.array([int(x) for x in lc['PHOTFLAG'].values])
         photprobs = np.array([float(x) for x in lc['PHOTPROB'].values])
         marg_photprobs = photprobs[np.where((photflags & 4096) & (photflags & ~1016))]
         if len(marg_photprobs[np.where(marg_photprobs > 0.8)]) > 4:
+            return True
+        else:
+            return False
+
+    def at_least_four_type_2_or_type_1_detections_with_ml_above_08(self, lc, md):
+        photflags = np.array([int(x) for x in lc['PHOTFLAG'].values])
+        photprobs = np.array([float(x) for x in lc['PHOTPROB'].values])
+        marg_photprobs = photprobs[np.where((photflags & 4096) & (photflags & ~1016))]
+        if len(marg_photprobs[np.where(marg_photprobs > 0.8)]) > 3:
             return True
         else:
             return False

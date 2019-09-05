@@ -44,7 +44,9 @@ if dat_file_path[-1] != '/':
     dat_file_path = dat_file_path + '/'
 
 #copy dat files to event directory for future use
-os.system('cp -r %s ../events/%s/sims_and_data' %(dat_file_path, event_name))
+if not os.path.exists('../events/%s/sims_and_data/LightCurvesReal' %event_name):
+    os.system('mkdir ../events/%s/sims_and_data/LightCurvesReal' %event_name)
+    os.system('cp -r %s ../events/%s/sims_and_data/LightCurvesReal' %(dat_file_path, event_name))
 
 ras, decs, expnums, glim, rlim, ilim, zlim = [], [], [], [], [], [], []
 g, r, i, z = False, False, False, False
