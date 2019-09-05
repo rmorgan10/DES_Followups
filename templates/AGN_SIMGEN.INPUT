@@ -11,6 +11,7 @@ GENRANGE_MJD: 58598 58628
 GENVERSION:  RM_Net_AGN
 EXPOSURE_TIME: 1.5
 SOLID_ANGLE:  0.0082
+NGEN_LC: 10000
 
 #--------------------------------------------------------------------
 # Don't need to change anything after this point  (I sure hope)
@@ -23,18 +24,19 @@ GENMODEL:  LCLIB  $PLASTICC_MODELS/LCLIB_AGN-LSST.TEXT 1+2+3+4
 #GENRANGE_PEAKMJD: 58598 58628
 #EXPOSURE_TIME 1.5
 GENRANGE_TREST  -100. 100.
-FORMAT_MASK: 48
+FORMAT_MASK: 32
 
 # Rel rate = 5th order polynominal in cos(b)
 DNDB: COSBPOLY 1  0 0 0 0 0        # AGN are isotropic
-NGENTOT_LC: 10000                 # total number to generate
+#NGENTOT_LC: 10000                 # total number to generate
+#NGENTOT_LC: 100
 #NGEN_SEASON: 1
 
 # restrict AGN redshift to ZTRUE range of G18 photo-z library
 LCLIB_CUTWIN:  REDSHIFT 0.0 1.5  #3.45
 
 
-SIMLIB_FILE:  SIMLIB.txt
+SIMLIB_FILE:  sim_gen/SIMLIB.txt
 
 GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 
@@ -53,9 +55,10 @@ RANSEED: 12945       # random number seed
 SMEARFLAG_FLUX:    1  # photo-stat smearing of signal, sky, etc ...
 SMEARFLAG_ZEROPT:  1  # smear zero-point with zptsig
 
-#NEWMJD_DIF:  0.3   # 2nd trigger obs on separate night
-#APPLY_SEARCHEFF_OPT:  1
-#SEARCHEFF_PIPELINE_FILE:  SEARCHEFF_PIPELINE_DES.DAT
+NEWMJD_DIF:  0.7   # 2nd trigger obs on separate night
+APPLY_SEARCHEFF_OPT:  0
+SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
+SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
 
 #APPLY_CUTWIN_OPT:  1    #PSNID dies without this cut, fun fact
 #CUTWIN_SNRMAX:   3 griz 1 -20. 60.  # require 1 of griz with S/N > 3
