@@ -190,3 +190,30 @@ def confidenceInterval(n, k, alpha=0.68, errorbar=True):
         return e, [low, high]
     else:
         return e, [e - low, high - e]
+
+
+def open_dat(dat_file):
+    infile = open(dat_file, 'r')
+    lines = infile.readlines()
+    infile.close()
+    return lines
+
+def get_terse_lc(lines):
+
+    columns = [y for y in [x.split(' ') for x in lines if x[0:8] == 'VARLIST:'][0] if y != ''][1:-1]
+    data = [[y for y in x.split(' ') if y != ''][1:-1] for x in lines if x[0:4] == 'OBS:']
+    df = pd.DataFrame(data=data, columns=columns)
+    
+    for col in columns:
+        if col != 'FLT' and col != 'FIELD':
+            df[col] = pd.to_numeric(df[col])
+
+    return df
+
+def get_meta_data(lines):
+
+    snid = [y for y in [x for x in lines if x[0:5] == 'SNID:'][0].split(' ') if y != ''][1][0:-1]
+    ra = float([y for y in [x for x in lines if x[0:3] == 'RA:'][0].split(' ') if y != ''][1])
+    dec = float([y for y in [x for x in lines if x[0:3] == 'DEC'][0].split(' ') if y != ''][1])
+
+    return {'SNID': snid, 'RA': ra, 'DEC': dec}
