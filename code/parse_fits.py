@@ -1,14 +1,20 @@
 # functions for parsing SNANA fits files 
 
-import numpy as np
-import pandas as pd
+##### Need to edit to work on an arbitrary fits directory
+
+
 from astropy.io import fits
+import numpy as np
+import os
+import pandas as pd
 import sys
+
 
 #deal with input data
 event_name = sys.argv[1]
-phot_file = '../events/%s/LightCurvesReal_FITS/LightCurvesReal_PHOT.FITS' %event_name
-head_file = '../events/%s/LightCurvesReal_FITS/LightCurvesReal_HEAD.FITS' %event_name
+fits_dir_prefix = sys.argv[2]
+phot_file = '../events/%s/sims_and_data/%s_FITS/%s_PHOT.FITS' %(event_name, fits_dir_prefix, fits_dir_prefix)
+head_file = '../events/%s/sims_and_data/%s_FITS/%s_HEAD.FITS' %(event_name, fits_dir_prefix, fits_dir_prefix)
 
 #read head file
 hdu = fits.open(head_file)
@@ -37,7 +43,10 @@ for data_line in phot_data:
 
     #organize light curves
     if data_line[1] == '-':
-        lcs.append(pd.DataFrame(data=np.array(lc_data), columns=phot_columns))
+        df = pd.DataFrame(data=np.array(lc_data), columns=phot_columns)
+        #force photflag definition to include the 8192 bit for ml socre > 0.7
+        df['PHOTFLAG'] = [12288 if x == 4096 and y > 0.7 else x for x, y in zip(df['PHOTFLAG'].values, df['PHOTPROB'].values)]
+        lcs.append(df)
         lc_data = []
     else:
         lc_data.append(data_line)
@@ -45,8 +54,9 @@ for data_line in phot_data:
 #construct out dictionary
 out_dict = {}
 for index, row in head_df.iterrows():
-    out_dict[row['SNID']] = {'metadata': row, 'lightcurve': lcs[index]}
+    out_dict[row['SNID'].strip()] = {'metadata': row, 'lightcurve': lcs[index]}
 
 #save out dict
-os.system('mkdir ../events/%s/LightCurvesReal_PYTHON' %event_name)
-np.save('../events/%s/LightCurvesReal_PYTHON/LightCurvesReal.npy' %event_name, out_dict)
+if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix)):
+    os.system('mkdir ../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix))
+np.save('../events/%s/sims_and_data/%s_PYTHON/%s.npy' %(event_name, fits_dir_prefix, fits_dir_prefix), out_dict)
