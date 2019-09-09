@@ -12,7 +12,7 @@ df = pd.read_csv('../events/%s/event_metadata.csv' %event_name)
 username = getpass.getuser()
 
 #get effective area from simlib
-simlib_filename = '../events/%s/sims/SIMLIB.txt' %event_name
+simlib_filename = '../events/%s/sim_gen/SIMLIB.txt' %event_name
 simlib_file = open(simlib_filename, 'r')
 simlib_info = simlib_file.readlines()
 simlib_file.close()
@@ -24,7 +24,7 @@ eff_area = float([x for x in simlib_info[-5:] if x[0:15] == 'EFFECTIVE_AREA:'][0
 # - SIMGEN_DES_NONIA.input
 # - SIMGEN_DES_SALT2.input
 
-file_prefix = '../events/%s/sims/' %event_name
+file_prefix = '../events/%s/sim_gen/' %event_name
 file_list = ['AGN_SIMGEN.INPUT', 'SIMGEN_DES_KN.input', 'SIMGEN_DES_NONIA.input', 'SIMGEN_DES_SALT2.input']
 objs = ['AGN', 'KN', 'CC', 'Ia']
 
@@ -64,6 +64,11 @@ for filename, obj in zip(file_list, objs):
     if obj == 'KN':
         header.append('MJD_EXPLODE: ' + mjd_exp)
         header.append('GENRANGE_REDSHIFT: ' + str(min_z) + ' ' + str(max_z))
+        header.append('NGEN_LC: ' + str(df['NUM_KN'].values[0]))
+    elif obj == 'AGN':
+        header.append('NGEN_LC: ' + str(df['NUM_AGN'].values[0]))
+    elif obj == 'CC' or obj == 'Ia':
+        header.append('NGEN_SEASON: ' + str(df['BOOST'].values[0]))
 
     buffer_lines = ['#--------------------------------------------------------------------',
                     "# Don't need to change anything after this point  (I sure hope)",
