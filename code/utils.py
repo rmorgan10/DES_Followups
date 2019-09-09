@@ -182,9 +182,13 @@ def confidenceInterval(n, k, alpha=0.68, errorbar=True):
     p_i = np.take(p, i)
 
     s = i[np.cumsum(p_i * dx) < alpha]
-
-    low = min(np.min(s) * dx, e)
-    high = max(np.max(s) * dx, e)
+    
+    try:
+        low = min(np.min(s) * dx, e)
+        high = max(np.max(s) * dx, e)
+    except:
+        low = 0.0
+        high = 0.0
 
     if not errorbar:
         return e, [low, high]

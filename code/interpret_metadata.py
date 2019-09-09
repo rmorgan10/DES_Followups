@@ -6,6 +6,7 @@ from optparse import OptionParser
 import os
 import pandas as pd
 import sys
+import time
 
 import utils
 
@@ -45,120 +46,145 @@ if dat_file_path[-1] != '/':
 
 #copy dat files to event directory for future use
 if not os.path.exists('../events/%s/sims_and_data/LightCurvesReal' %event_name):
-    os.system('mkdir ../events/%s/sims_and_data/LightCurvesReal' %event_name)
-    os.system('cp -r %s ../events/%s/sims_and_data/LightCurvesReal' %(dat_file_path, event_name))
+    os.system('mkdir ../events/%s/sims_and_data/' %event_name)
+    #os.system('mkdir ../events/%s/sims_and_data' %event_name)
+    os.system('cp -r %s ../events/%s/sims_and_data &' %(dat_file_path, event_name))
+    total = len(glob.glob('%s*.dat' %dat_file_path))
+    done_copying = False
+    while not done_copying:
+        num_copied = len(glob.glob('../events/%s/sims_and_data/LightCurvesReal/*.dat' %event_name))
+        if num_copied > total - 5:
+            done_copying = True
+        
+        time.sleep(2)
+        progress = float(num_copied) / total * 100.0
+        sys.stdout.write('\rCopying dat files:  %.2f %%' %progress)
+        sys.stdout.flush()
 
-ras, decs, expnums, glim, rlim, ilim, zlim = [], [], [], [], [], [], []
-g, r, i, z = False, False, False, False
-dat_files = glob.glob('../events/%s/sims_and_data/LightCurvesReal/*.dat' %event_name)
+print("Copying dat files:  Done!     ")
 
 
-total = len(dat_files)
-counter = 0.0
-
-for dat_file in dat_files:
-    #print(dat_file)
+if not os.path.exists('../events/%s/exptable.txt' %event_name) and not os.path.exists('../events/%s/sim_gen/SIMLIB.txt' %event_name):
     
-    #Track progress
-    counter += 1.0
-    progress = counter / total * 100.0
-    sys.stdout.write('\rProgress:  %.2f     ' %progress)
-    sys.stdout.flush()
+
+    ras, decs, expnums, glim, rlim, ilim, zlim = [], [], [], [], [], [], []
+    g, r, i, z = False, False, False, False
+    dat_files = glob.glob('../events/%s/sims_and_data/LightCurvesReal/*.dat' %event_name)
+
+
+    total = len(dat_files)
+    assert total > 0
+    counter = 0.0
+
+
+    for dat_file in dat_files:
+        #Track progress
+        counter += 1.0
+        progress = counter / total * 100.0
+        sys.stdout.write('\rReading dat files:  %.2f %%    ' %progress)
+        sys.stdout.flush()
     
-    #parse the dat file
-    lines = utils.open_dat(dat_file)
-    lc = utils.get_terse_lc(lines)
-    md = utils.get_meta_data(lines)
+        #parse the dat file
+        lines = utils.open_dat(dat_file)
+        lc = utils.get_terse_lc(lines)
+        md = utils.get_meta_data(lines)
     
-    #save ra and dec
-    ras.append(float(md['RA']))
-    decs.append(float(md['DEC']))
+        #save ra and dec
+        ras.append(float(md['RA']))
+        decs.append(float(md['DEC']))
     
-    #save expnums
-    expnums += [int(x) for x in lc['EXPNUM'].values]
+        #save expnums
+        expnums += [int(x) for x in lc['EXPNUM'].values]
 
-    #save limiting magnitude and band representation
-    g_lc = lc[lc['FLT'].values == 'g']
-    r_lc = lc[lc['FLT'].values == 'r']
-    i_lc = lc[lc['FLT'].values == 'i']
-    z_lc = lc[lc['FLT'].values == 'z']
+        #save limiting magnitude and band representation
+        g_lc = lc[lc['FLT'].values == 'g']
+        r_lc = lc[lc['FLT'].values == 'r']
+        i_lc = lc[lc['FLT'].values == 'i']
+        z_lc = lc[lc['FLT'].values == 'z']
     
-    if g_lc.shape[0] != 0:
-        g = True
-        glim += get_mag_lims(g_lc)
+        if g_lc.shape[0] != 0:
+            g = True
+            glim += get_mag_lims(g_lc)
 
-    if r_lc.shape[0] != 0:
-        r = True
-        rlim += get_mag_lims(r_lc)
+        if r_lc.shape[0] != 0:
+            r = True
+            rlim += get_mag_lims(r_lc)
 
-    if i_lc.shape[0] != 0:
-        i = True
-        ilim += get_mag_lims(i_lc)
+        if i_lc.shape[0] != 0:
+            i = True
+            ilim += get_mag_lims(i_lc)
 
-    if z_lc.shape[0] != 0:
-        z = True
-        zlim += get_mag_lims(z_lc)
-
-
-### calculate necessart metadata values
-min_ra = np.min(ras) - 5.0
-max_ra = np.max(ras) + 5.0
-min_dec = np.min(decs) - 5.0
-max_dec = np.max(decs) + 5.0
-
-if len(glim) != 0:
-    mag_lim_g = np.median(glim)
-    mag_lim_g_std = np.std(glim)
-else:
-    mag_lim_g = 0.0
-    mag_lim_g_std = 0.0
-
-if len(rlim) !=0:
-    mag_lim_r =np.median(rlim)
-    mag_lim_r_std = np.std(rlim)
-else:
-    mag_lim_r =0.0
-    mag_lim_r_std = 0.0
-
-if len(ilim) !=0:
-    mag_lim_i =np.median(ilim)
-    mag_lim_i_std = np.std(ilim)
-else:
-    mag_lim_i =0.0
-    mag_lim_i_std = 0.0
-
-if len(zlim) !=0:
-    mag_lim_z =np.median(zlim)
-    mag_lim_z_std = np.std(zlim)
-else:
-    mag_lim_z =0.0
-    mag_lim_z_std = 0.0
-
-g = int(g)
-r = int(r)
-i = int(i)
-z = int(z)
+        if z_lc.shape[0] != 0:
+            z = True
+            zlim += get_mag_lims(z_lc)
 
 
-#compile into a csv
-cols = ['NAME', 'MIN_RA', 'MAX_RA', 'MIN_DEC', 'MAX_DEC', 
+    ### calculate necessart metadata values
+    min_ra = np.min(ras) - 5.0
+    max_ra = np.max(ras) + 5.0
+    min_dec = np.min(decs) - 5.0
+    max_dec = np.max(decs) + 5.0
+
+    if len(glim) != 0:
+        mag_lim_g = np.median(glim)
+        mag_lim_g_std = np.std(glim)
+    else:
+        mag_lim_g = 0.0
+        mag_lim_g_std = 0.0
+
+    if len(rlim) !=0:
+        mag_lim_r =np.median(rlim)
+        mag_lim_r_std = np.std(rlim)
+    else:
+        mag_lim_r =0.0
+        mag_lim_r_std = 0.0
+
+    if len(ilim) !=0:
+        mag_lim_i =np.median(ilim)
+        mag_lim_i_std = np.std(ilim)
+    else:
+        mag_lim_i =0.0
+        mag_lim_i_std = 0.0
+
+    if len(zlim) !=0:
+        mag_lim_z =np.median(zlim)
+        mag_lim_z_std = np.std(zlim)
+    else:
+        mag_lim_z =0.0
+        mag_lim_z_std = 0.0
+
+    g = int(g)
+    r = int(r)
+    i = int(i)
+    z = int(z)
+    
+    #compile into a csv
+    cols = ['NAME', 'MIN_RA', 'MAX_RA', 'MIN_DEC', 'MAX_DEC', 
         'LIM_MAG_g', 'LIM_MAG_r', 'LIM_MAG_i', 'LIM_MAG_z',
         'LIM_MAG_g_std', 'LIM_MAG_r_std', 'LIM_MAG_i_std', 'LIM_MAG_z_std',
         'g', 'r', 'i', 'z',
         'BOOST', 'NUM_KN', 'NUM_AGN']
 
-data = [[event_name, min_ra, max_ra, min_dec, max_dec,
+    data = [[event_name, min_ra, max_ra, min_dec, max_dec,
          mag_lim_g, mag_lim_r, mag_lim_i, mag_lim_z,
          mag_lim_g_std, mag_lim_r_std, mag_lim_i_std, mag_lim_z_std,
          g, r, i, z, 
          boost, num_kn, num_agn]]
 
-event_info = pd.DataFrame(data=data, columns=cols)
-event_info.to_csv('../events/%s/DES_metadata.csv' %event_name, index=False)
+    event_info = pd.DataFrame(data=data, columns=cols)
+    event_info.to_csv('../events/%s/DES_metadata.csv' %event_name, index=False)
 
-#merge with LIGO csv to make full event_metadata
-ligo_df = pd.read_csv('../events/%s/LIGO_metadata.csv' %event_name)
+    #merge with LIGO csv to make full event_metadata
+    ligo_df = pd.read_csv('../events/%s/LIGO_metadata.csv' %event_name)
+    
+    event_metadata_df = ligo_df.merge(event_info, on='NAME')
+    event_metadata_df.to_csv('../events/%s/event_metadata.csv' %event_name, index=False)
 
-event_metadata_df = ligo_df.merge(event_info, on='NAME')
-event_metadata_df.to_csv('../events/%s/event_metadata.csv' %event_name, index=False)
+    #make exptable
+    exptable_file = open('../events/%s/exptable.txt' %event_name, 'w+')
+    expnums = np.unique(expnums)
+    formatted_expnums = [str(x) + '\n' for x in expnums]
+    exptable_file.writelines(formatted_expnums)
+    exptable_file.close()
 
+print("Reading dat files:  Done!     ")

@@ -33,7 +33,10 @@ class CutList:
     def at_least_one_type_1_detection(self, lc, md):
         #Type 1: no errors and ml score > 0.7
         photflags = np.array([int(x) for x in lc['PHOTFLAG'].values])
-        good_photflags_no_errors = photflags[np.where((photflags & 8192) & (photflags & ~1016))]
+        photprobs = np.array([float(x) for x in lc['PHOTPROB'].values])
+        #good_photflags_no_errors = photflags[np.where((photflags & 8192) & (photflags & ~1016))]
+        #good_photflags_no_errors = photflags[np.where((photflags & 4096) & (photflags & ~1016) & (photprobs > 0.7))]
+        good_photflags_no_errors = photflags[np.where((photflags > 4095) & (photprobs > 0.7))]
         if len(good_photflags_no_errors) > 0: 
             return True
         else: 
@@ -50,7 +53,7 @@ class CutList:
 
     def at_least_one_hour_separation_between_detections(self, lc, md):
         photflags = np.array([int(x) for x in lc['PHOTFLAG'].values])
-        mjds = lc['MJD'].values
+        mjds = np.array([float(x) for x in lc['MJD'].values])
         mjd_good = list(mjds[np.where((photflags & 8192) & (photflags & ~1016))])
         mjd_marginal = list(mjds[np.where((photflags & 4096) & (photflags & ~1016))])
 
@@ -67,7 +70,8 @@ class CutList:
         photflags = np.array([int(x) for x in lc['PHOTFLAG'].values])
         photprobs = np.array([float(x) for x in lc['PHOTPROB'].values])
         marg_photprobs = photprobs[np.where((photflags & 4096) & (photflags & ~1016))]
-        if len(marg_photprobs[np.where(marg_photprobs > 0.8)]) > 4:
+        #if len(marg_photprobs[np.where(marg_photprobs > 0.8)]) > 4:
+        if len(marg_photprobs) > 4:
             return True
         else:
             return False
@@ -76,6 +80,7 @@ class CutList:
         photflags = np.array([int(x) for x in lc['PHOTFLAG'].values])
         photprobs = np.array([float(x) for x in lc['PHOTPROB'].values])
         marg_photprobs = photprobs[np.where((photflags & 4096) & (photflags & ~1016))]
+        #marg_photprobs = photprobs[np.where(photflags > 4095)]
         if len(marg_photprobs[np.where(marg_photprobs > 0.8)]) > 3:
             return True
         else:

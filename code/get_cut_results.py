@@ -12,10 +12,9 @@ fits_dir_prefix = sys.argv[2]
 ## i.e., run convert_dat_to_fits.py as a preprocessing step
 
 # place cuts
-os.system('python place_cuts.py %s %s' %(event_name, fits_dir_prefix))
+if not os.path.exists('../events/%s/cut_results/%s_cut_results.npy'  %(event_name, fits_dir_prefix)):
+    os.system('python place_cuts.py %s %s' %(event_name, fits_dir_prefix))
 cut_results = np.load('../events/%s/cut_results/%s_cut_results.npy' %(event_name, fits_dir_prefix)).item()
-
-
 
 
 # build up cut summary table and candidate table

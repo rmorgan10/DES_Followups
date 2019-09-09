@@ -149,3 +149,17 @@ df['KN_scaled_err_minus'] = err_minus
 
 print(df[['KN_scaled', 'KN_scaled_err_plus', 'KN_scaled_err_minus']])
 
+## Data
+remaining = [df['DATA'].values[0]]
+err_plus = [0.0]
+err_minus = [0.0]
+for value in df['DATA'].values[1:]:
+    remaining.append(value)
+    eff, [err_high, err_low] = utils.confidenceInterval(n=remaining[-1], k=value)
+    err_plus.append(err_high)
+    err_minus.append(err_low)
+
+df['DATA_err_plus'] = err_plus
+df['DATA_err_minus'] = err_minus
+
+print(df[['DATA', 'DATA_err_plus', 'DATA_err_minus']])

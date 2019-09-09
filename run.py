@@ -53,7 +53,8 @@ if mode == 'interactive':
 if mode == 'normal':
     print("Running in normal mode.\n")
 
-
+    #interpret metadata
+    os.system('python interpret_metadata.py %s' %event_name)
 
     #generate sims
     os.system('python generate_sims.py %s' %event_name)
@@ -62,4 +63,4 @@ if mode == 'normal':
     os.system('python run_cuts.py %s both' %event_name)
 
     #analyze results
-    os.system('python analyze_results %s' %event_name)
+    os.system('python analyze_results.py %s' %event_name)
