@@ -21,3 +21,10 @@ events/GW190814/sims.tar.gz
 events/GW190814/logs/
 events/GW190814/cut_results/
 events/GW190814/sim_gen/
+
+#GW190814_1001
+events/GW190814_1001/sims_and_data/
+events/GW190814_1001/sims.tar.gz
+events/GW190814_1001/logs/
+events/GW190814_1001/cut_results/
+events/GW190814_1001/sim_gen/
