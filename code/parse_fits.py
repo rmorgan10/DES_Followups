@@ -70,7 +70,7 @@ if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_
     #tar and delete snana fits files
     os.chdir('../events/%s/sims_and_data' %event_name)
     os.system('tar -czf %s_FITS.tar.gz %s_FITS' %(fits_dir_prefix, fits_dir_prefix))
-    os.system('rm -r %s_FITS' %fits_dir_prefix)
+    os.system('rm -rf %s_FITS' %fits_dir_prefix)
     os.chdir('../../../code')
 
 else:
