@@ -28,3 +28,7 @@ events/GW190814_1001/sims.tar.gz
 events/GW190814_1001/logs/
 events/GW190814_1001/cut_results/
 events/GW190814_1001/sim_gen/
+
+
+### scripts in progress
+analysis/

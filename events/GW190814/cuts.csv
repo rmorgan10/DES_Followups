@@ -2,4 +2,5 @@ NUMBER,NAME
 1,at_least_one_type_1_detection
 2,at_least_one_additional_detection_of_type_2_or_better
 3,at_least_one_hour_separation_between_detections
-4,at_least_four_type_2_or_type_1_detections_with_ml_above_08
+4,at_least_five_type_2_or_better_detections
+

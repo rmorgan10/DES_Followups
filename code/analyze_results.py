@@ -80,19 +80,30 @@ lines = simlib_file.readlines()
 simlib_file.close()
 eff_area = float([x for x in lines[-5:] if x[0:15] == 'EFFECTIVE_AREA:'][0].split(' ')[1][0:-1])
 
+#AGN
+agn_cut_results = np.load('%s_DESGW_%s_AGN_cut_results.npy' %(username, event_name)).item()
+agn_scaled = []
+err_plus = []
+err_minus = []
 ##use limiting mag to scale the number of agn
-num_agn, [num_agn_plus_unc, num_agn_minus_unc] = utils.calc_expected_agn(event_info, eff_area)
+for cutnum in [int(x) for x in np.arange(len(df['CUT'].values))]:
 
-## AGN
-simulated_agn = float(event_info['NUM_AGN'].values[0])
-agn_scaled = [num_agn]
-err_plus = [num_agn_plus_unc]
-err_minus = [num_agn_minus_unc]
-for value in df['AGN'].values[1:]:
-    eff, [err_high, err_low] = utils.confidenceInterval(n=agn_scaled[-1], k=value * agn_scaled[-1] / simulated_agn)
-    agn_scaled.append(value * agn_scaled[-1] / simulated_agn)
-    err_plus.append(eff * np.sqrt((err_high) ** 2 + (err_plus[-1]) ** 2))
-    err_minus.append(eff * np.sqrt((err_low) ** 2 + (err_minus[-1]) ** 2))
+    means, upper_errs, lower_errs = [], [], []
+    for flt in ['g', 'r', 'i', 'z']:
+        if int(event_info[flt].values[0]) == 1:
+            try:
+                num_agn, [num_agn_plus_unc, num_agn_minus_unc] = utils.calc_expected_agn_using_mag_eff(event_info, eff_area, agn_cut_results, flt, cutnum)
+            except:
+                num_agn, num_agn_plus_unc, num_agn_minus_unc = 0.0, 0.0, 0.0
+
+            means.append(num_agn)
+            upper_errs.append(num_agn_plus_unc)
+            lower_errs.append(num_agn_minus_unc)
+
+    agn_scaled.append(np.mean(means))
+    err_plus.append(np.sqrt(np.sum(np.power(np.array(upper_errs), 2))) / len(means))
+    err_minus.append(np.sqrt(np.sum(np.power(np.array(lower_errs), 2))) / len(means))
+
 
 df['AGN_scaled'] = agn_scaled
 df['AGN_scaled_err_plus'] = err_plus
@@ -163,3 +174,5 @@ df['DATA_err_plus'] = err_plus
 df['DATA_err_minus'] = err_minus
 
 print(df[['DATA', 'DATA_err_plus', 'DATA_err_minus']])
+
+df.to_csv('MERGED_CUT_RESULTS.csv')
