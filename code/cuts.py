@@ -6,6 +6,9 @@ import numpy as np
 #for testing
 from random import randint
 
+#snid_lists
+import snid_lists
+
 class CutList:
     def __init__(self):
         self.all_cuts = [x for x in dir(self) if x[0] != '_']
@@ -106,6 +109,14 @@ class CutList:
         else:
             return False
 
+    def at_least_five_type_2_or_better_detections(self, lc, md):
+        photflags = np.array([int(x) for x in lc['PHOTFLAG'].values])
+        marginal_photflags_no_errors = photflags[np.where((photflags & 4096) & (photflags & ~1016))]
+        if len(marginal_photflags_no_errors) > 4:
+            return True
+        else:
+            return False
+
     #super strict
     def all_detections_are_type_1(self, lc, md):
         photflags = np.array([int(x) for x in lc['PHOTFLAG'].values])
@@ -166,3 +177,76 @@ class CutList:
     #decreaseing flux 
     def decreases_in_flux_by_at_least_two_sigma(self, lc, md):
         pass
+
+
+    def no_bad_subtractions_in_stamps(self, lc, md):
+        if int(md['FAKE']) == 2:
+            #automatic pass for sims
+            return True
+        else:
+
+            passing_snids = []
+
+
+            if int(md['SNID']) in passing_snids:
+                return True
+            else:
+                return False
+
+    def no_pre_existing_stellar_object_in_stamps(self, lc, md):
+        if int(md['FAKE']) == 2:
+            #automatic pass for sims 
+            return True
+        else:
+
+            passing_snids = []
+
+
+            if int(md['SNID']) in passing_snids:
+                return True
+            else:
+                return False
+
+
+
+    def visual_inspection_GW190814_1001(self, lc, md):
+        if int(md['FAKE']) == 2:
+            if int(md['SIM_MODEL_INDEX']) == 12:
+                #all agn cut out by requirement of visible transient
+                return False
+            else:
+                #other simulated transient classes we would expect to be visible
+                return True
+        else:
+            passing_snids = snid_lists.GW190814_1001_visual_inspection()
+            if int(md['SNID']) in passing_snids:
+                return True
+            else:
+                return False
+
+    def fading_by_more_than_015_mag_per_day_6_through_16(self, lc, md):
+        for flt in np.unique(lc['FLT'].values):
+            flt_lc = lc[lc['FLT'] == flt]
+            
+            if flt_lc.shape[0] < 2:
+                continue
+
+            #only allow type 2 detections to be used as trustworthy flux measurements
+            mjds = np.array([float(x) for x in flt_lc['MJD'].values])
+            fluxes = np.array([float(x) for x in flt_lc['FLUXCAL'].values])
+            photflags = np.array([int(x) for x in flt_lc['PHOTFLAG'].values])
+            
+            #Start of NITE 6: 58714.6
+            mjd_6_16 = mjds[np.where((mjds > 58714.6) & (fluxes > 0.0) & (photflags > 4095))]
+            flux_6_16 = fluxes[np.where((mjds > 58714.6) & (fluxes > 0.0) & (photflags > 4095))]
+            if len(mjd_6_16) < 2:
+                continue
+            
+            mag_6_16 = 27.5 - 2.5 * np.log10(flux_6_16)
+
+            if (mag_6_16[-1] - mag_6_16[0]) / (mjd_6_16[-1] - mjd_6_16[0]) > -0.15:
+                return False
+
+        return True
+
+        

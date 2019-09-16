@@ -56,6 +56,98 @@ def MAGLIMIT_calculator(ZPT, PSF, SKYMAG, SNR):
     return MLIM
 
 
+def calc_expected_agn_using_mag_eff(event_info, eff_area, cut_results, flt, cut):
+    #obtain detection efficiency as a function of magnitude
+    ##extract peakmag
+    cut_peak_mags = []
+    total_peak_mags = []
+    for snid, info in cut_results.iteritems():
+        fluxes = info['lightcurve'][info['lightcurve']['FLT'] == flt]['FLUXCAL'].values
+        if len(fluxes) != 0:
+            max_flux = np.max([float(x) for x in fluxes])
+            if max_flux > 0:
+                total_peak_mags.append(27.5 - 2.5 * np.log10(max_flux))
+                if info['cut'] > cut or info['cut'] == -1:
+                    cut_peak_mags.append(27.5 - 2.5* np.log10(max_flux))
+
+    ##magnitude-binned calculation of efficiency
+    min_mag = np.min(cut_peak_mags)
+    max_mag = np.max(cut_peak_mags)
+    binned_tot = np.array([float(x) for x in np.histogram(total_peak_mags, bins=10, range=(min_mag, max_mag))[0]])
+    binned_det = np.array([float(x) for x in np.histogram(cut_peak_mags, bins=10,range=(min_mag,max_mag))[0]])
+    binned_mag_eff = binned_det / binned_tot   # np.array([x / y for x in x, y in zip(binned_det, binned_tot)])
+    if cut == 0: binned_mag_eff = np.ones_like(binned_tot)
+    
+    #connect to DB 
+    conn = ea.connect(section='dessci')
+    cursor = conn.cursor()
+
+    # interpret magnitude limits 
+    glim = event_info['LIM_MAG_g'].values[0] + event_info['LIM_MAG_g_std'].values[0]
+    rlim = event_info['LIM_MAG_r'].values[0] + event_info['LIM_MAG_r_std'].values[0]
+    ilim = event_info['LIM_MAG_i'].values[0] + event_info['LIM_MAG_i_std'].values[0]
+    zlim = event_info['LIM_MAG_z'].values[0] + event_info['LIM_MAG_z_std'].values[0]
+
+    #specify small regions of footproint to look at 
+    footprint_regions = [[45.0, 45.2, -25.2, -25.0],
+                         [43.0, 43.2, -26.2, -26.0],
+                         [52.0, 52.2, -30.2, -30.0],
+                         [56.0, 56.2, -25.2, -25.0],
+                         [45.0, 45.2, -26.2, -26.0],
+                         [52.0, 52.2, -25.2, -25.0],
+                         [56.0, 56.2, -30.2, -30.0],
+                         [43.0, 43.2, -25.2, -25.0],
+                         [43.0, 43.2, -30.2, -30.0],
+                         [56.0, 56.2, -25.2, -25.0]]
+
+    #calulate the density in each region and average them 
+    scaled_num_galaxies = []
+    for region in footprint_regions:
+        ra_min = region[0]
+        ra_max = region[1]
+        dec_min = region[2]
+        dec_max = region[3]
+
+        area = (ra_max - ra_min) * (np.sin(dec_max * np.pi / 180.0) - np.sin(dec_min * np.pi / 180.0)) * 180.0 / np.pi
+
+        query = ["SELECT SOF_CM_MAG_%s FROM Y3_GOLD_2_2" %flt.upper(),
+             "WHERE RA < ", str(ra_max), "and RA > ", str(ra_min),
+             "and DEC < ", str(dec_max), "and DEC > ", str(dec_min),
+             "and EXTENDED_CLASS_MASH_SOF = 3 ",
+             "and FLAGS_FOOTPRINT = 1 ",
+             "and FLAGS_FOREGROUND = 0 ",
+             "and bitand(FLAGS_GOLD, 62) = 0 ",
+             "and SOF_CM_MAG_I between 16 and 26 ",
+             "and (SOF_CM_MAG_G < ", str(glim),
+             "or SOF_CM_MAG_R < ", str(rlim),
+             "or SOF_CM_MAG_I < ", str(ilim),
+             "or SOF_CM_MAG_Z < ", str(zlim),
+             ")"]
+
+        #print(' '.join(query))  
+        QQ = cursor.execute(' '.join(query))
+        rows = cursor.fetchall()
+        
+        mag_df = pd.DataFrame(data=rows, columns=['%s_mag' %flt])
+
+        binned_mag_counts = np.array([float(x) for x in np.histogram(mag_df[['%s_mag' %flt]].values, bins=10, range=(min_mag, max_mag))[0]])
+        
+        num_galaxies = np.dot(binned_mag_counts, binned_mag_eff)
+        scaled_num_galaxies.append(num_galaxies / area * eff_area)
+        
+    mean_num_galaxies = np.mean(scaled_num_galaxies)
+    std_num_galaxies = np.std(scaled_num_galaxies) / len(scaled_num_galaxies)**2
+
+    agn_rate, agn_plus_unc, agn_minus_unc = 0.0016, 0.0006, 0.0006
+
+    num_agn = mean_num_galaxies * agn_rate
+    num_agn_plus_unc = num_agn * np.sqrt((agn_plus_unc / agn_rate) ** 2 + (std_num_galaxies / mean_num_galaxies) ** 2)
+    num_agn_minus_unc = num_agn * np.sqrt((agn_minus_unc / agn_rate) ** 2 + (std_num_galaxies / mean_num_galaxies) ** 2)
+
+    return num_agn, [num_agn_plus_unc, num_agn_minus_unc]
+
+
+
 def calc_expected_agn(event_info, eff_area):
     #connect to DB
     conn = ea.connect(section='dessci')
