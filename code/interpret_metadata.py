@@ -1,4 +1,4 @@
-# A module to automatically construct metadata information from dat files
+1;95;0c# A module to automatically construct metadata information from dat files
 
 import glob
 import numpy as np
@@ -18,7 +18,7 @@ if len(sys.argv) > 2:
     parser.add_option('--num_kn', default=10000, help="Number of KNe to simulate")
     parser.add_option('--num_agn', default=10000, help="Number of AGN to simulate")
     options, args = parser.parse_args(sys.argv[2:])
-    boost = int(float(options.boost))
+    boost = float(options.boost)
     num_kn = int(float(options.num_kn))
     num_agn = int(float(options.num_agn))
 else:
