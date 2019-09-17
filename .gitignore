@@ -29,6 +29,9 @@ events/GW190814_1001/logs/
 events/GW190814_1001/cut_results/
 events/GW190814_1001/sim_gen/
 
+### testing (not unit tests yet)
+events/test/
+run_test.py
 
 ### scripts in progress
 analysis/

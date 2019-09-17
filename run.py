@@ -7,6 +7,8 @@ import os
 import pandas as pd
 import sys
 
+from optparse import OptionParser
+
 # move to code directory
 os.chdir('code')
 
@@ -37,6 +39,17 @@ if len(sys.argv) == 1:
 else:
     event_name = sys.argv[1]
     mode = 'normal'
+
+    #parse for bosst, num_kn, and num_agn
+    parser = OptionParser(__doc__)
+    parser.add_option('--boost', default=10, help="Number of seasons to simulate for SNe")
+    parser.add_option('--num_kn', default=10000, help="Number of KNe to simulate")
+    parser.add_option('--num_agn', default=10000, help="Number of AGN to simulate")
+    options, args = parser.parse_args(sys.argv[2:])
+    boost = float(options.boost)
+    num_kn = int(float(options.num_kn))
+    num_agn = int(float(options.num_agn))
+
     
 
 if mode == 'interactive':
@@ -54,7 +67,7 @@ if mode == 'normal':
     print("Running in normal mode.\n")
 
     #interpret metadata
-    os.system('python interpret_metadata.py %s' %event_name)
+    os.system('python interpret_metadata.py %s --boost %i --num_kn %i --num_agn %i' %(event_name, boost, num_kn, num_agn))
 
     #generate sims
     os.system('python generate_sims.py %s' %event_name)
