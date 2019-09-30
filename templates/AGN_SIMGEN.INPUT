@@ -60,9 +60,10 @@ APPLY_SEARCHEFF_OPT:  0
 SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
 SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
 
-#APPLY_CUTWIN_OPT:  1    #PSNID dies without this cut, fun fact
+APPLY_CUTWIN_OPT:  1    #PSNID dies without this cut, fun fact
 #CUTWIN_SNRMAX:   3 griz 1 -20. 60.  # require 1 of griz with S/N > 3
 #CUTWIN_NEPOCH:  2  +2  #Require two epochs with SNR > 2
+CUTWIN_NOBSDIF: 2, 9999
 
 # cosmological params for lightcurve generation and redshift distribution
 OMEGA_MATTER:  0.3
