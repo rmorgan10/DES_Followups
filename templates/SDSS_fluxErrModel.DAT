@@ -1,0 +1,157 @@
+# Created Feb 15 2018
+# New mechanism to model flux-error tweaks.
+# Add the following to the sim-input file:
+#   FLUXERRMODEL_FILE:  $SNDATA_ROOT/simlib/SDSS/SDSS_fluxErrModel.DAT
+# which will use the maps below and ignore the
+# maps at the top of the SIMLIB file.
+# The maps below are identical to the FLUXERR_COR/FLUXERR_ADD 
+# maps in SDSS_3year.SIMLIB.
+
+MAPNAME:  FLUXERR_ADD
+BAND: u   NVAR: 2   VARNAMES:  PSF ERRADD
+ROW:  0    28   # FLUXCAL units
+ROW:  6    28
+ENDMAP:
+
+MAPNAME:  FLUXERR_ADD
+BAND: g   NVAR: 2   VARNAMES:  PSF ERRADD
+ROW:  0    10
+ROW:  6    10
+ENDMAP:
+
+
+MAPNAME:  FLUXERR_ADD
+BAND: r   NVAR: 2   VARNAMES:  PSF ERRADD
+ROW:  0    15
+ROW:  6    15
+ENDMAP:
+
+
+MAPNAME:  FLUXERR_ADD
+BAND: i   NVAR: 2   VARNAMES:  PSF ERRADD
+ROW:  0    10 #23
+ROW:  6    10 #23
+ENDMAP:
+
+
+MAPNAME:  FLUXERR_ADD
+BAND: z   NVAR: 2   VARNAMES:  PSF ERRADD
+ROW:  0    20 #60
+ROW:  6    20 #60
+ENDMAP:
+
+
+# =====================================
+MAPNAME: FLUXERR_SCALE
+BAND: u    NVAR:  2   VARNAMES: LOGSNR  ERRSCALE
+ROW:  -0.90     1.0212 
+ROW:  -0.70     1.0288 
+ROW:  -0.50     1.0351 
+ROW:  -0.30     1.0400 
+ROW:  -0.10     1.0436 
+ROW:   0.10     1.0458 
+ROW:   0.30     1.0466 
+ROW:   0.50     1.0460 
+ROW:   0.70     1.0440 
+ROW:   0.90     1.0406 
+ROW:   1.10     1.0358 
+ROW:   1.30     1.0297 
+ROW:   1.50     1.0223 
+ROW:   1.70     1.0137 
+ROW:   1.90     1.0039 
+ROW:   2.10     1.0039 
+ROW:   2.3      1.0039 
+ROW:   2.5      1.0039 
+ENDMAP:
+
+MAPNAME: FLUXERR_SCALE
+BAND: g    NVAR:  2   VARNAMES: LOGSNR  ERRSCALE
+ROW:  -0.90   0.9930
+ROW:  -0.70   0.9895
+ROW:  -0.50   0.9869
+ROW:  -0.30   0.9852
+ROW:  -0.10   0.9844
+ROW:   0.10   0.9845
+ROW:   0.30   0.9855
+ROW:   0.50   0.9874
+ROW:   0.70   0.9902
+ROW:   0.90   0.9939
+ROW:   1.10   0.9987
+ROW:   1.30   1.0043
+ROW:   1.50   1.0110
+ROW:   1.70   1.0188
+ROW:   1.90   1.0277
+ROW:   2.1    1.0277
+ROW:   2.3    1.0277
+ROW:   2.5    1.0277
+ENDMAP:
+
+
+MAPNAME: FLUXERR_SCALE
+BAND: r    NVAR:  2   VARNAMES: LOGSNR  ERRSCALE
+ROW:  -0.90   1.0115
+ROW:  -0.70   1.0150
+ROW:  -0.50   1.0180
+ROW:  -0.30   1.0204
+ROW:  -0.10   1.0222
+ROW:   0.10   1.0234
+ROW:   0.30   1.0241
+ROW:   0.50   1.0241
+ROW:   0.70   1.0236
+ROW:   0.90   1.0224
+ROW:   1.10   1.0207
+ROW:   1.30   1.0184
+ROW:   1.50   1.0155
+ROW:   1.70   1.0121
+ROW:   1.90   1.0081
+ROW:   2.1    1.0081
+ROW:   2.3    1.0081
+ROW:   2.5    1.0081
+ENDMAP:
+
+
+MAPNAME: FLUXERR_SCALE
+BAND: i    NVAR:  2   VARNAMES: LOGSNR  ERRSCALE
+ROW:  -0.90   0.9885
+ROW:  -0.70   0.9846
+ROW:  -0.50   0.9819
+ROW:  -0.30   0.9803
+ROW:  -0.10   0.9797
+ROW:   0.10   0.9802
+ROW:   0.30   0.9818
+ROW:   0.50   0.9845
+ROW:   0.70   0.9882
+ROW:   0.90   0.9931
+ROW:   1.10   0.9992
+ROW:   1.30   1.0064
+ROW:   1.50   1.0149
+ROW:   1.70   1.0247
+ROW:   1.90   1.0359
+ROW:   2.1    1.0359
+ROW:   2.3    1.0359
+ROW:   2.5    1.0359
+ENDMAP:
+
+
+MAPNAME: FLUXERR_SCALE
+BAND: z    NVAR:  2   VARNAMES: LOGSNR  ERRSCALE
+ROW:  -0.90   0.9840
+ROW:  -0.70   0.9866
+ROW:  -0.50   0.9891
+ROW:  -0.30   0.9913
+ROW:  -0.10   0.9934
+ROW:   0.10   0.9954
+ROW:   0.30   0.9971
+ROW:   0.50   0.9987
+ROW:   0.70   1.0001
+ROW:   0.90   1.0014
+ROW:   1.10   1.0024
+ROW:   1.30   1.0033
+ROW:   1.50   1.0040
+ROW:   1.70   1.0046
+ROW:   1.90   1.0049
+ROW:   2.1    1.0049
+ROW:   2.3    1.0049
+ROW:   2.5    1.0049
+ENDMAP:
+

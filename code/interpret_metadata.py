@@ -1,4 +1,4 @@
-1;95;0c# A module to automatically construct metadata information from dat files
+# A module to automatically construct metadata information from dat files
 
 import glob
 import numpy as np

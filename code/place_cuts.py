@@ -10,6 +10,10 @@ import cuts
 event_name = sys.argv[1]
 fits_dir_prefix = sys.argv[2]
 
+#deal with output data
+#transient_class = fits_dir_prefix.split('_')[-1]
+#process_log_file = '../events/%s/logs/cut_%s.log' %(event_name, transient_class)
+
 #parse cut_file
 cut_filename = '../events/%s/cuts.csv' %event_name
 cut_df = pd.read_csv(cut_filename)
