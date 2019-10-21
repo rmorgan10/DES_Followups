@@ -28,11 +28,15 @@ if sims_data_both in ['sims', 'both']:
             os.system('tar -xzf %s_FITS.tar.gz' %fits_dir_prefix)
             os.chdir('../../../code')
         #convert fits files to numpy files
-        os.system('python parse_fits.py %s %s' %(event_name, fits_dir_prefix))
-        
+        os.system('python parse_fits.py %s %s ' %(event_name, fits_dir_prefix))
+                
         print("Placing cuts on %s simulations" %obj)
         #place cuts on fits files
-        os.system('python get_cut_results.py %s %s' %(event_name, fits_dir_prefix))
+        if not os.path.exists('../events/%s/cut_results/%s_DESGW_%s_%s_cut_results.npy' %(event_name, username, event_name, obj)):
+            os.system('python get_cut_results.py %s %s' %(event_name, fits_dir_prefix))
+        else:
+            print("Cut results already exist, skipping cuts on %s" %obj)
+        
     
 
 # DATA
@@ -57,4 +61,7 @@ if sims_data_both in ['data', 'both']:
 
     print("Placing cuts on data")
     #place cuts on fits files
-    os.system('python get_cut_results.py %s %s' %(event_name, fits_dir_prefix))
+    if not os.path.exists('../events/%s/cut_results/LightCurvesReal_cut_results.npy' %event_name):
+        os.system('python get_cut_results.py %s %s' %(event_name, fits_dir_prefix))
+    else:
+        print("Cut results already exist, skipping cuts on DATA")

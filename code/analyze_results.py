@@ -109,39 +109,44 @@ df['AGN_scaled'] = agn_scaled
 df['AGN_scaled_err_plus'] = err_plus
 df['AGN_scaled_err_minus'] = err_minus
 
-print(df[['AGN_scaled', 'AGN_scaled_err_plus', 'AGN_scaled_err_minus']])
+#print(df[['AGN_scaled', 'AGN_scaled_err_plus', 'AGN_scaled_err_minus']])
 
 ## Ia
 ia_scaled = [df['Ia'].values[0] / boost]
-err_plus = [ia_unc / boost]
-err_minus = [ia_unc / boost]
+err_plus = [ia_unc * boost]
+err_minus = [ia_unc * boost]
 for value in df['Ia'].values[1:]:
     eff, [err_high, err_low] = utils.confidenceInterval(n=ia_scaled[-1] * boost, k=value)
     ia_scaled.append(value / boost)
-    err_plus.append(eff * np.sqrt((err_high / boost) ** 2 + (err_plus[-1]) ** 2))
-    err_minus.append(eff * np.sqrt((err_low /boost) ** 2 + (err_minus[-1]) ** 2))
+    err_plus.append(eff * boost * np.sqrt((err_high ) ** 2 + (err_plus[-1] / boost) ** 2))
+    err_minus.append(eff * boost * np.sqrt((err_low) ** 2 + (err_minus[-1] / boost) ** 2))
 
 df['Ia_scaled'] = ia_scaled
 df['Ia_scaled_err_plus'] = err_plus
 df['Ia_scaled_err_minus'] = err_minus
 
-print(df[['Ia_scaled', 'Ia_scaled_err_plus', 'Ia_scaled_err_minus']])
+#print(df[['Ia_scaled', 'Ia_scaled_err_plus', 'Ia_scaled_err_minus']])
 
 ## CC
 cc_scaled = [df['CC'].values[0] / boost]
-err_plus = [cc_unc / boost]
-err_minus = [cc_unc / boost]
+err_plus = [cc_unc * boost **2]
+err_minus = [cc_unc * boost **2]
 for value in df['CC'].values[1:]:
     eff, [err_high, err_low] = utils.confidenceInterval(n=cc_scaled[-1] * boost, k=value)
     cc_scaled.append(value / boost)
-    err_plus.append(eff * np.sqrt((err_high / boost) ** 2 + (err_plus[-1]) ** 2))
-    err_minus.append(eff * np.sqrt((err_low /boost) ** 2 + (err_minus[-1]) ** 2))
+    err_plus.append(eff * boost * np.sqrt((err_high) ** 2 + (err_plus[-1] / boost) ** 2))
+    err_minus.append(eff * boost * np.sqrt((err_low) ** 2 + (err_minus[-1] / boost) ** 2))
+
+err_plus[0] = cc_unc * boost
+err_minus[0] = cc_unc * boost
+err_plus[1] = cc_unc * boost
+err_minus[1] = cc_unc * boost
 
 df['CC_scaled'] = cc_scaled
 df['CC_scaled_err_plus'] = err_plus
 df['CC_scaled_err_minus'] = err_minus
 
-print(df[['CC_scaled', 'CC_scaled_err_plus', 'CC_scaled_err_minus']])
+#print(df[['CC_scaled', 'CC_scaled_err_plus', 'CC_scaled_err_minus']])
 
 ## KN
 num_kn = float(event_info['NUM_KN'].values[0]) * event_info['LIGO_prob_KN'].values[0]
@@ -158,7 +163,7 @@ df['KN_scaled'] = kn_eff
 df['KN_scaled_err_plus'] = err_plus
 df['KN_scaled_err_minus'] = err_minus
 
-print(df[['KN_scaled', 'KN_scaled_err_plus', 'KN_scaled_err_minus']])
+#print(df[['KN_scaled', 'KN_scaled_err_plus', 'KN_scaled_err_minus']])
 
 ## Data
 remaining = [df['DATA'].values[0]]
@@ -173,6 +178,7 @@ for value in df['DATA'].values[1:]:
 df['DATA_err_plus'] = err_plus
 df['DATA_err_minus'] = err_minus
 
-print(df[['DATA', 'DATA_err_plus', 'DATA_err_minus']])
+#print(df[['DATA', 'DATA_err_plus', 'DATA_err_minus']])
 
 df.to_csv('MERGED_CUT_RESULTS.csv')
+

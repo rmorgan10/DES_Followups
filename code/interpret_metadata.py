@@ -18,7 +18,7 @@ if len(sys.argv) > 2:
     parser.add_option('--num_kn', default=10000, help="Number of KNe to simulate")
     parser.add_option('--num_agn', default=10000, help="Number of AGN to simulate")
     options, args = parser.parse_args(sys.argv[2:])
-    boost = int(float(options.boost))
+    boost = float(options.boost)
     num_kn = int(float(options.num_kn))
     num_agn = int(float(options.num_agn))
 else:
@@ -61,7 +61,8 @@ if not os.path.exists('../events/%s/sims_and_data/LightCurvesReal' %event_name):
         sys.stdout.write('\rCopying dat files:  %.2f %%' %progress)
         sys.stdout.flush()
 
-print("Copying dat files:  Done!     ")
+sys.stdout.write("\rCopying dat files:  Done!               \n")
+sys.stdout.flush()
 
 
 if not os.path.exists('../events/%s/exptable.txt' %event_name) and not os.path.exists('../events/%s/sim_gen/SIMLIB.txt' %event_name):
@@ -187,4 +188,5 @@ if not os.path.exists('../events/%s/exptable.txt' %event_name) and not os.path.e
     exptable_file.writelines(formatted_expnums)
     exptable_file.close()
 
-print("Reading dat files:  Done!     ")
+sys.stdout.write("\rReading dat files:  Done!                  \n")
+sys.stdout.flush()

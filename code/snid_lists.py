@@ -1,12 +1,49 @@
 # module for hard coding snid lists to make human-vetted cuts implementable
+import numpy as np
+import pandas as pd
+
+def not_in_gaia_1_arcsec_GW190814_1001_snids():
+    df = pd.read_csv('../events/GW190814_1001/snid_lists/not_gaia_2_arcsec.txt', header=None, names=['SNID'])
+    snids = np.array(df['SNID'], dtype=int)
+    return snids
+
+def GW190814_1001_DES_galaxy():
+    df = pd.read_csv('../events/GW190814_1001/snid_lists/not_DES_galaxy.txt', header=None, names=['SNID'])
+    snids = np.array(df['SNID'], dtype=int)
+    return snids
+
+def GW190814_1001_DES_star():
+    df = pd.read_csv('../events/GW190814_1001/snid_lists/not_DES_star.txt', header=None, names=['SNID'])
+    snids = np.array(df['SNID'], dtype=int)
+    return snids
+
+def GW190814_1001_DES_object():
+    df = pd.read_csv('../events/GW190814_1001/snid_lists/not_DES_object.txt', header=None, names=['SNID'])
+    snids = np.array(df['SNID'], dtype=int)
+    return snids
+
+def GW190814_1001_near_bright_things():
+    #not closer than: $20\arcmin$ to the Sculptor Galaxy, $8\arcmin$ to NGC288, $3\arcmin$ to HD4398
+    df = pd.read_csv('../events/GW190814_1001/snid_lists/not_near_bright_things.txt', header=None, names=['SNID'])
+    snids = np.array(df['SNID'], dtype=int)
+    return snids
+
 
 def GW190814_1001_visual_inspection():
-    l = [635566, 625633, 635380, 625878, 625839, 626956, 664936, 631484, 625263,
-         627337, 627577, 627249, 625673, 627832, 625985, 663323, 627394, 624252,
-         661833, 627288, 625030, 626718, 659801, 631360, 626761, 628025, 624157,
-         614750, 660289, 626722, 624690, 628966, 614827, 626209, 635347, 625381]
+    #l = [635566, 625633, 635380, 625878, 625839, 626956, 664936, 631484, 625263,
+    #     627337, 627577, 627249, 625673, 627832, 625985, 663323, 627394, 624252,
+    #     661833, 627288, 625030, 626718, 659801, 631360, 626761, 628025, 624157,
+    #     614750, 660289, 626722, 624690, 628966, 614827, 626209, 635347, 625381]
 
-    return l
+    #additional snids
+    #l += [671111, 666914, 668442, 661188, 670178, 632892, 628631, 659780, 660284,
+    #      663735, 661618, 670016, 665573, 667752, 633118, 667752, 633118, 667525,
+    #      667764, 634604, 665913, 659395, 626606, 633239, 659340, 625152, 631833,
+    #      659132]
+
+    df = pd.read_csv('../events/GW190814_1001/snid_lists/good_nice_faint.txt', header=None, names=['SNID'])
+    snids = np.array(df['SNID'], dtype=int)
+    return snids
 
 
 def GW190814_1001_448():

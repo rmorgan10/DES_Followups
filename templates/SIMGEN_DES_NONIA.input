@@ -22,7 +22,7 @@ SIMLIB_FILE:  sim_gen/SIMLIB.txt
 #HOSTLIB_FILE:           $DES_ROOT/simlibs/DES_SVA1GOLD_DEEP_TRAIN.HOSTLIB
 # HOSTNOISE_FILE:         $SNDATA_ROOT/simlib/DES/DES_Y1reproc2_SBNOISEMODEL.DAT
 # HOSTNOISE_FILE:         /project/rkessler/SN/INTERNAL/GW170814/analysis/DES_Y1reproc2_SBNOISEMODEL.DAT
-FLUXERRMODEL_FILE:        sim_gen/fluxErrModel_IceCube.DAT
+FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT
 #HOSTLIB_ZPHOTEFF_FILE:  $DES_ROOT/simlibs/DESB12_zPHOT_EFF1.DAT
 HOSTLIB_MSKOPT:  256
 
@@ -66,9 +66,10 @@ SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
 SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
 
 
-#APPLY_CUTWIN_OPT:  1    #PSNID dies without this cut, fun fact
+APPLY_CUTWIN_OPT:  1    #PSNID dies without this cut, fun fact
 #CUTWIN_SNRMAX:   3 griz 1 -20. 60.  # require 1 of griz with S/N > 3
 #CUTWIN_NEPOCH:  2  +2  #Require two epochs with SNR > 2
+CUTWIN_NOBSDIF: 2, 9999
 
 # cosmological params for lightcurve generation and redshift distribution
 OMEGA_MATTER:  0.3

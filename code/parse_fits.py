@@ -16,8 +16,14 @@ fits_dir_prefix = sys.argv[2]
 phot_file = '../events/%s/sims_and_data/%s_FITS/%s_PHOT.FITS' %(event_name, fits_dir_prefix, fits_dir_prefix)
 head_file = '../events/%s/sims_and_data/%s_FITS/%s_HEAD.FITS' %(event_name, fits_dir_prefix, fits_dir_prefix)
 
+#deal with output data
+transient_class = fits_dir_prefix.split('_')[-1]
+process_log_file = '../events/%s/logs/parse_%s.log' %(event_name, transient_class)
+
+
 if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix)):
     os.system('mkdir ../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix))
+    log = open(process_log_file, 'w+')
     
     #read head file
     hdu = fits.open(head_file)
@@ -35,14 +41,16 @@ if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_
 
     #split phot data into individual light curve dataframes
     lc_data = []
-    total = float(len(phot_data))
-    counter = 0.0
+    total = len(phot_data)
+    counter = 0
     for data_line in phot_data:
         #track progress
-        counter += 1.0
-        progress = counter / total * 100
-        sys.stdout.write('\rProgress:  %.2f %%' %progress)
-        sys.stdout.flush()
+        counter += 1
+        progress = float(counter) / total * 100
+        #sys.stdout.write('\rProgress:  %.2f %%' %progress)
+        #sys.stdout.flush()
+        if (total - counter) % 100 == 0:
+            log.write('\r%.2f' % progress)
 
         #organize light curves
         if data_line[1] == '-':
@@ -70,8 +78,12 @@ if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_
     #tar and delete snana fits files
     os.chdir('../events/%s/sims_and_data' %event_name)
     os.system('tar -czf %s_FITS.tar.gz %s_FITS' %(fits_dir_prefix, fits_dir_prefix))
-    os.system('rm -r %s_FITS' %fits_dir_prefix)
+    os.system('rm -rf %s_FITS/*' %fits_dir_prefix)
+    os.rmdir('%s_FITS' %fits_dir_prefix)
     os.chdir('../../../code')
+
+    #close log file
+    log.close()
 
 else:
     print("Python-ized light curves already exists, skipping light curve processing")

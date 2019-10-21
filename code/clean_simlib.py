@@ -6,6 +6,7 @@ import numpy as np
 # Target SIMLIB file
 filename = str(sys.argv[1])
 outfile_name = str(sys.argv[2])
+area = str(sys.argv[3])
 f = open(filename, 'r')
 lines = f.readlines()
 f.close()
@@ -76,6 +77,8 @@ for line in lines:
     else:
         outlines.append(line)
 
+#overwrite the effective area line
+outlines[-1] = 'EFFECTIVE_AREA: %s' %area
 
 # Write output SIMLIB file
 outfile = open(outfile_name, 'w+')
