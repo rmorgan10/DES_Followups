@@ -17,14 +17,17 @@ if len(sys.argv) > 2:
     parser.add_option('--boost', default=10, help="Number of seasons to simulate for SNe")
     parser.add_option('--num_kn', default=10000, help="Number of KNe to simulate")
     parser.add_option('--num_agn', default=10000, help="Number of AGN to simulate")
+    parser.add_option('--num_mdwarf', default=100, help="Number of Mdwarfs to simulate")
     options, args = parser.parse_args(sys.argv[2:])
     boost = float(options.boost)
     num_kn = int(float(options.num_kn))
     num_agn = int(float(options.num_agn))
+    num_mdwarf = int(float(options.num_mdwarf))
 else:
     boost = 10
     num_kn = 10000
     num_agn = 10000
+    num_mdwarf = 100
 
 
 def get_mag_lims(df):
@@ -164,13 +167,13 @@ if not os.path.exists('../events/%s/exptable.txt' %event_name) and not os.path.e
         'LIM_MAG_g', 'LIM_MAG_r', 'LIM_MAG_i', 'LIM_MAG_z',
         'LIM_MAG_g_std', 'LIM_MAG_r_std', 'LIM_MAG_i_std', 'LIM_MAG_z_std',
         'g', 'r', 'i', 'z',
-        'BOOST', 'NUM_KN', 'NUM_AGN']
+        'BOOST', 'NUM_KN', 'NUM_AGN', 'NUM_Mdwarf']
 
     data = [[event_name, min_ra, max_ra, min_dec, max_dec,
          mag_lim_g, mag_lim_r, mag_lim_i, mag_lim_z,
          mag_lim_g_std, mag_lim_r_std, mag_lim_i_std, mag_lim_z_std,
          g, r, i, z, 
-         boost, num_kn, num_agn]]
+         boost, num_kn, num_agn, num_mdwarf]]
 
     event_info = pd.DataFrame(data=data, columns=cols)
     event_info.to_csv('../events/%s/DES_metadata.csv' %event_name, index=False)

@@ -23,7 +23,7 @@ process_log_file = '../events/%s/logs/parse_%s.log' %(event_name, transient_clas
 
 if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix)):
     os.system('mkdir ../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix))
-    log = open(process_log_file, 'w+')
+    #log = open(process_log_file, 'w+')
     
     #read head file
     hdu = fits.open(head_file)
@@ -50,7 +50,9 @@ if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_
         #sys.stdout.write('\rProgress:  %.2f %%' %progress)
         #sys.stdout.flush()
         if (total - counter) % 100 == 0:
-            log.write('\r%.2f' % progress)
+            log = open(process_log_file, 'w+') 
+            log.write('%.2f' % progress)
+            log.close()
 
         #organize light curves
         if data_line[1] == '-':
@@ -79,11 +81,11 @@ if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_
     os.chdir('../events/%s/sims_and_data' %event_name)
     os.system('tar -czf %s_FITS.tar.gz %s_FITS' %(fits_dir_prefix, fits_dir_prefix))
     os.system('rm -rf %s_FITS/*' %fits_dir_prefix)
-    os.rmdir('%s_FITS' %fits_dir_prefix)
+    #os.rmdir('%s_FITS' %fits_dir_prefix)
     os.chdir('../../../code')
 
     #close log file
-    log.close()
+    #log.close() --closed earlier
 
 else:
     print("Python-ized light curves already exists, skipping light curve processing")

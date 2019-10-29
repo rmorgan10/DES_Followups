@@ -1,5 +1,6 @@
 *~
 code/*.pyc
+code/.*.password
 
 #GW190510
 events/GW190510/sims_and_data/
