@@ -801,9 +801,12 @@ sys.stdout.flush()
 
 #output a list of all sims that finished successfully
 good_sims = []
-for k, v in name_map.iteritems():
-    if v != 'ERROR':
-        good_sims.append(k)
+try:
+    for k, v in name_map.iteritems():
+        if v != 'ERROR':
+            good_sims.append(k)
+except:
+    good_sims = ['AGN', 'SN91bg', 'CC', 'PIa', 'ILOT', 'CaRT', 'TDE', 'KN', 'SLSN', 'Mdwarf', 'Ia', 'Iax']
 
 stream = open('../events/%s/logs/monitor_all_sims_report.log' %event_name, 'w+')
 stream.write(','.join(good_sims))

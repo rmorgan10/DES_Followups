@@ -23,8 +23,17 @@ process_log_file = '../events/%s/logs/parse_%s.log' %(event_name, transient_clas
 
 if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix)):
     os.system('mkdir ../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix))
-    #log = open(process_log_file, 'w+')
     
+    #check if sim tar files need to be unpacked
+    if not os.path.exists(head_file):
+        os.system('pwd')
+        os.chdir('../events/%s/sims_and_data' %event_name)
+        os.system('pwd')
+        os.system('ls')
+        os.system('rm -rf %s_FITS' %fits_dir_prefix)
+        os.system('tar -xzf %s.tar.gz' %fits_dir_prefix)
+        os.chdir('../../../code')
+
     #read head file
     hdu = fits.open(head_file)
     head_columns = hdu[1].columns.names
@@ -60,6 +69,9 @@ if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_
                 df = pd.DataFrame(data=np.array(lc_data), columns=phot_columns)
                 #force photflag definition to include the 8192 bit for ml socre > 0.7
                 df['PHOTFLAG'] = [12288 if int(x) == 4096 and float(y) > 0.7 else x for x, y in zip(df['PHOTFLAG'].values, df['PHOTPROB'].values)]
+                #add mag and mag_err
+                df['MAG'] = [27.5 - 2.5 * np.log10(float(x)) if float(x) > 0.0 else 99.0 for x in df['FLUXCAL'].values]
+                df['MAGERR'] = [np.abs(2.5 * np.log10(float(x) / (float(x) + float(y)))) if float(x) > 0.0 else 99.0 for x, y in zip(df['FLUXCAL'].values, df['FLUXCALERR'].values)] 
                 lcs.append(df)
                 lc_data = []
             except:
