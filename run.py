@@ -51,6 +51,7 @@ else:
     parser.add_option('--last_exposure', default=0, help="Last expnum of observations")
     parser.add_option('--num_mdwarf', default=0, help="Number of Mdwarfs to simulate")
     parser.add_option('--sim_include', default="KN,Ia,CC,AGN", help="Transient classes to simulate")
+    parser.add_option('--force_conditions', default='real', help="PSF,SKYMAG,DELTAT")
     options, args = parser.parse_args(sys.argv[2:])
     boost = float(options.boost)
     num_kn = int(float(options.num_kn))
@@ -61,6 +62,7 @@ else:
     last_exposure = int(options.last_exposure)
     num_mdwarf = int(options.num_mdwarf)
     sim_include = str(options.sim_include).strip().split(',')
+    forced_conditions = str(options.force_conditions)
 
 # Command-line argument error checking
 allowed_sims = ['KN', 'Ia', 'CC', 'AGN', 'CaRT', 'ILOT', 'Mdwarf', 'SN91bg', 'Iax', 'PIa', 'SLSN', 'TDE']
@@ -104,7 +106,7 @@ if mode == 'normal':
     os.system('python interpret_metadata.py %s --boost %.3f --num_kn %i --num_agn %i --num_mdwarf %i' %(event_name, boost, num_kn, num_agn, num_mdwarf))
 
     #generate sims
-    os.system('python generate_all_sims.py %s %s' %(event_name, ' '.join(sim_include)))
+    os.system('python generate_all_sims.py %s %s %s' %(event_name, forced_conditions, ' '.join(sim_include)))
     #sys.exit()
     #apply cuts to sims and data
     os.system('python run_all_cuts.py %s both %s' %(event_name, ' '.join(sim_include)))

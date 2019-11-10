@@ -10,6 +10,12 @@ import utils
 event_name = sys.argv[1]
 df = pd.read_csv('../events/%s/event_metadata.csv' %event_name)
 username = getpass.getuser()
+forced_conditions = sys.argv[2]
+
+#insert forced conditions into simlib
+if forced_conditions != 'real':
+    forced_values = ' '.join(forced_conditions.split(','))
+    os.system('python force_conditions.py %s %s' %(event_name, forced_values))
 
 #get effective area from simlib
 simlib_filename = '../events/%s/sim_gen/SIMLIB.txt' %event_name

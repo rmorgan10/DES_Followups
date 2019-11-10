@@ -11,8 +11,13 @@ event_name = sys.argv[1]
 df = pd.read_csv('../events/%s/event_metadata.csv' %event_name)
 username = getpass.getuser()
 
+#read forced conditions
+## psf,skymag,deltat (no spaces, comma-separated)
+## use 'real' if real conditions are desired
+forced_conditions = sys.argv[2]
+
 try:
-    obj_to_simulate = sys.argv[2:]
+    obj_to_simulate = sys.argv[3:]
 except:
     print("ERROR: Provide space-separated list of objects to generate_sims.py")
     sys.exit()
@@ -63,7 +68,7 @@ if not os.path.exists('../events/%s/sim_gen/SIMGEN_DES_NONIA.input' %event_name)
     os.system('cp ../templates/* ../events/%s/sim_gen/' %event_name)
 
     #call update_inputs.py
-    os.system('python update_inputs.py %s' %event_name)
+    os.system('python update_inputs.py %s %s' %(event_name, forced_conditions))
 else:
     print("Existing SIM_INPUTS found, skipping update inputs")
 
