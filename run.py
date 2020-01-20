@@ -52,6 +52,10 @@ else:
     parser.add_option('--num_mdwarf', default=0, help="Number of Mdwarfs to simulate")
     parser.add_option('--sim_include', default="KN,Ia,CC,AGN", help="Transient classes to simulate")
     parser.add_option('--force_conditions', default='real', help="PSF,SKYMAG,DELTAT")
+    parser.add_option('--clobber', action='store_true')
+    parser.add_option('--nobs_force', default='', help='Number of obs to require in libids')
+    parser.add_option('--run_psnid', action='store_true')
+    parser.add_option('--classify_cutoff', default=100, help='Final cut to apply before classification')
     options, args = parser.parse_args(sys.argv[2:])
     boost = float(options.boost)
     num_kn = int(float(options.num_kn))
@@ -63,6 +67,10 @@ else:
     num_mdwarf = int(options.num_mdwarf)
     sim_include = str(options.sim_include).strip().split(',')
     forced_conditions = str(options.force_conditions)
+    clobber = options.clobber
+    nobs_force = options.nobs_force
+    run_psnid = options.run_psnid
+    classify_cutoff = int(options.classify_cutoff)
 
 # Command-line argument error checking
 allowed_sims = ['KN', 'Ia', 'CC', 'AGN', 'CaRT', 'ILOT', 'Mdwarf', 'SN91bg', 'Iax', 'PIa', 'SLSN', 'TDE']
@@ -94,6 +102,10 @@ if mode == 'interactive':
 if mode == 'normal':
     print("Running in normal mode.\n")
 
+    #clobber all existing runs if desired
+    if clobber:
+        clean_up = 'everything'
+
     #clean up if desired
     if clean_up != "None":
         os.system("python clean_up.py %s %s" %(event_name, clean_up))
@@ -106,8 +118,8 @@ if mode == 'normal':
     os.system('python interpret_metadata.py %s --boost %.3f --num_kn %i --num_agn %i --num_mdwarf %i' %(event_name, boost, num_kn, num_agn, num_mdwarf))
 
     #generate sims
-    os.system('python generate_all_sims.py %s %s %s' %(event_name, forced_conditions, ' '.join(sim_include)))
-    #sys.exit()
+    os.system('python generate_all_sims.py %s %s %s %s' %(event_name, forced_conditions, nobs_force, ' '.join(sim_include)))
+
     #apply cuts to sims and data
     os.system('python run_all_cuts.py %s both %s' %(event_name, ' '.join(sim_include)))
 
@@ -116,3 +128,10 @@ if mode == 'normal':
 
     #write out a report with uncertainties
     os.system('python write_report.py %s' %event_name)
+
+    #classify with psnid if desired
+    if run_psnid:
+        os.chdir('../classifications/PSNID')
+        os.system('python run_PSNID.py %s %i' %(event_name, classify_cutoff))
+        os.system('python featurize.py %s' %event_name)
+        os.system('python classify.py %s' %event_name)

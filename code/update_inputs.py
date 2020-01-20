@@ -6,6 +6,8 @@ import pandas as pd
 import sys
 import utils
 
+import force_kn_dist
+
 #read input data
 event_name = sys.argv[1]
 df = pd.read_csv('../events/%s/event_metadata.csv' %event_name)
@@ -105,6 +107,9 @@ for filename, obj in zip(file_list, objs):
     outfile.writelines(output_lines)
     outfile.close()
 
+
+# do kn specific distribution
+force_kn_dist.run(event_name, df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0])
 
 
 #File header looks like this:

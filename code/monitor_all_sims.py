@@ -773,18 +773,19 @@ while running:
     
     
     #output progress
-    name_map = {'AGN': agn_progress,
-                'KN': kn_progress,
-                'Ia': ia_progress,
-                'CC': cc_progress,
-                'CaRT': cart_progress,
-                'ILOT': ilot_progress,
-                'Mdwarf': mdwarf_progress,
-                'SN91bg': sn91bg_progress,
-                'Iax': iax_progress,
-                'PIa': pia_progress,
-                'SLSN': slsn_progress,
-                'TDE': tde_progress}
+    progress_map = {'AGN': agn_progress,
+                    'KN': kn_progress,
+                    'Ia': ia_progress,
+                    'CC': cc_progress,
+                    'CaRT': cart_progress,
+                    'ILOT': ilot_progress,
+                    'Mdwarf': mdwarf_progress,
+                    'SN91bg': sn91bg_progress,
+                    'Iax': iax_progress,
+                    'PIa': pia_progress,
+                    'SLSN': slsn_progress,
+                    'TDE': tde_progress}
+    name_map = {obj : progress_map[obj] for obj in sys.argv[2:]}
     
     progress = 'Simulating:  ' + ' | '.join([obj + ' -- ' + name_map[obj] for obj in sys.argv[2:]]) + ' |                             '
     #progress = 'Simulating:  AGN -- %s | KN -- %s | Ia -- %s | CC -- %s |                          ' %(agn_progress, kn_progress, ia_progress, cc_progress)

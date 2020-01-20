@@ -1,9 +1,13 @@
 # A class to contain all cuts
 
+from astropy.cosmology import FlatLambdaCDM
 import pandas as pd
 import numpy as np
+from scipy.interpolate import interp1d
 
 np.random.seed(6)
+
+cosmo = FlatLambdaCDM(H0=70, Om0=0.3, Tcmb0=2.725)
 
 #for testing
 from random import randint
@@ -35,6 +39,37 @@ class CutList:
     #define all cuts below such that they return true if pass and return false if fail
     #define all cuts with both lc and md arguments even if they are unused
 
+    def at_least_one_MLSCORE_90_detection(self, lc, md):
+        photprobs = np.array(lc['PHOTPROB'].values, dtype=float)
+        good_photprobs = photprobs[photprobs > 0.9]
+        if len(good_photprobs) > 0:
+            return True
+        else:
+            return False
+
+    def at_least_one_snr_10_detection(self, lc, md):
+        fluxes = np.array(lc['FLUXCAL'].values, dtype=float)
+        fluxerrs = np.array(lc['FLUXCALERR'].values, dtype=float)
+        snr = fluxes / fluxerrs
+        good_snrs = snr[np.where(snr > 10.0)]
+        if len(good_snrs) > 0:
+            return True
+        else:
+            return False
+
+    def at_least_one_snr_7_detection(self, lc, md):
+        fluxes = np.array(lc['FLUXCAL'].values, dtype=float)
+        fluxerrs = np.array(lc['FLUXCALERR'].values, dtype=float)
+        photflags = np.array(lc['PHOTFLAG'].values, dtype=int)
+        type_2_detection_fluxes = fluxes[np.where(((photflags & 4096) != 0) & ((photflags & 1016) == 0))]
+        type_2_detection_fluxerrs = fluxerrs[np.where(((photflags & 4096) != 0) & ((photflags & 1016) == 0))]
+        snr = type_2_detection_fluxes / type_2_detection_fluxerrs
+        good_snrs = snr[np.where(snr > 7.0)]
+        if len(good_snrs) > 0:
+            return True
+        else:
+            return False
+
     def at_least_one_snr_5_detection(self, lc, md):
         fluxes = np.array(lc['FLUXCAL'].values, dtype=float)
         fluxerrs = np.array(lc['FLUXCALERR'].values, dtype=float)
@@ -45,6 +80,15 @@ class CutList:
         else:
             return False
 
+    def at_least_one_snr_3_detection(self, lc, md):
+        fluxes = np.array(lc['FLUXCAL'].values, dtype=float)
+        fluxerrs = np.array(lc['FLUXCALERR'].values, dtype=float)
+        snr = fluxes / fluxerrs
+        good_snrs = snr[np.where(snr > 3.0)]
+        if len(good_snrs) > 0:
+            return True
+        else:
+            return False
 
     def at_least_one_type_1_detection(self, lc, md):
         #Type 1: no errors and ml score > 0.7
@@ -194,6 +238,23 @@ class CutList:
             return False
 
     #consistent with ligo dist
+
+    def fading_cut_one_band(self, lc, md):
+        mjds = np.array(lc['MJD'].values, dtype=float)
+        flts = np.array(lc['FLT'].values, dtype=str)
+        mags = np.array(lc['MAG'].values, dtype=float)
+        photflags = np.array(lc['PHOTFLAG'].values, dtype=int)
+        good_flts = flts[np.where(((photflags & 4096) != 0) & ((photflags & 1016) == 0))]
+        good_mjds = mjds[np.where(((photflags & 4096) != 0) & ((photflags & 1016) == 0))]
+        good_mags = mags[np.where(((photflags & 4096) != 0) & ((photflags & 1016) == 0))]
+        for flt in np.unique(good_flts):
+            cut_mjds = good_mjds[good_flts == flt]
+            cut_mags = good_mags[good_flts == flt]
+            final_mags = cut_mags[cut_mjds > 58713.0]
+            if len(final_mags) > 1:
+                if final_mags[-1] - final_mags[0] < 0.0: return False
+        return True
+
     
     #decreaseing flux 
     def decreases_in_flux_by_at_least_two_sigma(self, lc, md):
@@ -218,19 +279,53 @@ class CutList:
     # star: 0.0043266 + 2.04622306123e-05 - 2.03116973886e-05  
     # galaxy: 0.0517372 + 6.94684156921e-05 - 6.9342809866e-05  
     # object: 0.013142 + 3.56627088227e-05 - 3.54864011889e-05    
-    def at_least_2_arcsec_from_DES_galaxy(self, lc, md):
+    def at_least_05_arcsec_from_DES_galaxy(self, lc, md):
         if int(md['FAKE']) == 2:
-            choice = np.random.uniform(low=0.0, high=1.0, size=1)[0]
-            if choice < 0.0517372:
+            #choice = np.random.uniform(low=0.0, high=1.0, size=1)[0]
+            #if choice < 0.0517372:
+            #    return False
+            #else:
+            #    return True
+            
+            #use physical sn host sep pdf to choose distance
+            #from DES3YR SN sample, H0=70
+            bins = [(0.000, 0.148), (0.148, 1.362), (1.362, 2.575), (2.575, 3.789), 
+                    (3.789, 5.002), (5.002, 6.216), (6.216, 7.430), (7.430, 8.643), 
+                    (8.643, 9.857), (9.857, 11.070), (11.070, 12.284), (12.284, 13.497), 
+                    (13.497, 14.711), (14.711, 15.925), (15.925, 17.138), (17.138, 18.352), 
+                    (18.352, 19.565), (19.565, 20.779), (20.779, 21.992), (21.992, 23.206), 
+                    (23.206, 24.420), (24.420, 26.500)]
+            bin_probs = np.array([0.129, 0.125, 0.116, 0.105, 0.092, 0.080, 0.067, 0.055, 0.044, 
+                         0.034, 0.026, 0.020, 0.015, 0.012, 0.010, 0.009, 0.010, 0.011, 
+                         0.012, 0.012, 0.011, 0.006])
+            bin_probs = bin_probs / np.sum(bin_probs)
+
+            chosen_bin_index = np.random.choice(np.arange(len(bins), dtype=int), size=1, p=bin_probs)[0]
+            chosen_bin = bins[chosen_bin_index]
+            kpc_sep = np.random.uniform(low=chosen_bin[0], high=chosen_bin[1], size=1)[0]
+
+            arcsec_per_kpc = cosmo.arcsec_per_kpc_comoving(float(md['SIM_REDSHIFT_CMB']))
+            ang_sep = arcsec_per_kpc.value * kpc_sep
+            if ang_sep >= 0.5:
+                return True
+            else:
+                return False
+
+        #try using host matching instead of gold
+        elif int(md['HOSTGAL_NMATCH']) > 0:
+            if float(md['HOSTGAL_SNSEP']) < 0.5:
                 return False
             else:
                 return True
         else:
-            passing_snids = snid_lists.GW190814_1001_DES_galaxy()
-            if int(md['SNID']) in passing_snids:
-                return True
-            else:
-                return False
+            return False #data with no host, shouldn't happen, but cut anyways
+             
+        #else:
+        #    passing_snids = snid_lists.GW190814_1001_near_galaxy_center()
+        #    if int(md['SNID']) in passing_snids:
+        #        return True
+        #    else:
+        #        return False
 
     def at_least_2_arcsec_from_DES_star(self, lc, md):
         if int(md['FAKE']) == 2:
@@ -273,6 +368,33 @@ class CutList:
                 return False
         else:
             passing_snids = snid_lists.GW190814_1001_near_bright_things()
+            if int(md['SNID']) in passing_snids:
+                return True
+            else:
+                return False
+
+    def separated_from_foreground(self, lc, md):
+        # at least 0.5 arcsec from DES star or object (0.00109)
+
+        # at least 20 arcmin from NGC253
+
+        # at least 8 arcmin from NGC288
+
+        # at least 3 arcmin from HD4398
+
+        #total_area = 57.7949 #deg**2                                                                                                                
+        #masked_area = ((20. / 60.)**2 + (8. / 60.)**2 + (3. / 60.)**2) * np.pi
+        #masked_fraction = masked_area / total_area
+        #(0.007142)
+
+        if int(md['FAKE']) == 2:
+            choice = np.random.uniform(low=0.0, high=1.0, size=1)[0]
+            if choice < 0.00823:
+                return False
+            else:
+                return True
+        else:
+            passing_snids = snid_lists.GW190814_1001_near_foreground()
             if int(md['SNID']) in passing_snids:
                 return True
             else:
@@ -333,13 +455,31 @@ class CutList:
             ##pz_err = np.random.uniform(low=0.02, high=float(md['SIM_REDSHIFT_CMB']) / 10.0 + 0.02, size=1)[0]
             ##pz_err = np.abs(float(md['SIM_REDSHIFT_CMB']) - 0.06) / np.abs(6.8 * float(md['SIM_REDSHIFT_CMB']) - 0.41)
             ##pz_err = np.abs(float(md['SIM_REDSHIFT_CMB']) - 0.06) / np.abs(12.5 * float(md['SIM_REDSHIFT_CMB']) - 3.25)    
-            pz_err_proxy = np.random.uniform(low=0.02, high=0.06, size=1)[0]
-            pz_err = pz_err_proxy * ( 1.0 + float(md['SIM_REDSHIFT_CMB']))
-            pz = np.random.normal(loc=float(md['SIM_REDSHIFT_CMB']), scale=np.sqrt(pz_err), size=1)[0]
-            if pz - pz_err < 0:
-                pz = float(md['SIM_REDSHIFT_CMB']) + 0.005
-                pz_err = 0.005
+            #pz_err_proxy = np.random.uniform(low=0.02, high=0.06, size=1)[0]
             
+            means = [18.428, 18.694, 19.535, 19.889, 20.423, 20.962, 21.267, 21.631, 21.856]
+            stds = [1.394, 1.534, 1.364, 1.234, 1.309, 1.129, 0.949, 0.911, 0.853]
+            z_bins = np.linspace(0.0, 0.6, 10)
+            bin_index = np.argmax(z_bins[z_bins < float(md['SIM_REDSHIFT_CMB'])])
+            if bin_index >= len(means):
+                bin_index = len(means) - 1
+            mag = np.random.normal(loc=means[bin_index], scale=stds[bin_index], size=1)[0]
+
+            x = [16.386, 17.161, 17.927, 18.693, 19.489, 20.273, 21.048, 21.793, 22.575]
+            y = [0.015, 0.019, 0.02, 0.025, 0.018, 0.026, 0.031, 0.041, 0.06]
+            func = interp1d(x, y)
+
+            if mag > np.max(x): mag = np.max(x) - 0.1
+            if mag < np.min(x): mag = np.min(x) + 0.1
+
+            z_err_proxy = func(mag)
+
+            pz_err = z_err_proxy * (1.0 + float(md['SIM_REDSHIFT_CMB']))
+
+            pz = np.random.normal(loc=float(md['SIM_REDSHIFT_CMB']), scale=pz_err, size=1)[0]
+            while pz <= 0:
+                pz = np.random.normal(loc=float(md['SIM_REDSHIFT_CMB']), scale=pz_err, size=1)[0]
+
         else:
             pz = float(md['REDSHIFT_FINAL'])
             pz_err = float(md['REDSHIFT_FINAL_ERR'])
@@ -356,6 +496,94 @@ class CutList:
         else:
             return False
 
+    def has_host_30_arcsec(self, lc, md):
+         if int(md['FAKE']) == 2:
+             bins = [(0.000, 0.148), (0.148, 1.362), (1.362, 2.575), (2.575, 3.789),
+                            (3.789, 5.002), (5.002, 6.216), (6.216, 7.430), (7.430, 8.643),
+                            (8.643, 9.857), (9.857, 11.070), (11.070, 12.284), (12.284, 13.497),
+                            (13.497, 14.711), (14.711, 15.925), (15.925, 17.138), (17.138, 18.352),
+                            (18.352, 19.565), (19.565, 20.779), (20.779, 21.992), (21.992, 23.206),
+                            (23.206, 24.420), (24.420, 26.500)]
+             bin_probs = np.array([0.129, 0.125, 0.116, 0.105, 0.092, 0.080, 0.067, 0.055, 0.044,
+                                          0.034, 0.026, 0.020, 0.015, 0.012, 0.010, 0.009, 0.010, 0.011,
+                                          0.012, 0.012, 0.011, 0.006])
+             bin_probs = bin_probs / np.sum(bin_probs)
+
+             chosen_bin_index = np.random.choice(np.arange(len(bins), dtype=int), size=1, p=bin_probs)[0]
+             chosen_bin = bins[chosen_bin_index]
+             kpc_sep = np.random.uniform(low=chosen_bin[0], high=chosen_bin[1], size=1)[0]
+
+             kpc_per_arcsec_angular_diameter = cosmo.kpc_comoving_per_arcmin(float(md['SIM_REDSHIFT_CMB'])) / 60.0 / (1.0 + float(md['SIM_REDSHIFT_CMB']))
+             arcsec_sep = kpc_sep / kpc_per_arcsec_angular_diameter.value
+             if arcsec_sep < 30.0:
+                 return True
+             else:
+                 return False
+
+         else:
+             if int(md['HOSTGAL_NMATCH']) > 0:
+                 if float(md['HOSTGAL_SNSEP']) < 30.0:
+                     return True
+                 else:
+                     return False
+             else:
+                 return False
+
+    def realtime_vetting(self, lc, md):
+        if int(md['FAKE']) == 2:
+            return True
+        else:
+            bad_snids = snid_lists.GW19084_1001_not_artifact()
+            if int(md['SNID']) in bad_snids:
+                return False
+            else:
+                return True
+
+    def realtime_vetting_strict(self, lc, md):
+        if int(md['FAKE']) == 2:
+            if int(md['SIM_MODEL_INDEX']) == 12:
+                #all agn cut out by requirement of visible transient 
+                return False
+            else:
+                #other simulated transient classes we would expect to be visible 
+                ##unless they are in a galaxy with an AGN, so use the AGN rate to account for the confusion 
+                choice = np.random.uniform(low=0.0, high=1.0, size=1)[0]
+                if choice > 0.0016:
+                    #if not AGN, cut only if we are seeing lmited 
+                    bins = [(0.000, 0.148), (0.148, 1.362), (1.362, 2.575), (2.575, 3.789),
+                            (3.789, 5.002), (5.002, 6.216), (6.216, 7.430), (7.430, 8.643),
+                            (8.643, 9.857), (9.857, 11.070), (11.070, 12.284), (12.284, 13.497),
+                            (13.497, 14.711), (14.711, 15.925), (15.925, 17.138), (17.138, 18.352),
+                            (18.352, 19.565), (19.565, 20.779), (20.779, 21.992), (21.992, 23.206),
+                            (23.206, 24.420), (24.420, 26.500)]
+                    bin_probs = np.array([0.129, 0.125, 0.116, 0.105, 0.092, 0.080, 0.067, 0.055, 0.044,
+                                          0.034, 0.026, 0.020, 0.015, 0.012, 0.010, 0.009, 0.010, 0.011,
+                                          0.012, 0.012, 0.011, 0.006])
+                    bin_probs = bin_probs / np.sum(bin_probs)
+
+                    chosen_bin_index = np.random.choice(np.arange(len(bins), dtype=int), size=1, p=bin_probs)[0]
+                    chosen_bin = bins[chosen_bin_index]
+                    kpc_sep = np.random.uniform(low=chosen_bin[0], high=chosen_bin[1], size=1)[0]
+
+                    kpc_per_arcsec_angular_diameter = cosmo.kpc_comoving_per_arcmin(float(md['SIM_REDSHIFT_CMB'])) / 60.0 / (1.0 + float(md['SIM_REDSHIFT_CMB']))
+                    arcsec_sep = kpc_sep / kpc_per_arcsec_angular_diameter.value
+                    
+                    seeing_limit = np.min(np.array(lc['PSF_SIG1'].values, dtype=float)) / 4.0
+
+                    if arcsec_sep > seeing_limit:
+                        return True
+                    else:
+                        return False
+
+                else:
+                    #if AGN, automatically cut since we sill  just see a point source 
+                    return False
+        else:
+            bad_snids = snid_lists.GW19084_1001_not_artifact_strict()
+            if int(md['SNID']) in bad_snids:
+                return False
+            else:
+                return True
 
     def visual_inspection_GW190814_1001(self, lc, md):
         if int(md['FAKE']) == 2:
@@ -367,8 +595,35 @@ class CutList:
                 ##unless they are in a galaxy with an AGN, so use the AGN rate to account for the confusion
                 choice = np.random.uniform(low=0.0, high=1.0, size=1)[0]
                 if choice > 0.0016:
-                    return True
+                    #if not AGN, cut only if we are seeing lmited
+                    bins = [(0.000, 0.148), (0.148, 1.362), (1.362, 2.575), (2.575, 3.789),
+                            (3.789, 5.002), (5.002, 6.216), (6.216, 7.430), (7.430, 8.643),
+                            (8.643, 9.857), (9.857, 11.070), (11.070, 12.284), (12.284, 13.497),
+                            (13.497, 14.711), (14.711, 15.925), (15.925, 17.138), (17.138, 18.352),
+                            (18.352, 19.565), (19.565, 20.779), (20.779, 21.992), (21.992, 23.206),
+                            (23.206, 24.420), (24.420, 26.500)]
+                    bin_probs = np.array([0.129, 0.125, 0.116, 0.105, 0.092, 0.080, 0.067, 0.055, 0.044,
+                                          0.034, 0.026, 0.020, 0.015, 0.012, 0.010, 0.009, 0.010, 0.011,
+                                          0.012, 0.012, 0.011, 0.006])
+                    bin_probs = bin_probs / np.sum(bin_probs)
+
+                    chosen_bin_index = np.random.choice(np.arange(len(bins), dtype=int), size=1, p=bin_probs)[0]
+                    chosen_bin = bins[chosen_bin_index]
+                    kpc_sep = np.random.uniform(low=chosen_bin[0], high=chosen_bin[1], size=1)[0]
+
+                    kpc_per_arcsec_angular_diameter = cosmo.kpc_comoving_per_arcmin(float(md['SIM_REDSHIFT_CMB'])) / 60.0 / (1.0 + float(md['SIM_REDSHIFT_CMB']))
+                    arcsec_sep = kpc_sep / kpc_per_arcsec_angular_diameter.value
+                    #arcsec_per_kpc = cosmo.arcsec_per_kpc_comoving(float(md['SIM_REDSHIFT_CMB']))
+                    #arcsec_sep = kpc_sep * arcsec_per_kpc.value
+                    seeing_limit = np.min(np.array(lc['PSF_SIG1'].values, dtype=float)) / 4.0
+                    
+                    if arcsec_sep > seeing_limit:
+                        return True
+                    else:
+                        return False
+
                 else:
+                    #if AGN, automatically cut since we sill  just see a point source
                     return False
         else:
             #use the 448 list instead
@@ -423,3 +678,4 @@ class CutList:
                 return False
 
 
+        

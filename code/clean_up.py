@@ -9,7 +9,7 @@ event_name = sys.argv[1]
 mode = sys.argv[2]
 
 # modes
-allowed_modes = ['sims']
+allowed_modes = ['sims', 'everything']
 if mode not in allowed_modes:
     print("'%s' not in allowed modes for clean up" %mode)
     sys.exit()
@@ -29,3 +29,16 @@ if mode == 'sims':
     os.system('rm -rf ../events/%s/DES_metadata.csv' %event_name)
     os.system('rm -rf ../events/%s/exptable.txt' %event_name)
     print("Cleaned existing simulations")
+
+#destroy it all
+if mode == 'everything':
+    os.system('rm -rf ../events/%s/analysis' %event_name)
+    os.system('rm -rf ../events/%s/sims_and_data' %event_name)
+    os.system('rm -rf ../events/%s/sim_gen' %event_name)
+    os.system('rm -rf ../events/%s/cut_results' %event_name)
+    os.system('rm -rf ../events/%s/logs' %event_name)
+    os.system('rm -rf ../events/%s/event_metadata.csv' %event_name)
+    os.system('rm -rf ../events/%s/DES_metadata.csv' %event_name)
+    os.system('rm -rf ../events/%s/exptable.txt' %event_name)
+    os.system('rm -rf ../events/%s/report.txt' %event_name)
+    print("Clobbered all existing results for %s" %event_name)

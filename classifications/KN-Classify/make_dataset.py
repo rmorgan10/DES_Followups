@@ -14,10 +14,17 @@ obj = sys.argv[2]
 extract.run_extraction(event_name, obj)
 
 # Load featurized data
-df = pd.read_csv('../../events/%s/KNC/%s_feats.csv' %(event_name, obj))
+empty_df = False
+try:
+    df = pd.read_csv('../../events/%s/KNC/%s_feats.csv' %(event_name, obj))
+except:
+    empty_df = True
 
 # Organize by light curve properties
-datasets = organize.breakup(df)
+if not empty_df:
+    datasets = organize.breakup(df)
+else:
+    datasets = {}
 
 # Save results
 np.save('../../events/%s/KNC/%s_datasets.npy' %(event_name, obj), datasets)

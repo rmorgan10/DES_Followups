@@ -16,8 +16,10 @@ username = getpass.getuser()
 ## use 'real' if real conditions are desired
 forced_conditions = sys.argv[2]
 
+nobs_force = sys.argv[3]
+
 try:
-    obj_to_simulate = sys.argv[3:]
+    obj_to_simulate = sys.argv[4:]
 except:
     print("ERROR: Provide space-separated list of objects to generate_sims.py")
     sys.exit()
@@ -25,9 +27,12 @@ except:
 
 #check for and nuke existing sims directory
 sim_path = '../events/%s/sim_gen' % event_name
-if os.path.exists(sim_path):
-    os.system('rm -r %s' %sim_path)
-os.system('mkdir %s' %sim_path)
+#if os.path.exists(sim_path):
+#    os.system('rm -r %s' %sim_path)
+#os.system('mkdir %s' %sim_path)
+if not os.path.exists(sim_path):
+    os.system('mkdir %s' %sim_path)
+
 
 log_path = '../events/%s/logs' %event_name
 if not os.path.exists(log_path):
@@ -59,7 +64,26 @@ if not os.path.exists('../events/%s/sim_gen/SIMLIB.txt' %event_name):
     log_file = open('../events/%s/logs/eff_area.log' %event_name, 'w+')
     log_file.write('%.6f' %std)
     log_file.close()
-    os.system('python clean_simlib.py ../events/%s/sim_gen/SIMLIB_raw.txt ../events/%s/sim_gen/SIMLIB.txt %.6f' %(event_name, event_name, area))
+    os.system('python clean_simlib.py ../events/%s/sim_gen/SIMLIB_raw.txt ../events/%s/sim_gen/SIMLIB_0.txt %.6f %s' %(event_name, event_name, area, nobs_force))
+    #rerun until length of file does not change
+    os.system('touch ../events/%s/sim_gen/SIMLIB_0.txt' %event_name)
+    simlib_file = open('../events/%s/sim_gen/SIMLIB_raw.txt' %event_name, 'r')
+    simlib_lines = len(simlib_file.readlines())
+    simlib_file.close()
+    new_simlib_file = open('../events/%s/sim_gen/SIMLIB_0.txt'%event_name, 'r')
+    new_simlib_lines = len(new_simlib_file.readlines())
+    new_simlib_file.close()
+    counter = 0
+    while simlib_lines != new_simlib_lines:
+        os.system('python clean_simlib.py ../events/%s/sim_gen/SIMLIB_%i.txt ../events/%s/sim_gen/SIMLIB_%i.txt %.6f %s' %(event_name, counter, event_name, counter + 1, area, nobs_force))
+        simlib_file = open('../events/%s/sim_gen/SIMLIB_%i.txt' %(event_name, counter), 'r')
+        simlib_lines = len(simlib_file.readlines())
+        simlib_file.close()
+        new_simlib_file = open('../events/%s/sim_gen/SIMLIB_%i.txt' %(event_name, counter), 'r')
+        new_simlib_lines = len(new_simlib_file.readlines())
+        new_simlib_file.close()
+        counter += 1
+    os.system('mv ../events/%s/sim_gen/SIMLIB_%i.txt ../events/%s/sim_gen/SIMLIB.txt' %(event_name, counter, event_name))
 else:
     print("Existing SIMLIB found, skipping simlib generation")
 
@@ -117,18 +141,20 @@ for obj in obj_to_simulate:
         args.append(obj)
         os.system('snlc_sim.exe sim_gen/%s > logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
 
-os.chdir('../../code')
-monitor_args = ' '.join(args)
-monitor_error = os.system('python monitor_all_sims.py %s %s' %(event_name, monitor_args))
+#only do the following if there are running sims
+if len(args) != 0:
 
-if monitor_error != 0:
-    garbage = raw_input("ERROR in monitor_all_sims.py. Simulations are still running. Press ENTER to continue when you are sure sims have finished.")
+    os.chdir('../../code')
+    monitor_args = ' '.join(args)
+    monitor_error = os.system('python monitor_all_sims.py %s %s' %(event_name, monitor_args))
 
-#sys.exit()
-
-
-os.chdir('../events/%s' %event_name)
-for obj in args:
-    os.system('mv ' + sim_dir_prefix + '%s  sims_and_data/%s_DESGW_%s_%s_FITS' %(obj, username, event_name, obj))
+    if monitor_error != 0:
+        garbage = raw_input("ERROR in monitor_all_sims.py. Simulations are still running. Press ENTER to continue when you are sure sims have finished.")
 
 
+    os.chdir('../events/%s' %event_name)
+    for obj in args:
+        os.system('mv ' + sim_dir_prefix + '%s  sims_and_data/%s_DESGW_%s_%s_FITS' %(obj, username, event_name, obj))
+
+else:
+    print("Previous sims found, moving on")

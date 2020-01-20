@@ -2,6 +2,37 @@
 import numpy as np
 import pandas as pd
 
+def GW19084_1001_not_artifact():
+    df = pd.read_csv('../events/GW190814_1001/snid_lists/GW190814_vetting.csv', comment='#')
+    snids = np.array(df['SNID'], dtype=int)
+    bad_sub = np.array(df['Bad Sub'].values, dtype=int)
+    masked = np.array(df['Overmasked'].values, dtype=int)
+    psf = np.array(df['PSF in temp'].values, dtype=int)
+    missing = np.array(df['Missing'].values, dtype=int)
+    artifacts = (bad_sub == 1) | (masked == 1) | (psf == 1) | (missing == 1)
+    return snids[artifacts] #return bad snids
+
+def GW19084_1001_not_artifact_strict():
+    df = pd.read_csv('../events/GW190814_1001/snid_lists/GW190814_vetting.csv', comment='#')
+    snids = np.array(df['SNID'], dtype=int)
+    bad_sub = np.array(df['Bad Sub'].values, dtype=int)
+    masked = np.array(df['Overmasked'].values, dtype=int)
+    psf = np.array(df['PSF in temp'].values, dtype=int)
+    missing = np.array(df['Missing'].values, dtype=int)
+    marginal = np.array(df['Marginal at best'].values, dtype=int)
+    artifacts = (bad_sub == 1) | (masked == 1) | (psf == 1) | (missing == 1) | (marginal == 1) 
+    return snids[artifacts]
+
+def GW190814_1001_near_foreground():
+    df = pd.read_csv('../events/GW190814_1001/snid_lists/not_near_foreground.txt', header=None, names=['SNID'])
+    snids = np.array(df['SNID'], dtype=int)
+    return snids
+
+def GW190814_1001_near_galaxy_center():
+    df = pd.read_csv('../events/GW190814_1001/snid_lists/not_near_galaxy_center.txt', header=None, names=['SNID'])
+    snids = np.array(df['SNID'], dtype=int)
+    return snids
+
 def not_in_gaia_1_arcsec_GW190814_1001_snids():
     df = pd.read_csv('../events/GW190814_1001/snid_lists/not_gaia_2_arcsec.txt', header=None, names=['SNID'])
     snids = np.array(df['SNID'], dtype=int)

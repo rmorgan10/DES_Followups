@@ -11,6 +11,12 @@ f = open(filename, 'r')
 lines = f.readlines()
 f.close()
 
+if len(sys.argv) > 4:
+    nobs_force = int(sys.argv[4])
+    trim_libids_by_nobs = True
+else:
+    trim_libids_by_nobs = False
+
 # Collect indices of each LIBID start and end, and the line with NOBS
 libid_starts, libid_ends, nobs_lines = [], [], []
 index = 0
@@ -73,12 +79,53 @@ for ii in sorted(lines_to_delete, reverse=True):
 outlines = []
 for line in lines:
     if line[0:6] == 'FIELD:':
-        outlines.append('FIELD: 1')
+        outlines.append('FIELD: 1\n')
     else:
         outlines.append(line)
 
 #overwrite the effective area line
 outlines[-1] = 'EFFECTIVE_AREA: %s' %area
+
+# if desired by user, drop libids that have fewer than specified number of observations
+
+if trim_libids_by_nobs:
+    new_outlines = []
+    libids_to_delete = []
+    new_line_counter = 0
+    while new_line_counter < len(outlines) - 1:
+        if outlines[new_line_counter + 1].find('NOBS') != -1:
+            nobs = int(outlines[new_line_counter + 1].strip().split(' ')[-1])
+            if nobs < nobs_force:
+                #mark libid for deletion
+                libids_to_delete.append(outlines[new_line_counter].strip().split(' ')[-1])
+            new_line_counter += nobs
+        else:
+            new_line_counter += 1
+
+    bad_libid_starts = []
+    bad_libid_ends = []
+    for line_index in range(len(outlines)):
+        if outlines[line_index][0:6] == 'LIBID:':
+            libid_index = outlines[line_index].strip().split(' ')[-1]
+            if libid_index in libids_to_delete:
+                bad_libid_starts.append(line_index)
+        elif outlines[line_index][0:10] == 'END_LIBID:':
+            libid_index= outlines[line_index].strip().split(' ')[-1]
+            if libid_index in libids_to_delete:
+                bad_libid_ends.append(line_index)
+    
+    bad_libid_indices = []
+    for x, y in zip(bad_libid_starts, bad_libid_ends):
+        l = range(x - 2, y + 1)
+        for item in l:
+            bad_libid_indices.append(item)
+
+    for ii in range(len(outlines)):
+        if ii not in bad_libid_indices:
+            new_outlines.append(outlines[ii])
+
+    outlines = new_outlines
+
 
 # Write output SIMLIB file
 outfile = open(outfile_name, 'w+')

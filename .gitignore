@@ -1,4 +1,5 @@
 *~
+*.pyc
 code/*.pyc
 code/.*.password
 
@@ -9,6 +10,9 @@ events/GW190510/logs/
 events/GW190510/cut_results/
 events/GW190510/sim_gen/
 events/GW190510/report.txt
+events/GW190510/analysis/
+events/GW190510/PSNID/
+events/GW190510_KNC/
 
 #GW190728
 events/GW190728/sims_and_data/
@@ -17,6 +21,7 @@ events/GW190728/logs/
 events/GW190728/cut_results/
 events/GW190728/sim_gen/
 events/GW190728/report.txt
+events/GW190728/analysis/
 
 #GW190814
 events/GW190814/sims_and_data/
@@ -25,6 +30,8 @@ events/GW190814/logs/
 events/GW190814/cut_results/
 events/GW190814/sim_gen/
 events/GW190814/report.txt
+events/GW190814/analysis/
+events/GW190814/PSNID/
 
 #GW190814_1001
 events/GW190814_1001/sims_and_data/
@@ -33,6 +40,8 @@ events/GW190814_1001/logs/
 events/GW190814_1001/cut_results/
 events/GW190814_1001/sim_gen/
 events/GW190814_1001/report.txt
+events/GW190814_1001/analysis/
+events/GW190814_1001/PSNID/
 
 ### testing (not unit tests yet)
 events/test/
@@ -40,3 +49,7 @@ run_test.py
 
 ### scripts in progress
 analysis/
+
+
+### data files
+*.npy

@@ -195,7 +195,7 @@ def main():
     if fname is None:
         print "must specify output file."
         exit()
-    out = open(fname, 'w')
+    out = open(fname, 'w+')
     out.write(master_head_template.format(cmd))
 
     if options.zpmin:
