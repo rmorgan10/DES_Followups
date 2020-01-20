@@ -1,0 +1,90 @@
+# 
+# SIGMGEN file for Mdwarf Stellar Flares
+# 
+
+#-----------------------------------------------------------------
+# Event-specific info to be overwritten
+#-----------------------------------------------------------------
+
+GENRANGE_PEAKMJD: 58700 58740
+GENRANGE_MJD: 58700 58740
+GENVERSION:  RM_test_Mdwarf
+EXPOSURE_TIME: 1.5
+SOLID_ANGLE:  0.0082
+NGEN_SEASON:  10.0
+
+#--------------------------------------------------------------------
+# Don't need to change anything after this point  (I sure hope)
+#--------------------------------------------------------------------
+
+SIMLIB_FILE:  sim_gen/SIMLIB.txt
+
+
+GENMODEL:  LCLIB  $PLASTICC_MODELS/LCLIB_Mdwarf-LSST.TEXT 1+2+3+4
+
+
+
+# rel rate = b0 + b1*cosb + b2*cosb^2 + b3*cosb^3
+
+DNDB: COSBPOLY 0.1  1.0  1.0  1.0  0 0  # b0 b1 b2 b3 b4 b5
+
+GENRANGE_TREST  -100. 100.
+FORMAT_MASK: 32
+
+
+GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
+
+# 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
+#SOLID_ANGLE:  0.0082    # steridians 
+
+
+#NGENTOT_LC:  1000
+#GENVERSION:  ZD_KNDES_TEST
+GENSOURCE:   RANDOM   
+
+GENFILTERS:  griz
+KCOR_FILE:   DES/kcor_DES_grizY.fits
+
+RANSEED: 12945       # random number seed
+
+# smear flags: 0=off, 1=on
+SMEARFLAG_FLUX:    1  # photo-stat smearing of signal, sky, etc ...
+SMEARFLAG_ZEROPT:  1  # smear zero-point with zptsig
+
+NEWMJD_DIF:  0.7
+APPLY_SEARCHEFF_OPT:  0
+SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
+SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
+
+APPLY_CUTWIN_OPT: 1   #PSNID dies if you turn this off, fun fact
+#CUTWIN_SNRMAX:   3 griz 1 -20. 60.  # require 1 of griz with S/N > 3
+#CUTWIN_NEPOCH:    2  +2  #Require    two epochs with    SNR > 2
+CUTWIN_NOBSDIF: 2, 9999
+
+
+# cosmological params for lightcurve generation and redshift distribution
+OMEGA_MATTER:  0.3
+OMEGA_LAMBDA:  0.7
+W0_LAMBDA:    -1.00
+H0:           70.0   
+
+# ======
+
+#FORMAT_MASK:  2  # 2=TEXT  8=BLIND  16=CIDRAN; 32=FITS
+
+CLEARPROMPT:    0
+
+GENRANGE_RA:      -360.   360.0   deg
+GENRANGE_DECL:    -360.   360.5
+#GENRANGE_TREST:   -50.0   50.
+
+
+
+# ==============================
+
+SIMGEN_DUMPALL:  29
+  CID CUTMASK SIM_EFFMASK GENTYPE  SNTYPE  NON1A_INDEX  GENZ 
+  FIELD LIBID RA DECL MWEBV MU PEAKMJD
+  MAGT0_g MAGT0_r MAGT0_i MAGT0_z 
+  SNRMAX_g SNRMAX_r SNRMAX_i SNRMAX_z SNRMAX SNRMAX2 SNRMAX3 
+  NOBS TRESTMIN TRESTMAX TGAPMAX  

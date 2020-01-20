@@ -51,7 +51,7 @@ KCOR_FILE:  DES/kcor_DES_grizY.fits
 #GENRANGE_PEAKMJD: 58598 58628
 GENSIGMA_SEARCH_PEAKMJD:  0.1     # sigma-smearing for  SEARCH_PEAKMJD (days)
 
-GENRANGE_REDSHIFT:  0.005 1.0      # RM-changed max redshift from 1.4 to 1.0
+GENRANGE_REDSHIFT:  0.005 0.6      # RM-changed max redshift from 1.4 to 1.0
 GENSIGMA_REDSHIFT:  0.001
 
 RANSEED: 12945       # random number seed

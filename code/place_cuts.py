@@ -11,7 +11,7 @@ event_name = sys.argv[1]
 fits_dir_prefix = sys.argv[2]
 
 #deal with output data
-#transient_class = fits_dir_prefix.split('_')[-1]
+transient_class = fits_dir_prefix.split('_')[-1]
 #process_log_file = '../events/%s/logs/cut_%s.log' %(event_name, transient_class)
 
 #parse cut_file
@@ -70,3 +70,4 @@ if not os.path.exists('../events/%s/cut_results' %event_name):
 
 np.save('../events/%s/cut_results/%s_cut_results.npy' %(event_name, fits_dir_prefix), cut_results)
 
+os.system('touch ../events/%s/logs/cut_%s.DONE' %(event_name, transient_class))

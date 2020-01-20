@@ -1,0 +1,61 @@
+JOBNAME_LCFIT:  psnid.exe
+OUTDIR:   REPLACEME
+
+NODELIST:  des50 des51 des41 des40  des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40  des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40  des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40  des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40  des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40
+SNANA_LOGIN_SETUP: source /home/s1/rkessler/bin/setup_SNANA-EUPS.sh
+
+VERSION:  REPLACEME
+
+ &SNLCINP
+   VERSION_PHOTOMETRY = 'LightCurvesReal'
+   PRIVATE_DATA_PATH  = 'REPLACEME'
+   PHOTFLAG_MSKREJ       = 1016, 0
+
+   SNCID_LIST_FILE = 'REPLACEME'
+     
+   SNTABLE_LIST     = 'FITRES LCPLOT(text:col)'
+   ROOTFILE_OUT     = 'LightCurvesReal.ROOT'
+   !HFILE_OUT        = 'LightCurvesReal.HBOOK'
+   TEXTFILE_PREFIX  = 'LightCurvesReal'
+
+   OPT_MWEBV    = 2  ! SFD98 for Galactic extinction
+   OPT_SETPKMJD = 5  ! Bazin function to estimate PKMJD_INIT
+
+   KCOR_FILE            = '$DES_ROOT/kcor/SpecIa_3yr/DES_Y3A2_noOOB.fits'
+  !FUDGE_HOSTNOISE_FILE = '$DES_ROOT/simlibs/DES_SMP_NOISEMODEL.DAT'
+
+   NFIT_ITERATION = 2
+   INTERP_OPT     = 1
+   
+   ABORT_ON_NOEPOCHS = F
+   ABORT_ON_TRESTCUT = F
+
+ &END
+
+
+ &PSNIDINP
+     METHOD_NAME            = 'BEST'
+     FILTLIST_FIT           = 'griz'
+     FILTLIST_PEAKMAG_STORE = 'griz'
+
+     CHISQMIN_OUTLIER = 10
+     NREJECT_OUTLIER  =  1
+
+     PRIVATE_TEMPLATES_PATH = '$DES_ROOT/psnid_templates/v09/SNgrid'
+
+     TEMPLATES_SNIa  = 'GRID_DES_SNIa-SALT2.FITS'
+     TEMPLATES_NONIa = 'GRID_DES_SNCC-S11.FITS'
+
+     OPT_ZPRIOR  = 2        ! 0=flat, 1=zspec, 2=zphot
+     FITPROB_IA_CUT = 1.0E-30
+
+     COLOR_MIN   = -1.0     ! minimum
+     COLOR_MAX   =  1.0     ! and maximum color value
+     NCOLOR      = 21       ! and number of bins to use in grid search
+
+     DMU_MIN     = -0.5
+     DMU_MAX     =  1.5
+     NDMU        =  11
+     MCMC_NSTEP  =  0
+     		     
+ &END

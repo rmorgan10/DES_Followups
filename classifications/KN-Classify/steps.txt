@@ -1,0 +1,58 @@
+# Steps to implementing KNC
+
+1. check whether all needed sims exist
+
+If yes, move on, if no, trigger needed simulations in parallel
+
+2. check whether pythonized versions of all sims exist
+
+If yes, move on, if no, trigger needed processing in parallel
+
+3. Place cuts on Pythonized light curves in parallel
+
+4. Extract features from all sims and data in parallel
+
+5. Output features to csv
+
+6. Train RFC and classify data
+
+7. Validate current performance
+
+8. Calibrate probabilities to FPR
+
+9. Output sorted classification report
+
+
+Needed codes
+------------
+run_knc.py
+
+	Outer shell in DES_Followups/code directory to change to KNC directory and run KNC
+
+knc.py
+
+	Shell to check for existing files and trigger other scripts
+
+generate_all_sims.py
+monitor_all_sims.py
+
+process_all_lc.py
+
+	Triggers parse_fits.py on all sims that need it
+
+cut_all_lc.py
+
+	Triggers place_cuts.py on all sims that need it
+
+extract_features.py
+
+	Determine optimal features based on light curve
+	Extract features from sims and data
+	Make training, validation, and data csv files
+
+classify.py
+
+	Train RFC on training set
+	Classify validation set
+	Output diagnostics
+	

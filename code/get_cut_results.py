@@ -7,6 +7,7 @@ import sys
 
 event_name = sys.argv[1]
 fits_dir_prefix = sys.argv[2]
+transient_class = fits_dir_prefix.split('_')[-1]
 
 # assume at this point we only have fits files
 ## i.e., run convert_dat_to_fits.py as a preprocessing step
@@ -25,7 +26,6 @@ print("Cuts to be placed:")
 print(cut_df)
 
 cut_by_dict = { str(x) : 0 for x in cut_df['NUMBER'].values }
-
 
 
 table_output = []
@@ -77,3 +77,4 @@ try:
 except:
     print("WARNING: Number of remaining objects (%i) does not agree with number of candidates (%i)." %(remaining, output_df.shape[0]))
     
+os.system('touch ../events/%s/logs/get_results_%s.DONE' %(event_name, transient_class))

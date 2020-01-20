@@ -1,0 +1,112 @@
+# 
+# SIGMGEN file for Tidal Disruption Events
+# 
+
+#-----------------------------------------------------------------
+# Event-specific info to be overwritten
+#-----------------------------------------------------------------
+
+GENRANGE_PEAKMJD: 58700 58740
+GENRANGE_MJD: 58700 58740
+GENVERSION:  RM_test_TDE
+EXPOSURE_TIME: 1.5
+SOLID_ANGLE:  0.0082
+NGEN_SEASON:  1.0
+
+#--------------------------------------------------------------------
+# Don't need to change anything after this point  (I sure hope)
+#--------------------------------------------------------------------
+
+SIMLIB_FILE:  sim_gen/SIMLIB.txt
+
+# TDE from MOSFIT group
+
+GENMODEL: $PLASTICC_MODELS/SIMSED.TDE-MOSFIT
+#GENAV_WV07:   1      # WV07, Eq. 2
+GENTAU_AV:    0.4     # expon component only, no Gauss core
+GENRANGE_AV:  0 3     # CCM89 AV-extinctionrange
+
+SIMSED_USE_BINARY:   1
+SIMSED_PATH_BINARY:  $PLASTICC_MODELS/SIMSED_BINARIES
+
+# Volumetric rate from 1707.03458, (8 +- 4) × 10−7 /Mpc^3/yr
+# z-dependence from
+#   http://adsabs.harvard.edu/abs/2016MNRAS.tmp..944K
+#
+#DNDZ: MD14  1.0E-6                 # MD14 SFR(z), with 1E-6/yr/Mpc^3 at z=0
+#DNDZ_ZPOLY_REWGT: 1.0 -0.8  0.25  -0.03  # temp fudge
+
+#DNDZ: EPM  1.0E-6  # acronym to hide in code
+#DNDZ: EPM 0.8E-7  # from van Velson 2017, Sec 5.2
+DNDZ: TDE  1.0E-6 # eventual acronym after PLASTICC
+GENRANGE_REDSHIFT:  0.015   0.8
+
+#GENRANGE_TREST:   -100.0  500.0
+#GENRANGE_TREST:   -50.0  100.0
+
+# ==============================
+# SIMSED GRID PARAMETERS
+# Eqal prob per SED
+
+SIMSED_GRIDONLY:  TDE_INDEX
+
+
+GENRANGE_TREST:  -100. 100.
+FORMAT_MASK: 32
+
+GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
+
+# 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
+#SOLID_ANGLE:  0.0082    # steridians 
+
+
+#NGENTOT_LC:  1000
+#GENVERSION:  ZD_KNDES_TEST
+GENSOURCE:   RANDOM   
+
+GENFILTERS:  griz
+KCOR_FILE:   DES/kcor_DES_grizY.fits
+
+RANSEED: 12945       # random number seed
+
+# smear flags: 0=off, 1=on
+SMEARFLAG_FLUX:    1  # photo-stat smearing of signal, sky, etc ...
+SMEARFLAG_ZEROPT:  1  # smear zero-point with zptsig
+
+NEWMJD_DIF:  0.7
+APPLY_SEARCHEFF_OPT:  0
+SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
+SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
+
+APPLY_CUTWIN_OPT: 1   #PSNID dies if you turn this off, fun fact
+#CUTWIN_SNRMAX:   3 griz 1 -20. 60.  # require 1 of griz with S/N > 3
+#CUTWIN_NEPOCH:    2  +2  #Require    two epochs with    SNR > 2
+CUTWIN_NOBSDIF: 2, 9999
+
+# cosmological params for lightcurve generation and redshift distribution
+OMEGA_MATTER:  0.3
+OMEGA_LAMBDA:  0.7
+W0_LAMBDA:    -1.00
+H0:           70.0   
+
+# ======
+
+#FORMAT_MASK:  2  # 2=TEXT  8=BLIND  16=CIDRAN; 32=FITS
+
+CLEARPROMPT:    0
+
+
+GENRANGE_RA:      -360.   360.0   deg
+GENRANGE_DECL:    -360.   360.5
+#GENRANGE_TREST:   -50.0   50.
+
+
+
+# ==============================
+
+SIMGEN_DUMPALL:  29
+  CID CUTMASK SIM_EFFMASK GENTYPE  SNTYPE  NON1A_INDEX  GENZ 
+  FIELD LIBID RA DECL MWEBV MU PEAKMJD
+  MAGT0_g MAGT0_r MAGT0_i MAGT0_z 
+  SNRMAX_g SNRMAX_r SNRMAX_i SNRMAX_z SNRMAX SNRMAX2 SNRMAX3 
+  NOBS TRESTMIN TRESTMAX TGAPMAX  
