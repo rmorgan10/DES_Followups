@@ -15,6 +15,11 @@ event_dir = '../../events/%s/PSNID' %event_name
 train_df = pd.read_csv('%s/training_set.csv' %event_dir)
 test_df = pd.read_csv('%s/testing_set.csv' %event_dir)
 
+#load full sim_dfs
+kn_df = pd.read_csv('%s/full_feat_df_KN.csv' %event_dir)
+ia_df = pd.read_csv('%s/full_feat_df_Ia.csv' %event_dir)
+cc_df = pd.read_csv('%s/full_feat_df_CC.csv' %event_dir)
+
 #load data
 data_df = pd.read_csv('%s/data.csv' %event_dir)
 
@@ -34,6 +39,10 @@ out_feat_df.to_csv('%s/feat_importances.csv' %event_dir, index=False)
 train_pred = rfc.predict_proba(train_df[feats])
 test_pred = rfc.predict_proba(test_df[feats])
 data_pred = rfc.predict_proba(data_df[feats])
+
+kn_pred = rfc.predict_proba(kn_df[feats])
+ia_pred = rfc.predict_proba(ia_df[feats])
+cc_pred = rfc.predict_proba(cc_df[feats])
 
 #calibrate KN probabilities to Purity of test set
 test_labels_binary = [int(x == 'KN') for x in test_df['CLASS'].values]
@@ -101,8 +110,21 @@ data_df['PROB_CC'] = calibrate_sn(data_pred[:,0], data_pred[:,1], data_pred[:,0]
 data_df['PROB_Ia'] = calibrate_sn(data_pred[:,0], data_pred[:,1], data_pred[:,1])
 data_df['PROB_KN'] = calibrate_kn(data_pred[:,2])
 
+kn_df['PROB_CC'] = calibrate_sn(kn_pred[:,0], kn_pred[:,1], kn_pred[:,0])
+kn_df['PROB_Ia'] = calibrate_sn(kn_pred[:,0], kn_pred[:,1], kn_pred[:,1])
+kn_df['PROB_KN'] = calibrate_kn(kn_pred[:,2])
+ia_df['PROB_CC'] = calibrate_sn(ia_pred[:,0], ia_pred[:,1], ia_pred[:,0])
+ia_df['PROB_Ia'] = calibrate_sn(ia_pred[:,0], ia_pred[:,1], ia_pred[:,1])
+ia_df['PROB_KN'] = calibrate_kn(ia_pred[:,2])
+cc_df['PROB_CC'] = calibrate_sn(cc_pred[:,0], cc_pred[:,1], cc_pred[:,0])
+cc_df['PROB_Ia'] = calibrate_sn(cc_pred[:,0], cc_pred[:,1], cc_pred[:,1])
+cc_df['PROB_KN'] = calibrate_kn(cc_pred[:,2])
 
 #output results
 train_df.to_csv('%s/pred_train.csv' %event_dir, index=False)
 test_df.to_csv('%s/pred_test.csv' %event_dir, index=False)
 data_df.to_csv('%s/pred_data.csv' %event_dir, index=False)
+
+kn_df.to_csv('%s/pred_full_KN.csv' %event_dir, index=False)
+ia_df.to_csv('%s/pred_full_Ia.csv' %event_dir, index=False)
+cc_df.to_csv('%s/pred_full_CC.csv' %event_dir, index=False)

@@ -2,6 +2,10 @@
 import numpy as np
 import pandas as pd
 
+def gw190510_candidates():
+    df = pd.read_csv('../events/GW190510/snid_lists/candidates.csv')
+    return np.array(df['SNID'].values, dtype=int)
+
 def GW19084_1001_not_artifact():
     df = pd.read_csv('../events/GW190814_1001/snid_lists/GW190814_vetting.csv', comment='#')
     snids = np.array(df['SNID'], dtype=int)
@@ -13,7 +17,7 @@ def GW19084_1001_not_artifact():
     return snids[artifacts] #return bad snids
 
 def GW19084_1001_not_artifact_strict():
-    df = pd.read_csv('../events/GW190814_1001/snid_lists/GW190814_vetting.csv', comment='#')
+    df = pd.read_csv('../events/GW190814_gold/snid_lists/GW190814_vetting.csv', comment='#')
     snids = np.array(df['SNID'], dtype=int)
     bad_sub = np.array(df['Bad Sub'].values, dtype=int)
     masked = np.array(df['Overmasked'].values, dtype=int)

@@ -6,6 +6,8 @@ import pandas as pd
 from scipy.interpolate import LinearNDInterpolator
 from scipy import ndimage
 
+from scipy.stats import poisson
+
 from matplotlib import rcParams
 rcParams['font.family'] = 'serif'
 
@@ -36,7 +38,8 @@ def get_eff_data(filename, gridsize=100):
     return eff_df
 
 def calc_prob(eff, B, lam, f):
-    return 1. / (lam * f * eff + B) 
+    #return 1. / (lam * f * eff + B) 
+    return (1. - eff) * poisson.pmf(mu=B, k=0)
 
 def get_prob_df(df1, B, lam, f):
     probs = calc_prob(df1['EFFICIENCY'].values, B, lam, f)
@@ -108,11 +111,82 @@ def make_contour(info, ax):
     
     return ax
 
+def get_boundaries(bindata, info, levels=[5, 39.3]):
+    cutoffs = np.percentile(info, q=levels)
+    
+    outdata = []
+    for cutoff in cutoffs:
+        outdata.append(get_boundaries_single(bindata, info, cutoff))
+        
+    return outdata
+        
+def get_boundaries_single(bindata, info, cutoff, thresh=0.02):
+    idx = np.arange(len(bindata))
+    
+    num_possibilities = 3
+    while num_possibilities > 2:
+        thresh /= 1.9 #1.4
+    
+        cond = (info < cutoff + thresh) & (info > cutoff - thresh)
+        num_possibilities = len(idx[cond])
+
+    #print(idx[cond])
+    helper = False
+    if len(idx[cond]) == 2:
+        #two sided constraints
+        if np.abs(idx[cond][0] - idx[cond][1]) != 1:
+            # true two sided limit
+            return idx[cond]
+        helper = True
+    
+    #one sided limit
+    if helper:
+        up_low = np.argmin(np.array([np.abs(np.max(bindata) - bindata[idx[cond][0]]), np.abs(np.min(bindata) - bindata[idx[cond][0]])]))
+    else:
+        up_low = np.argmin(np.array([np.abs(np.max(bindata) - bindata[idx[cond]]), np.abs(np.min(bindata) - bindata[idx[cond]])]))
+    #print([np.abs(np.max(bindata) - bindata[idx[cond]]), np.abs(np.min(bindata) - bindata[idx[cond]])])
+    if up_low == 0:
+        return np.array([idx[cond][0], len(bindata) -1])
+    else:
+        return np.array([0, idx[cond][0]])
+
+
 def make_hist(info, ax, hist_params):
     #ax.hist(info, bins=20)
+
     ax.step(info[0], info[1], **hist_params)
+
+
+    boundary_idx = get_boundaries(info[0], info[1], levels=[5, 39.3])
+
+    #one sigma
+    ax.fill_between(info[0][boundary_idx[1][0]:boundary_idx[1][1],0],
+                    np.zeros(boundary_idx[1][1] - boundary_idx[1][0]),
+                    np.array(info[1])[boundary_idx[1][0]:boundary_idx[1][1]],
+                    alpha=0.3, color='#b6bfec')
     
+    #two sigma
+    ax.fill_between(info[0][boundary_idx[0][0]:boundary_idx[0][1],0],
+                    np.zeros(boundary_idx[0][1] - boundary_idx[0][0]),
+                    np.array(info[1])[boundary_idx[0][0]:boundary_idx[0][1]],
+                    alpha=0.3, color='#0e30d8')
+
+
+    plot_range = np.max(info[1]) - np.min(info[1])
+
+    ax.set_ylim(np.min(info[1]) - 0.05 * plot_range, np.max(info[1]) + 0.05 * plot_range)
+
+
+    #Don't ask me what the heck is going on with the dimensions here
+    print("One Sigma")
+    print("%.5f  %.5f" %(info[0][boundary_idx[1][0]][0], info[0][boundary_idx[1][1]][0]))
+    print("Two Sigma")
+    print("%.5f  %.5f" %(info[0][boundary_idx[0][0]][0], info[0][boundary_idx[0][1]][0]))
+
+    print('\n')
+
     return ax
+
 
 def make_plot_full(all_info, plot_contour_list=[True], hist_param_list=[{}], outfile=''):
     if len(plot_contour_list) != len(all_info):
@@ -138,7 +212,7 @@ def make_plot_full(all_info, plot_contour_list=[True], hist_param_list=[{}], out
     ax.set_yticklabels(['%.3f' %(10**x) for x in ax.get_yticks()], fontsize=12)
     ax.set_xlim(0.03, 0.3)
     ax.set_ylim(-3,-1)
-    ax.text(0.15, -1.5, 'Excluded at $1\sigma$\nConfidence Level', fontsize=14,
+    ax.text(0.15, -1.8, 'Excluded at $1\sigma$\nConfidence Level', fontsize=14,
             horizontalalignment='center', verticalalignment='center')
     
     #VK vs LOGXLAN
@@ -148,7 +222,7 @@ def make_plot_full(all_info, plot_contour_list=[True], hist_param_list=[{}], out
     ax.set_ylim(-9, -1)
     ax.set_xticklabels([''])
     ax.set_yticklabels(['%i' %x for x in ax.get_yticks()], fontsize=12)
-    ax.text(0.15, -8, 'Excluded at $1\sigma$\nConfidence Level', fontsize=14,
+    ax.text(0.15, -6.5, 'Excluded at $1\sigma$\nConfidence Level', fontsize=14,
             horizontalalignment='center', verticalalignment='center')
     
     #LOGXLAN vs LOGMASS
@@ -158,7 +232,7 @@ def make_plot_full(all_info, plot_contour_list=[True], hist_param_list=[{}], out
     ax.set_ylim(-3,-1)
     ax.set_xticklabels(['%i' %x for x in ax.get_xticks()], fontsize=12)
     ax.set_yticklabels('')
-    ax.text(-5, -1.5, 'Excluded at $1\sigma$\nConfidence Level', fontsize=14,
+    ax.text(-5, -1.8, 'Excluded at $1\sigma$\nConfidence Level', fontsize=14,
             horizontalalignment='center', verticalalignment='center')
     
     #VK

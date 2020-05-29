@@ -12,6 +12,11 @@ event_name = sys.argv[1]
 os.chdir('../events/%s/cut_results' %event_name)
 username = getpass.getuser()
 
+try:
+    force_area = float(sys.argv[2])
+except:
+    force_area = None
+
 #check for existence of summary files
 if not os.path.exists('%s_DESGW_%s_AGN_cut_summary.txt' %(username, event_name)):
     print("ERROR: AGN cut summary file is missing.")
@@ -80,6 +85,12 @@ lines = simlib_file.readlines()
 simlib_file.close()
 eff_area = float([x for x in lines[-5:] if x[0:15] == 'EFFECTIVE_AREA:'][0].split(' ')[1][0:-1])
 
+#calc area scale factor
+if force_area is None:
+    scale_factor = 1.0
+else:
+    scale_factor = force_area / eff_area
+
 #AGN
 agn_cut_results = np.load('%s_DESGW_%s_AGN_cut_results.npy' %(username, event_name)).item()
 agn_scaled = []
@@ -100,24 +111,24 @@ for cutnum in [int(x) for x in np.arange(len(df['CUT'].values))]:
             upper_errs.append(num_agn_plus_unc)
             lower_errs.append(num_agn_minus_unc)
 
-    agn_scaled.append(np.mean(means))
+    agn_scaled.append(np.mean(means) * scale_factor)
     err_plus.append(np.sqrt(np.sum(np.power(np.array(upper_errs), 2))) / len(means))
     err_minus.append(np.sqrt(np.sum(np.power(np.array(lower_errs), 2))) / len(means))
 
 
-df['AGN_scaled'] = agn_scaled
+df['AGN_scaled'] = agn_scaled 
 df['AGN_scaled_err_plus'] = err_plus
 df['AGN_scaled_err_minus'] = err_minus
 
 #print(df[['AGN_scaled', 'AGN_scaled_err_plus', 'AGN_scaled_err_minus']])
 
 ## Ia
-ia_scaled = [df['Ia'].values[0] / boost]
+ia_scaled = [df['Ia'].values[0] / boost  * scale_factor]
 err_plus = [ia_unc * boost]
 err_minus = [ia_unc * boost]
 for value in df['Ia'].values[1:]:
     eff, [err_high, err_low] = utils.confidenceInterval(n=ia_scaled[-1] * boost, k=value)
-    ia_scaled.append(value / boost)
+    ia_scaled.append(value / boost * scale_factor)
     err_plus.append(eff * boost * np.sqrt((err_high ) ** 2 + (err_plus[-1] / boost) ** 2))
     err_minus.append(eff * boost * np.sqrt((err_low) ** 2 + (err_minus[-1] / boost) ** 2))
 
@@ -128,12 +139,12 @@ df['Ia_scaled_err_minus'] = err_minus
 #print(df[['Ia_scaled', 'Ia_scaled_err_plus', 'Ia_scaled_err_minus']])
 
 ## CC
-cc_scaled = [df['CC'].values[0] / boost]
+cc_scaled = [df['CC'].values[0] / boost * scale_factor]
 err_plus = [cc_unc * boost **2]
 err_minus = [cc_unc * boost **2]
 for value in df['CC'].values[1:]:
     eff, [err_high, err_low] = utils.confidenceInterval(n=cc_scaled[-1] * boost, k=value)
-    cc_scaled.append(value / boost)
+    cc_scaled.append(value / boost * scale_factor)
     err_plus.append(eff * boost * np.sqrt((err_high) ** 2 + (err_plus[-1] / boost) ** 2))
     err_minus.append(eff * boost * np.sqrt((err_low) ** 2 + (err_minus[-1] / boost) ** 2))
 

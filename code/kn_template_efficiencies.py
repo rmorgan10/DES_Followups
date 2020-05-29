@@ -12,13 +12,19 @@ rcParams['font.family'] = 'serif'
 event_name = sys.argv[1]
 
 #read output of kn_propoerties.py
-df = pd.read_csv('../events/%s/analysis/%s_kn_terse_cut_results.csv' %(event_name, event_name))
+try:
+    df = pd.read_csv('../events/%s/analysis/%s_kn_terse_cut_results_ml.csv' %(event_name, event_name))
+    ml = True
+except:
+    df = pd.read_csv('../events/%s/analysis/%s_kn_terse_cut_results.csv' %(event_name, event_name))
+    ml = False
 
 #parse df to determine template efficiencies for each cut
 def get_efficiency_df(cut, df):
     
     cuts, counts = np.unique(df['CUT'], return_counts=True)
     templates, totals = np.unique(df['SIM_TEMPLATE_INDEX'], return_counts=True)
+    #print(templates, totals)
     cut_df = df.iloc[np.where((df['CUT'].values > cut) | (df['CUT'].values == -1))]
     
     results = []
@@ -28,25 +34,42 @@ def get_efficiency_df(cut, df):
         eff = float(template_df.shape[0]) / float(totals[x - 1])
         results.append(eff)
         try:
+            if len(template_df['PEAKMAG_g'].values[template_df['PEAKMAG_g'].values < 27.5]) > 0:
+                g_mean = np.mean(template_df['PEAKMAG_g'].values[template_df['PEAKMAG_g'].values < 27.5])
+            else:
+                g_mean = 99.0
+            if len(template_df['PEAKMAG_r'].values[template_df['PEAKMAG_r'].values < 27.5]) > 0:
+                r_mean = np.mean(template_df['PEAKMAG_r'].values[template_df['PEAKMAG_r'].values < 27.5])
+            else:
+                r_mean = 99.0
+            if len(template_df['PEAKMAG_i'].values[template_df['PEAKMAG_i'].values < 27.5]) > 0:
+                i_mean = np.mean(template_df['PEAKMAG_i'].values[template_df['PEAKMAG_i'].values < 27.5])
+            else:
+                i_mean = 99.0
+            if len(template_df['PEAKMAG_z'].values[template_df['PEAKMAG_z'].values < 27.5]) > 0:
+                z_mean = np.mean(template_df['PEAKMAG_z'].values[template_df['PEAKMAG_z'].values < 27.5])
+            else:
+                z_mean = 99.0
+
             template_info.append([x,
                                   template_df['VK'].values[0],
                                   template_df['LOGXLAN'].values[0],
                                   template_df['LOGMASS'].values[0],
                                   eff,
-                                  template_df['PEAKMAG_g'].values[0],
-                                  template_df['PEAKMAG_r'].values[0],
-                                  template_df['PEAKMAG_i'].values[0],
-                                  template_df['PEAKMAG_z'].values[0]])
+                                  g_mean,
+                                  r_mean,
+                                  i_mean,
+                                  z_mean])
         except:
             template_info.append([x, 
                                   df['VK'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
                                   df['LOGXLAN'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
                                   df['LOGMASS'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
                                   0.0, 
-                                  -99.0,
-                                  -99.0,
-                                  -99.0,
-                                  -99.0])
+                                  99.0,
+                                  99.0,
+                                  99.0,
+                                  99.0])
 
     template_info_cols = ['SNANA_INDEX', 'VK', 'LOGXLAN', 'LOGMASS', 'EFFICIENCY', 'PEAKMAG_g', 'PEAKMAG_r', 'PEAKMAG_i', 'PEAKMAG_z']
     output_df = pd.DataFrame(data=template_info, columns=template_info_cols)
@@ -115,11 +138,11 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
         
         #axs[counter].set_xlabel('EJECTA VELOCITY\nLOGXLAN = %.0f' %logxlans[counter], fontsize=20)
         if skip_last:
-            axs[counter].set_xlabel('EJECTA VELOCITY', fontsize=20)
-            axs[counter].set_title('LOGXLAN = %.0f' %logxlans[counter], fontsize=20)
+            axs[counter].set_xlabel('$v_{ej}$ [$c$]', fontsize=20)
+            axs[counter].set_title('$\log (X_{lan})$ = %.0f' %logxlans[counter], fontsize=20)
         else:
-            axs[counter].set_xlabel('EJECTA VELOCITY', fontsize=16)
-            axs[counter].set_title('LOGXLAN = %.0f' %logxlans[counter], fontsize=16)
+            axs[counter].set_xlabel('$v_{ej}$ [$c$]', fontsize=16)
+            axs[counter].set_title('$\log (X_{lan})$ = %.0f' %logxlans[counter], fontsize=16)
     
         counter += 1
         
@@ -128,10 +151,10 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
                 break
     
     if skip_last:
-        axs[0].set_ylabel("EJECTA MASS [solar masses]", fontsize=20)
+        axs[0].set_ylabel("$M_{ej}$ [$M_\odot$]", fontsize=20)
         axs[0].set_yticklabels(['%.3f' %10**x for x in logmasses], fontsize=20)
     else:
-        axs[0].set_ylabel("EJECTA MASS [solar masses]", fontsize=16)
+        axs[0].set_ylabel("$M_{ej}$ [$M_\odot$]", fontsize=16)
         axs[0].set_yticklabels(['%.3f' %10**x for x in logmasses], fontsize=16)
     axs[0].set_yticks(np.arange(len(logmasses)))
     

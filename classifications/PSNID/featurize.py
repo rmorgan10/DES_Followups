@@ -13,9 +13,12 @@ data_df = pd.read_csv('%s/DATA.FITRES' %event_dir, delim_whitespace=True, commen
 
 dfs = []
 for obj in ['CC', 'KN', 'Ia']:
-    df = pd.read_csv('%s/%s.FITRES' %(event_dir, obj), delim_whitespace=True, comment='#')
+    df = pd.read_csv('%s/%s.FITRES' %(event_dir, obj), delim_whitespace=True, comment='#').replace(np.nan, 0)
     df['CLASS'] = obj
     dfs.append(df)
+
+
+
 df = pd.concat(dfs)
 
 # Drop nonnumeric columns or columns with truth information
@@ -29,7 +32,7 @@ meaningful_columns = ['PKMJDINI', 'SNRMAX1', 'SNRMAX2', 'SNRMAX3', 'ITYPE_BEST',
                       'PEAKMAG_z_Ibc', 'Z_II', 'COLORPAR_II', 'COLORLAW_II', 'TMAX_II', 'DMU_II', 'TOBSMIN_II',
                       'TOBSMAX_II', 'CHI2_II', 'NPT_II', 'FITPROB_II', 'PBAYES_II', 'LCQ_II', 'PEAKMAG_g_II',
                       'PEAKMAG_r_II', 'PEAKMAG_i_II', 'PEAKMAG_z_II', 'CLASS']
-df = df[meaningful_columns].copy().reset_index(drop=True)
+#df = df[meaningful_columns].copy().reset_index(drop=True)
 
 # Select 15 features with largest difference between means of the distributions
 diff_data = []
@@ -45,7 +48,13 @@ sorted_diff_df = diff_df.sort_values(by='DIFF', ascending=False)
 
 
 chosen_feats = list(sorted_diff_df['FEATURE'].values[0:15]) 
-feat_df = df[chosen_feats + ['CLASS']].copy().reset_index(drop=True)
+feat_df = df[chosen_feats + ['CID', 'CLASS']].copy().reset_index(drop=True)
+
+#output full feat_dfs
+feat_df[feat_df['CLASS'] == 'KN'].to_csv('%s/full_feat_df_KN.csv' %event_dir, index=False)
+feat_df[feat_df['CLASS'] == 'Ia'].to_csv('%s/full_feat_df_Ia.csv' %event_dir, index=False)
+feat_df[feat_df['CLASS'] == 'CC'].to_csv('%s/full_feat_df_CC.csv' %event_dir, index=False)
+
 
 #balance classes
 feat_df_sn = feat_df[feat_df['CLASS'] != 'KN']

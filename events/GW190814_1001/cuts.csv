@@ -3,8 +3,8 @@ NUMBER,NAME
 2,at_least_one_hour_separation_between_detections
 3,has_host_30_arcsec
 4,separated_from_foreground
-5,at_least_05_arcsec_from_DES_galaxy
+5,at_least_02_arcsec_from_DES_galaxy
 6,realtime_vetting_strict
 7,GW190814_1001_photo_z_inconsistent
-8,fading_cut_one_band
+8,fading_cut_one_band_one_sigma
 9,GW190814_1001_spec_confirmed_sn

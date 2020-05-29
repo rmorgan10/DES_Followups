@@ -23,7 +23,7 @@ SIMLIB_FILE:  sim_gen/SIMLIB.txt
 #HOSTLIB_FILE:            DES_SVA1GOLD_DEEP_TRAIN.HOSTLIB
 # HOSTNOISE_FILE:         $SNDATA_ROOT/simlib/DES/DES_Y1reproc2_SBNOISEMODEL.DAT
 # HOSTNOISE_FILE:         /project/rkessler/SN/INTERNAL/GW170814/analysis/DES_Y1reproc2_SBNOISEMODEL.DAT
-FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT
+#FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT
 #HOSTLIB_ZPHOTEFF_FILE:  $DES_ROOT/simlibs/DESB12_zPHOT_EFF1.DAT
 #                        !SEARCHEFF_zPHOT_KNANA.DAT
 HOSTLIB_MSKOPT:  256 
@@ -47,8 +47,9 @@ GENMODEL:    SALT2.Guy10_UV2IR
 GENMAG_SMEAR_MODELNAME:  G10
 
 GENFILTERS:  griz                 # RM-set to gri from griz to match obs?
-KCOR_FILE:   DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits #DES/kcor_DES_grizY.fits
 
+#/data/des41.b/data/SNDATA_ROOT/kcor/DES/DES-SN3YR/kcor_DECam.fits
 
 #GENRANGE_PEAKMJD: 58034  58186    # RM-set start=(first MJD-30) end=(last MJD+100)
 GENSIGMA_SEARCH_PEAKMJD:  0.1     # sigma-smearing for  SEARCH_PEAKMJD (days)
@@ -69,7 +70,7 @@ SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
 SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
 
 APPLY_CUTWIN_OPT: 1   #PSNID dies if you turn this off, fun fact
-#CUTWIN_SNRMAX:   3 griz 1 -20. 60.  # require 1 of griz with S/N > 3
+CUTWIN_SNRMAX:   5 griz 1 -20. 60.  # require 1 of griz with S/N > 5
 #CUTWIN_NEPOCH:	 2  +2  #Require    two epochs with	SNR > 2
 CUTWIN_NOBSDIF: 2, 9999
 

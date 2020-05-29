@@ -31,7 +31,7 @@ except:
 
 
 def get_operating_threshold(fpr, tpr, thresholds):
-    fpr_tolerance = 0.001
+    fpr_tolerance = 0.01
     cond = (fpr < fpr_tolerance)
     
     trimmed_fpr = fpr[cond]
@@ -126,6 +126,8 @@ def plot_confusion_matrix(y_true, y_pred, classes,
     fig.tight_layout()
     fig.savefig('%s/res_confusion_matrix.pdf' %event_dir)
 
+    plt.close()
+
     return 
 
 def encode(label):
@@ -153,6 +155,10 @@ tpr = np.array([0.0] + list(tpr) + [1.0])
 thresholds = np.array([1.0] + list(thresholds) + [0.0])
 
 op_threshold, op_fpr, op_tpr = get_operating_threshold(fpr, tpr, thresholds)
+
+out_dict = {'fpr': fpr, 'tpr': tpr, 'thresholds': thresholds}
+np.save('%s/ml_curves.npy' %event_dir, out_dict)
+
 
 plt.figure(figsize=(6,4), dpi=120)
 
@@ -231,8 +237,10 @@ y_test_pred_label = [encode(x) for x in y_test_pred]
 
 plot_confusion_matrix(y_test_label, y_test_pred_label, classes=class_names, normalize=True)
 
+
 # Candidate probabilities
 confirmed_spec = []
+
 for index, row in data.iterrows():
     if int(row['CID']) not in candidate_snids:
         confirmed_spec.append(1)
@@ -247,10 +255,10 @@ plt.figure(figsize=(6,4), dpi=120)
 
 plt.bar(sorted_data['INDEX'].values[sorted_data['SPEC'].values == 1], 
         sorted_data['PROB_KN'].values[sorted_data['SPEC'].values == 1],
-        color='#d95f02', label='Spectroscopic Confirmed SN')
+        color='#d95f02', label=None)
 plt.bar(sorted_data['INDEX'].values[sorted_data['SPEC'].values == 0], 
         sorted_data['PROB_KN'].values[sorted_data['SPEC'].values == 0], 
-        color='#7570b3', label='No Spectroscopic Information')
+        color='#7570b3', label=None)
 
 color_dict = {0:'#7570b3', 1:'#d95f02'}
 for index, row in sorted_data.iterrows():
@@ -270,6 +278,10 @@ plt.text(np.max(sorted_data['INDEX']) + 0.5, op_threshold + 0.01, 'Operating Thr
          fontsize=12, horizontalalignment='right')
 
 plt.ylim(0.0, op_threshold + 0.05)
+
+plt.fill_between([0,1], [200, 200], [300, 300], color='#7570b3', label='No Spectroscopic Information')
+plt.fill_between([0,1], [200, 200], [300, 300], color='#d95f02', label='Spectroscopic Confirmed SN')
+
 
 plt.legend(fontsize=12, loc='upper right', bbox_to_anchor=[0.99, 0.8])
 

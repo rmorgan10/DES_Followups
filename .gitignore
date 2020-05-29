@@ -3,6 +3,9 @@
 code/*.pyc
 code/.*.password
 
+#screw it just ignore all the events
+events/
+
 #GW190510
 events/GW190510/sims_and_data/
 events/GW190510/sims.tar.gz

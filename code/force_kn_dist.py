@@ -37,7 +37,9 @@ def fit(avg, std, H0=70, Tcmb0=2.725, Om0=0.3):
             attempt += 1
 
     if attempt == 11:
-        print("Error in curve fit. Defaulting to LIGO_mean +/- 2 sigma")
+        print("Error in curve fit of avg = %s, std = %s. Defaulting to LIGO_mean +/- 2 sigma" %(avg, std))
+        
+        popt, pcov = curve_fit(double_poly_fit, midpoints, counts, maxfev=10000)
         assert False
 
     res = np.array([double_poly_fit(x, *popt) for x in midpoints])

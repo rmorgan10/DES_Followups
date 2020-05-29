@@ -1,2 +1,4 @@
 NUMBER,NAME
-1,at_least_one_snr_5_detection
+1,brighter_than_lim_mag
+2,GW190510_photo_z_inconsistent
+3,gw0510_vetting

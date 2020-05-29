@@ -78,6 +78,8 @@ print("Collecting data")
 # collect data
 os.system('python get_candidates.py %s %i' %(event_name, cutoff))
 
+
+
 #run psnid
 for obj, mode in modes.iteritems():
     os.system('split_and_fit.pl %s' %mode['filename'])

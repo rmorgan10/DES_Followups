@@ -8,6 +8,12 @@ import sys
 
 event_name = sys.argv[1]
 
+try:
+    mode = sys.argv[2]
+except:
+    mode = 'normal'
+
+
 df = pd.read_csv('../events/%s/cut_results/MERGED_CUT_RESULTS.csv' %event_name)
 
 
@@ -29,6 +35,10 @@ def format_uncertainty(value, plus, minus):
     err = round(error, num_digits)
         
     return "%s +/- %s" %(res, err)
+
+if mode == 'terse':
+    def format_uncertainty(value, plus, minus):
+        return "%.2f" %value
     
 
 #Write report
