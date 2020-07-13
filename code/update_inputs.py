@@ -6,7 +6,7 @@ import pandas as pd
 import sys
 import utils
 
-import force_kn_dist
+import force_ligo_dist
 
 #read input data
 event_name = sys.argv[1]
@@ -52,8 +52,6 @@ mjd_max = str(int(float(df['MJD_EXPLODE'].values[0])) + 30)
 mjd_exp = str(df['MJD_EXPLODE'].values[0])
 solid_angle = str(round(eff_area / 3.0 * .00082, 6))
 min_z, max_z = utils.get_ligo_z_range(df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0]) 
-
-
 
 
 for filename, obj in zip(file_list, objs):
@@ -108,8 +106,9 @@ for filename, obj in zip(file_list, objs):
     outfile.close()
 
 
-# do kn specific distribution
-force_kn_dist.run(event_name, df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0])
+# do LIGO specific distribution
+if 'LIGO_distance_(Mpc)' in df.columns:
+    force_ligo_dist.run(event_name, df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0])
 
 
 #File header looks like this:
