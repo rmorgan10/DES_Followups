@@ -129,28 +129,31 @@ def write_report(event_name, zmin, zmax, zmin_found, zmax_found, popt):
 
 def update_snana(event_name, popt, zmin, zmax):
     simgen_dir = '../events/%s/sim_gen/' %event_name
-    filename = simgen_dir + 'SIMGEN_DES_KN.input'
+    # Add bbh input file to this list eventually
+    filenames = [simgen_dir + 'SIMGEN_DES_KN.input']
+
+    for filename in filenames:
     
-    stream = open(filename, 'r')
-    lines = stream.readlines()
-    stream.close()
+        stream = open(filename, 'r')
+        lines = stream.readlines()
+        stream.close()
 
-    outlines = []
-    for line in lines:
+        outlines = []
+        for line in lines:
 
-        if line[0:5] == 'DNDZ:':
-            outlines.append('DNDZ: ZPOLY  %s\n' %' '.join([convert_to_snana_float(x) for x in popt[:4]]))
-            outlines.append('DNDZ_ZPOLY_REWGT:  %s\n' %' '.join([convert_to_snana_float(x) for x in popt[4:]]))
+            if line[0:5] == 'DNDZ:':
+                outlines.append('DNDZ: ZPOLY  %s\n' %' '.join([convert_to_snana_float(x) for x in popt[:4]]))
+                outlines.append('DNDZ_ZPOLY_REWGT:  %s\n' %' '.join([convert_to_snana_float(x) for x in popt[4:]]))
 
-        elif line[0:18] == 'GENRANGE_REDSHIFT:':
-            outlines.append('GENRANGE_REDSHIFT:  %.4f  %.4f\n' %(zmin, zmax))
+            elif line[0:18] == 'GENRANGE_REDSHIFT:':
+                outlines.append('GENRANGE_REDSHIFT:  %.4f  %.4f\n' %(zmin, zmax))
             
-        else:
-            outlines.append(line)
+            else:
+                outlines.append(line)
 
-    stream = open(filename, 'w+')
-    stream.writelines(outlines)
-    stream.close()
+        stream = open(filename, 'w+')
+        stream.writelines(outlines)
+        stream.close()
 
     return
     
