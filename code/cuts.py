@@ -239,9 +239,20 @@ class CutList:
 
     #consistent with ligo dist
         
-    def brighter_than_lim_mag(self, lc, md):
+    def brighter_than_5sigma_lim_mag_0510_40(self, lc, md):
         # mag cutoff yielding snr = 5 for S190510g
         mag_dict = {'g': 23.5, 'r': 23.3, 'z': 22.3}
+        for flt in ['g', 'r', 'z']:
+            flt_mags = lc['MAG'].values[lc['FLT'].values == flt]
+            if len(flt_mags) == 0: continue
+            if np.min(flt_mags) < mag_dict[flt]:
+                return True
+
+        return False
+
+    def brighter_than_5sigma_lim_mag_0510_170(self, lc, md):
+        # mag cutoff yielding snr = 5 for S190510g
+        mag_dict = {'g': 24.37, 'r': 24.1, 'z': 23.08}
         for flt in ['g', 'r', 'z']:
             flt_mags = lc['MAG'].values[lc['FLT'].values == flt]
             if len(flt_mags) == 0: continue
