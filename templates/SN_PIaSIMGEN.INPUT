@@ -9,9 +9,8 @@
 GENRANGE_PEAKMJD: 58700 58740
 GENRANGE_MJD: 58700 58740
 GENVERSION:  RM_test_SNPIa
-EXPOSURE_TIME: 1.5
 SOLID_ANGLE:  0.0082
-NGEN_SEASON:  100.0
+NGEN_LC:  100
 
 #--------------------------------------------------------------------
 # Don't need to change anything after this point  (I sure hope)
@@ -50,9 +49,6 @@ GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 # 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
 #SOLID_ANGLE:  0.0082    # steridians 
 
-
-#NGENTOT_LC:  1000
-#GENVERSION:  ZD_KNDES_TEST
 GENSOURCE:   RANDOM   
 
 GENFILTERS:  griz
@@ -90,8 +86,6 @@ CLEARPROMPT:    0
 
 GENRANGE_RA:      -360.   360.0   deg
 GENRANGE_DECL:    -360.   360.5
-#GENRANGE_TREST:   -50.0   50.
-
 
 
 # ==============================

@@ -9,9 +9,8 @@
 GENRANGE_PEAKMJD: 58700 58740
 GENRANGE_MJD: 58700 58740
 GENVERSION:  RM_test_Mdwarf
-EXPOSURE_TIME: 1.5
 SOLID_ANGLE:  0.0082
-NGEN_SEASON:  10.0
+NGEN_LC:  10.0
 
 #--------------------------------------------------------------------
 # Don't need to change anything after this point  (I sure hope)
@@ -19,10 +18,7 @@ NGEN_SEASON:  10.0
 
 SIMLIB_FILE:  sim_gen/SIMLIB.txt
 
-
 GENMODEL:  LCLIB  $PLASTICC_MODELS/LCLIB_Mdwarf-LSST.TEXT 1+2+3+4
-
-
 
 # rel rate = b0 + b1*cosb + b2*cosb^2 + b3*cosb^3
 
@@ -31,15 +27,10 @@ DNDB: COSBPOLY 0.1  1.0  1.0  1.0  0 0  # b0 b1 b2 b3 b4 b5
 GENRANGE_TREST  -100. 100.
 FORMAT_MASK: 32
 
-
 GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 
 # 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
-#SOLID_ANGLE:  0.0082    # steridians 
 
-
-#NGENTOT_LC:  1000
-#GENVERSION:  ZD_KNDES_TEST
 GENSOURCE:   RANDOM   
 
 GENFILTERS:  griz
@@ -69,8 +60,6 @@ W0_LAMBDA:    -1.00
 H0:           70.0   
 
 # ======
-
-#FORMAT_MASK:  2  # 2=TEXT  8=BLIND  16=CIDRAN; 32=FITS
 
 CLEARPROMPT:    0
 

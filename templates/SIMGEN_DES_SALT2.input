@@ -9,9 +9,8 @@
 GENRANGE_PEAKMJD: 58598 58628
 GENRANGE_MJD: 58598 58628
 GENVERSION:  RM_Net_AGN
-EXPOSURE_TIME: 1.5
 SOLID_ANGLE:  0.0082
-NGEN_SEASON:  10
+NGEN_LC:  10
 
 #--------------------------------------------------------------------
 # Don't need to change anything after this point  (I sure hope)
@@ -19,29 +18,14 @@ NGEN_SEASON:  10
 
 SIMLIB_FILE:  sim_gen/SIMLIB.txt
 
-#HOSTLIB_FILE:           $DES_ROOT/simlibs/DES_SVA1GOLD_DEEP_TRAIN.HOSTLIB
-#HOSTLIB_FILE:            DES_SVA1GOLD_DEEP_TRAIN.HOSTLIB
-# HOSTNOISE_FILE:         $SNDATA_ROOT/simlib/DES/DES_Y1reproc2_SBNOISEMODEL.DAT
-# HOSTNOISE_FILE:         /project/rkessler/SN/INTERNAL/GW170814/analysis/DES_Y1reproc2_SBNOISEMODEL.DAT
 #FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT
-#HOSTLIB_ZPHOTEFF_FILE:  $DES_ROOT/simlibs/DESB12_zPHOT_EFF1.DAT
-#                        !SEARCHEFF_zPHOT_KNANA.DAT
 HOSTLIB_MSKOPT:  256 
 
 # 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
-#SOLID_ANGLE:  0.000860    # steridians: .00082 = 3 sqdeg 
-#SOLID_ANGLE: 0.007181396
 
-#GENRANGE_PEAKMJD: 58598 58628
-#EXPOSURE_TIME: 0.67
 GENRANGE_TREST:  -100. 100.
 FORMAT_MASK: 32
 
-#NGENTOT_LC: 100
-#NGEN_LC: 10000
-#NGEN_SEASON: 10
-
-#GENVERSION:  RM_DESGW_190510_SN_SIMS_Ia
 GENSOURCE:   RANDOM   
 GENMODEL:    SALT2.Guy10_UV2IR
 GENMAG_SMEAR_MODELNAME:  G10
@@ -49,9 +33,6 @@ GENMAG_SMEAR_MODELNAME:  G10
 GENFILTERS:  griz                 # RM-set to gri from griz to match obs?
 KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits #DES/kcor_DES_grizY.fits
 
-#/data/des41.b/data/SNDATA_ROOT/kcor/DES/DES-SN3YR/kcor_DECam.fits
-
-#GENRANGE_PEAKMJD: 58034  58186    # RM-set start=(first MJD-30) end=(last MJD+100)
 GENSIGMA_SEARCH_PEAKMJD:  0.1     # sigma-smearing for  SEARCH_PEAKMJD (days)
 
 GENRANGE_REDSHIFT:  0.03  1.0      # max redshift already set to 1.0 instead of 1.4
@@ -70,7 +51,7 @@ SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
 SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
 
 APPLY_CUTWIN_OPT: 1   #PSNID dies if you turn this off, fun fact
-CUTWIN_SNRMAX:   5 griz 1 -20. 60.  # require 1 of griz with S/N > 5
+CUTWIN_SNRMAX:   3 griz 1 -20. 60.  # require 1 of griz with S/N > 3
 #CUTWIN_NEPOCH:	 2  +2  #Require    two epochs with	SNR > 2
 CUTWIN_NOBSDIF: 2, 9999
 
@@ -98,16 +79,12 @@ HOSTLIB_DZTOL: 0.01 0 0
 #FORMAT_MASK:  32  # 2=terse  8=BLIND  16=CIDRAN; 32=FITS
 
 CLEARPROMPT: 0
-#EXPOSURE_TIME:  1
 
 GENRANGE_RA:      0.0   360.0   deg 
 GENRANGE_DECL:    -90.0   90.0 
 
 DNDZ:  POWERLAW2  2.6E-5   1.5  0.0 1.0  # R0(1+z)^Beta Zmin-Zmax
 DNDZ:  POWERLAW2  7.35E-5  0.0  1.0 2.0
-
-#DNDZ:  POWERLAW2  2.2E-5   2.15  0.0 1.0  # R0(1+z)^Beta Zmin-Zmax
-#DNDZ:  POWERLAW2  9.76E-5  0.0   1.0 2.0
 
 # open Trest window to include all pre-explosion epochs,
 # just like the real data 
