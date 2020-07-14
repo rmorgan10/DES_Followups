@@ -18,7 +18,18 @@ iax_log_file = '../events/%s/logs/sim_iax.log' %event_name
 pia_log_file = '../events/%s/logs/sim_pia.log' %event_name
 slsn_log_file = '../events/%s/logs/sim_slsn.log' %event_name
 tde_log_file = '../events/%s/logs/sim_tde.log' %event_name
-
+agn_tr_log_file = '../events/%s/logs/sim_tr_agn.log' %event_name
+kn_tr_log_file = '../events/%s/logs/sim_tr_kn.log' %event_name
+ia_tr_log_file = '../events/%s/logs/sim_tr_ia.log' %event_name
+cc_tr_log_file = '../events/%s/logs/sim_tr_cc.log' %event_name
+cart_tr_log_file = '../events/%s/logs/sim_tr_cart.log' %event_name
+ilot_tr_log_file = '../events/%s/logs/sim_tr_ilot.log' %event_name
+mdwarf_tr_log_file = '../events/%s/logs/sim_tr_mdwarf.log' %event_name
+sn91bg_tr_log_file = '../events/%s/logs/sim_tr_91bg.log' %event_name
+iax_tr_log_file = '../events/%s/logs/sim_tr_iax.log' %event_name
+pia_tr_log_file = '../events/%s/logs/sim_tr_pia.log' %event_name
+slsn_tr_log_file = '../events/%s/logs/sim_tr_slsn.log' %event_name
+tde_tr_log_file = '../events/%s/logs/sim_tr_tde.log' %event_name
 
 #determine which sims are being run
 agn_running = True if 'AGN' in sys.argv else False
@@ -33,6 +44,19 @@ iax_running = True if 'Iax' in sys.argv else False
 pia_running = True if 'PIa' in sys.argv else False
 slsn_running = True if 'SLSN' in sys.argv else False
 tde_running = True if 'TDE' in sys.argv else False
+agn_tr_running = True if 'AGN-tr' in sys.argv else False
+ia_tr_running = True if 'Ia-tr' in sys.argv else False
+cc_tr_running = True if 'CC-tr' in sys.argv else False
+kn_tr_running = True if 'KN-tr' in sys.argv else False
+cart_tr_running = True if 'CaRT-tr' in sys.argv else False
+ilot_tr_running = True if 'ILOT-tr' in sys.argv else False
+mdwarf_tr_running = True if 'Mdwarf-tr' in sys.argv else False
+sn91bg_tr_running = True if 'SN91bg-tr' in sys.argv else False
+iax_tr_running = True if 'Iax-tr' in sys.argv else False
+pia_tr_running = True if 'PIa-tr' in sys.argv else False
+slsn_tr_running = True if 'SLSN-tr' in sys.argv else False
+tde_tr_running = True if 'TDE-tr' in sys.argv else False
+
 
 #track errors
 agn_error = False
@@ -47,9 +71,22 @@ iax_error = False
 pia_error = False
 slsn_error = False
 tde_error = False
+agn_tr_error = False
+ia_tr_error = False
+cc_tr_error = False
+kn_tr_error = False
+cart_tr_error = False
+ilot_tr_error = False
+mdwarf_tr_error = False
+sn91bg_tr_error = False
+iax_tr_error = False
+pia_tr_error = False
+slsn_tr_error = False
+tde_tr_error = False
 
 #start monitoring
 running = agn_running or kn_running or ia_running or cc_running or cart_running or ilot_running or mdwarf_running or sn91bg_running or iax_running or pia_running or slsn_running or tde_running
+running = running or agn_tr_running or kn_tr_running or ia_tr_running or cc_tr_running or cart_tr_running or ilot_tr_running or mdwarf_tr_running or sn91bg_tr_running or iax_tr_running or iax_tr_running or pia_tr_running or slsn_tr_running or tde_tr_running
 agn_phase1, agn_phase2, agn_phase3 = True, False, False
 kn_phase1, kn_phase2, kn_phase3, kn_phase4 = True, False, False, False
 ia_phase1, ia_phase2, ia_phase3 = True, False, False
@@ -63,8 +100,21 @@ pia_phase1, pia_phase2, pia_phase3, pia_phase4 = True, False, False, False
 slsn_phase1, slsn_phase2, slsn_phase3, slsn_phase4 = True, False, False, False
 tde_phase1, tde_phase2, tde_phase3, tde_phase4 = True, False, False, False
 
+agn_tr_phase1, agn_tr_phase2, agn_tr_phase3 = True, False, False
+kn_tr_phase1, kn_tr_phase2, kn_tr_phase3, kn_tr_phase4 = True, False, False, False
+ia_tr_phase1, ia_tr_phase2, ia_tr_phase3 = True, False, False
+cc_tr_phase1, cc_tr_phase2, cc_tr_phase3 = True, False, False
+cart_tr_phase1, cart_tr_phase2, cart_tr_phase3, cart_tr_phase4 = True, False, False, False
+ilot_tr_phase1, ilot_tr_phase2, ilot_tr_phase3, ilot_tr_phase4 = True, False, False, False
+mdwarf_tr_phase1, mdwarf_tr_phase2, mdwarf_tr_phase3 = True, False, False
+sn91bg_tr_phase1, sn91bg_tr_phase2, sn91bg_tr_phase3, sn91bg_tr_phase4 = True, False, False, False
+iax_tr_phase1, iax_tr_phase2, iax_tr_phase3, iax_tr_phase4 = True, False, False, False
+pia_tr_phase1, pia_tr_phase2, pia_tr_phase3, pia_tr_phase4 = True, False, False, False
+slsn_tr_phase1, slsn_tr_phase2, slsn_tr_phase3, slsn_tr_phase4 = True, False, False, False
+tde_tr_phase1, tde_tr_phase2, tde_tr_phase3, tde_tr_phase4 = True, False, False, False
+
 #let the sims get started
-time.sleep(5)
+time.sleep(3)
 
 while running:
 
