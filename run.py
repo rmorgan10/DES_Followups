@@ -113,7 +113,7 @@ if mode == 'normal':
     os.system('python run_all_cuts.py %s both %s' %(event_name, ' '.join(sim_include)))
 
     #analyze results
-    os.system('python analyze_results.py %s' %event_name)
+    os.system('python analyze_results.py %s %s' %(event_name, ' '.join(sim_include)))
 
     #write out a report with uncertainties
     os.system('python write_report.py %s' %event_name)
