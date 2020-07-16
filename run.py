@@ -116,7 +116,7 @@ if mode == 'normal':
     os.system('python analyze_results.py %s %s' %(event_name, ' '.join(sim_include)))
 
     #write out a report with uncertainties
-    os.system('python write_report.py %s' %event_name)
+    os.system('python write_report.py %s %s terse' %(event_name, ' '.join(sim_include)))
 
     #classify with psnid if desired
     if run_psnid:
