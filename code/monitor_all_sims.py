@@ -239,13 +239,13 @@ while running:
         last_line = ia_info[-1]
         ia_log.close()
 
-        if ia_phase3 or (not ia_phase1 and last_line.find('Finished generating') == -1):
+        if ia_phase3 or (not ia_phase1 and last_line.find('Finished writing') == -1):
             ia_phase1 = False
             ia_phase2 = False
             ia_phase3 = True
             ia_running = False ## it should finish up in time where this is okay
             ia_progress = 'Finishing'
-        elif ia_phase2 or last_line.find('Finished generating') != -1:
+        elif ia_phase2 or last_line.find('Finished writing') != -1:
             ia_phase1 = False
             ia_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n']
@@ -280,13 +280,13 @@ while running:
         last_line = ia_tr_info[-1]
         ia_tr_log.close()
 
-        if ia_tr_phase3 or (not ia_tr_phase1 and last_line.find('Finished generating') == -1):
+        if ia_tr_phase3 or (not ia_tr_phase1 and last_line.find('Finished writing') == -1):
             ia_tr_phase1 = False
             ia_tr_phase2 = False
             ia_tr_phase3 = True
             ia_tr_running = False ## it should finish up in time where this is okay
             ia_tr_progress = 'Finishing'
-        elif ia_tr_phase2 or last_line.find('Finished generating') != -1:
+        elif ia_tr_phase2 or last_line.find('Finished writing') != -1:
             ia_tr_phase1 = False
             ia_tr_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n']
@@ -323,7 +323,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished generating') != -1:
+            if line.find('Finished writing') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -331,13 +331,13 @@ while running:
             last_line = last_lines[0]
         cc_log.close()
 
-        if cc_phase3 or (not cc_phase1 and last_line.find('Finished generating') == -1):
+        if cc_phase3 or (not cc_phase1 and last_line.find('Finished writing') == -1):
             cc_phase1 = False
             cc_phase2 = False
             cc_phase3 = True
             cc_running = False ## it should finish up in time where this is okay
             cc_progress = 'Finishing'
-        elif cc_phase2 or last_line.find('Finished generating') != -1:
+        elif cc_phase2 or last_line.find('Finished writing') != -1:
             cc_phase1 = False
             cc_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n']
@@ -374,7 +374,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished generating') != -1:
+            if line.find('Finished writing') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -382,7 +382,7 @@ while running:
             last_line = last_lines[0]
         cc_tr_log.close()
 
-        if cc_tr_phase3 or (not cc_tr_phase1 and last_line.find('Finished generating') == -1):
+        if cc_tr_phase3 or (not cc_tr_phase1 and last_line.find('Finished writing') == -1):
             cc_tr_phase1 = False
             cc_tr_phase2 = False
             cc_tr_phase3 = True
