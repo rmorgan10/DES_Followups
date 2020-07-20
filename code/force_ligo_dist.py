@@ -69,6 +69,9 @@ def get_zmin_zmax(resid, clean_midpoints, resid_thresh=2.0, z_thresh=0.005):
         
     if not zmin_found:
         z_min = 0.003
+
+    if z_min < 0.003:
+        z_min = 0.003
         
     #z max
     right_resid = list(resid[clean_midpoints > np.median(clean_midpoints)])
@@ -127,43 +130,40 @@ def write_report(event_name, zmin, zmax, zmin_found, zmax_found, popt):
 
     return
 
-def update_snana(event_name, popt, zmin, zmax):
+def update_snana(obj_filename, event_name, popt, zmin, zmax):
     simgen_dir = '../events/%s/sim_gen/' %event_name
-    # Add bbh input file to this list eventually
-    filenames = [simgen_dir + 'SIMGEN_DES_KN.input']
+    filename = simgen_dir + obj_filename
 
-    for filename in filenames:
-    
-        stream = open(filename, 'r')
-        lines = stream.readlines()
-        stream.close()
+    stream = open(filename, 'r')
+    lines = stream.readlines()
+    stream.close()
 
-        outlines = []
-        for line in lines:
+    outlines = []
+    for line in lines:
 
-            if line[0:5] == 'DNDZ:':
-                outlines.append('DNDZ: ZPOLY  %s\n' %' '.join([convert_to_snana_float(x) for x in popt[:4]]))
-                outlines.append('DNDZ_ZPOLY_REWGT:  %s\n' %' '.join([convert_to_snana_float(x) for x in popt[4:]]))
+        if line[0:5] == 'DNDZ:':
+            outlines.append('DNDZ: ZPOLY  %s\n' %' '.join([convert_to_snana_float(x) for x in popt[:4]]))
+            outlines.append('DNDZ_ZPOLY_REWGT:  %s\n' %' '.join([convert_to_snana_float(x) for x in popt[4:]]))
 
-            elif line[0:18] == 'GENRANGE_REDSHIFT:':
-                outlines.append('GENRANGE_REDSHIFT:  %.4f  %.4f\n' %(zmin, zmax))
+        elif line[0:18] == 'GENRANGE_REDSHIFT:':
+            outlines.append('GENRANGE_REDSHIFT:  %.4f  %.4f\n' %(zmin, zmax))
             
-            else:
-                outlines.append(line)
+        else:
+            outlines.append(line)
 
-        stream = open(filename, 'w+')
-        stream.writelines(outlines)
-        stream.close()
+    stream = open(filename, 'w+')
+    stream.writelines(outlines)
+    stream.close()
 
     return
     
     
 
-def run(event_name, avg, std):
+def run(obj_filename, event_name, avg, std):
     popt, midpoints, counts, res = fit(avg, std)
     
     zmin, zmax = check(event_name, midpoints, counts, res, popt)
     
-    update_snana(event_name, popt, zmin, zmax)
+    update_snana(obj_filename, event_name, popt, zmin, zmax)
     
     return
