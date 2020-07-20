@@ -82,4 +82,4 @@ while running:
 
 
 #final done statement
-sys.stdout.write('\rProcessing:  ' + ' | '.join([k + ' -- Done!' for k in sim_include]) + ' ' * 30 + '\n')
+sys.stdout.write('\rProcessing:  ' + ' | '.join([k + ' -- Done!' for k in sim_include]) + ' |' + ' * 30 + '\n')
