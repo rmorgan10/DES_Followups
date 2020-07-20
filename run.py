@@ -104,7 +104,7 @@ if mode == 'normal':
         os.system("python clean_up.py %s %s" %(event_name, clean_up))
     
     #interpret metadata
-    os.system('python interpret_metadata.py %s --boost %s --sim_include' %(event_name, boost, ','.join(sim_include)))
+    os.system('python interpret_metadata.py %s --boost %s --sim_include %s' %(event_name, boost, ','.join(sim_include)))
 
     #generate sims
     os.system('python generate_all_sims.py %s %s %s %s' %(event_name, forced_conditions, nobs_force, ' '.join(sim_include)))

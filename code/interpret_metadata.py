@@ -91,7 +91,7 @@ if not os.path.exists('../events/%s/exptable.txt' %event_name) and not os.path.e
     cols += ['BOOST--' + x for x in sim_include]
             
 
-    data = [[event_name, min_ra, max_ra, min_dec, max_dec] + boosts]
+    data = [[event_name, min_ra, max_ra, min_dec, max_dec] + boost]
 
     event_info = pd.DataFrame(data=data, columns=cols)
     event_info.to_csv('../events/%s/DES_metadata.csv' %event_name, index=False)
