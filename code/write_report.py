@@ -42,7 +42,7 @@ def format_uncertainty(value, plus, minus):
 
 if mode == 'terse':
     def format_uncertainty(value, plus=None, minus=None):
-        return "%.2f" %value
+        return value #"%.2f" %value
     
 
 #Write report
@@ -61,11 +61,11 @@ outlines.append("\n")
 outlines.append("   -----------------------------------------------------   ")
 outlines.append("                      Cut Efficiency                       ")
 outlines.append("   -----------------------------------------------------   \n")
-outlines.append(" No.\tData\t\t" + '\t\t'.join(sim_include.split(',')))
-outlines.append(" ---\t----\t\t" + '\t\t'.join(['-' * len(x) for x in sim_include.split(',')]))
+outlines.append(" No.\tData\t" + '\t'.join(sim_include.split(',')))
+outlines.append(" ---\t----\t" + '\t'.join(['-' * len(x) for x in sim_include.split(',')]))
 for index, row in df.iterrows():
     
-    out_line = ' %s\t%s\t\t' %(row['CUT'], row['DATA'])
+    out_line = ' %s\t%s\t' %(row['CUT'], row['DATA'])
     for obj in sim_include.split(','):
         out_line += '%s\t' %format_uncertainty(row[obj])
             
