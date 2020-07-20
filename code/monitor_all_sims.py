@@ -114,7 +114,7 @@ slsn_tr_phase1, slsn_tr_phase2, slsn_tr_phase3, slsn_tr_phase4 = True, False, Fa
 tde_tr_phase1, tde_tr_phase2, tde_tr_phase3, tde_tr_phase4 = True, False, False, False
 
 #let the sims get started
-time.sleep(3)
+time.sleep(6)
 
 while running:
 

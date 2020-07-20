@@ -68,6 +68,10 @@ else:
 
 
 for filename, obj in zip(file_list, objs):
+
+    if obj not in boosts.keys():
+        # Only edit files that requested simulations
+        continue
     
     #construct new input information
     header = ['#',
@@ -82,11 +86,11 @@ for filename, obj in zip(file_list, objs):
               'GENRANGE_MJD: ' + mjd_min + ' ' + mjd_max,
               'GENVERSION: %s_DESGW_' %username  + event_name + '_' + obj,
               'SOLID_ANGLE: ' + solid_angle,
-              'NGEN_LC: ' + boosts[obj]]
+              'NGEN_LC: ' + str(boosts[obj])]
 
     
     # LIGO redshift bounds
-    if obj in ['KN', 'BBH']:
+    if obj in ['KN', 'BBH', 'KN-tr', 'BBH-tr']:
         header.append('GENRANGE_REDSHIFT: ' + str(min_z) + ' ' + str(max_z))
 
     # Triggers
@@ -120,7 +124,9 @@ for filename, obj in zip(file_list, objs):
 
 # do LIGO specific distribution
 if 'LIGO_distance_(Mpc)' in df.columns:
-    force_ligo_dist.run(event_name, df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0])
+    # Run on all triggered input files
+    for obj_filename in ['TR_' + x for x in trigger_files]:
+        force_ligo_dist.run(obj_filename, event_name, df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0])
 
 
 #File header looks like this:
