@@ -69,8 +69,6 @@ H0:           70.0
 
 #FORMAT_MASK:  2  # 2=TEXT  8=BLIND  16=CIDRAN; 32=FITS
 
-CLEARPROMPT:    0
-
 
 GENRANGE_RA:      -360.   360.0   deg
 GENRANGE_DECL:    -360.   360.5

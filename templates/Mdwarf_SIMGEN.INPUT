@@ -61,7 +61,6 @@ H0:           70.0
 
 # ======
 
-CLEARPROMPT:    0
 
 GENRANGE_RA:      -360.   360.0   deg
 GENRANGE_DECL:    -360.   360.5
