@@ -47,7 +47,7 @@ else:
     parser.add_option('--sim_include', default="KN,Ia,CC,AGN", help="Transient classes to simulate")
     parser.add_option('--force_conditions', default='real', help="PSF,SKYMAG,DELTAT")
     parser.add_option('--clobber', action='store_true')
-    parser.add_option('--nobs_force', default='', help='Number of obs to require in libids')
+    parser.add_option('--nobs_force', default='2', help='Number of obs to require in libids')
     parser.add_option('--run_psnid', action='store_true')
     parser.add_option('--classify_cutoff', default=100, help='Final cut to apply before classification')
     options, args = parser.parse_args(sys.argv[2:])
