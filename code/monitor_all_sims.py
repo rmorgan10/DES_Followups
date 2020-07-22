@@ -1557,7 +1557,15 @@ while running:
     time.sleep(2)
     
 #sys.stdout.write('\rSimulating:  AGN -- Done! | KN -- Done! |  Ia -- Done!  |  CC -- Done!  |                         \n')
-sys.stdout.write('\rSimulating:  ' + ' | '.join([obj + ' ' + name_map[obj] for obj in sys.argv[2:]]) + ' |                             \n')
+
+display_map = {}
+for obj in sys.argv[2:]:
+    if name_map[obj] == 'ERROR':
+        display_map[obj] = ' ERROR'
+    else:
+        display_map[obj] = ' Done!'
+
+sys.stdout.write('\rSimulating:  ' + ' | '.join([obj + ' ' + display_map[obj] for obj in sys.argv[2:]]) + ' |                             \n')
 sys.stdout.flush()
 
 
