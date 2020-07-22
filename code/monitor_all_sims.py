@@ -686,7 +686,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished writing') != -1 or line.find('Read (ised=') != -1:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -710,7 +710,7 @@ while running:
             total = info[4]
             completed = info[2]
             ilot_progress = '%.2f %%' % (float(completed) / float(total) * 20.0 + 80.0)
-        elif ilot_phase2 or last_line.find('Read (ised=') != -1:
+        elif ilot_phase2 or last_line.find('Read  (ised=') != -1:
             ilot_phase1 = False
             ilot_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n'][1]
@@ -747,7 +747,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished writing') != -1 or line.find('Read (ised=') != -1:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -771,7 +771,7 @@ while running:
             total = info[4]
             completed = info[2]
             ilot_tr_progress = '%.2f %%' % (float(completed) / float(total) * 20.0 + 80.0)
-        elif ilot_tr_phase2 or last_line.find('Read (ised=') != -1:
+        elif ilot_tr_phase2 or last_line.find('Read  (ised=') != -1:
             ilot_tr_phase1 = False
             ilot_tr_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n'][1]
@@ -1563,7 +1563,7 @@ for obj in sys.argv[2:]:
     if name_map[obj] == 'ERROR':
         display_map[obj] = ' ERROR'
     else:
-        display_map[obj] = ' Done!'
+        display_map[obj] = ' -- Done!'
 
 sys.stdout.write('\rSimulating:  ' + ' | '.join([obj + ' ' + display_map[obj] for obj in sys.argv[2:]]) + ' |                             \n')
 sys.stdout.flush()
