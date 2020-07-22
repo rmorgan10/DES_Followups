@@ -556,7 +556,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished writing') != -1 or line.find('Read (ised=') != -1:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -580,7 +580,7 @@ while running:
             total = info[4]
             completed = info[2]
             cart_progress = '%.2f %%' % (float(completed) / float(total) * 20.0 + 80.0)
-        elif cart_phase2 or last_line.find('Read (ised=') != -1:
+        elif cart_phase2 or last_line.find('Read  (ised=') != -1:
             cart_phase1 = False
             cart_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n'][1]
@@ -621,7 +621,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished writing') != -1 or line.find('Read (ised=') != -1:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -645,7 +645,7 @@ while running:
             total = info[4]
             completed = info[2]
             cart_tr_progress = '%.2f %%' % (float(completed) / float(total) * 20.0 + 80.0)
-        elif cart_tr_phase2 or last_line.find('Read (ised=') != -1:
+        elif cart_tr_phase2 or last_line.find('Read  (ised=') != -1:
             cart_tr_phase1 = False
             cart_tr_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n'][1]
