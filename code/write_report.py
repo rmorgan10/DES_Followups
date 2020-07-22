@@ -16,10 +16,9 @@ except:
     mode = 'normal'
 
 
-
-
 df = pd.read_csv('../events/%s/cut_results/MERGED_CUT_RESULTS.csv' %event_name)
-
+# Trim sim_include to only sims that didn't fail
+sim_include = ','.join([x for x in sim_include.split(',') if x in df.columns])
 
 def format_uncertainty(value, plus, minus):
     #update this function to handle rounding of values

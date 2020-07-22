@@ -19,10 +19,17 @@ except:
     force_area = None
 
 #check for existence of summary files
+good_sims = []
 for obj in sim_include.split(','):
     if not os.path.exists('%s_DESGW_%s_%s_cut_summary.txt' %(username, event_name, obj)):
         print("ERROR: %s cut summary file is missing." %obj)
-        sys.exit()
+    else:
+        good_sims.append(obj)
+if len(good_sims) == 0:
+    print("No sims finished successfully.")
+    sys.exit()
+else:
+    sim_include = ','.join(good_sims)
 
 if not os.path.exists('LightCurvesReal_cut_summary.txt'):
     print("ERROR: LightCurvesReal cut summary file is missing.")
