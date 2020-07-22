@@ -552,7 +552,7 @@ while running:
                 cart_running = False
                 cart_error = True
 
-        last_lines = cart_info[-10:]
+        last_lines = cart_info[-40:]
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
@@ -617,7 +617,7 @@ while running:
                 cart_tr_running = False
                 cart_tr_error = True
 
-        last_lines = cart_tr_info[-10:]
+        last_lines = cart_tr_info[-40:]
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
