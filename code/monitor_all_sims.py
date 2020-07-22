@@ -1563,7 +1563,7 @@ for obj in sys.argv[2:]:
     if name_map[obj] == 'ERROR':
         display_map[obj] = ' ERROR'
     else:
-        display_map[obj] = ' -- Done!'
+        display_map[obj] = '  -- Done!'
 
 sys.stdout.write('\rSimulating:  ' + ' | '.join([obj + ' ' + display_map[obj] for obj in sys.argv[2:]]) + ' |                             \n')
 sys.stdout.flush()
