@@ -1154,7 +1154,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished writing') != -1 or line.find('Read (ised=') != -1:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -1178,7 +1178,7 @@ while running:
             total = info[4]
             completed = info[2]
             pia_progress = '%.2f %%' % (float(completed) / float(total) * 10.0 + 90.0)
-        elif pia_phase2 or last_line.find('Read (ised=') != -1:
+        elif pia_phase2 or last_line.find('Read  (ised=') != -1:
             pia_phase1 = False
             pia_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n'][1]
@@ -1215,7 +1215,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished writing') != -1 or line.find('Read (ised=') != -1:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -1239,7 +1239,7 @@ while running:
             total = info[4]
             completed = info[2]
             pia_tr_progress = '%.2f %%' % (float(completed) / float(total) * 10.0 + 90.0)
-        elif pia_tr_phase2 or last_line.find('Read (ised=') != -1:
+        elif pia_tr_phase2 or last_line.find('Read  (ised=') != -1:
             pia_tr_phase1 = False
             pia_tr_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n'][1]
@@ -1276,7 +1276,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished writing') != -1 or line.find('Read (ised=') != -1:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -1300,7 +1300,7 @@ while running:
             total = info[4]
             completed = info[2]
             slsn_progress = '%.2f %%' % (float(completed) / float(total) * 80.0 + 20.0)
-        elif slsn_phase2 or last_line.find('Read (ised=') != -1:
+        elif slsn_phase2 or last_line.find('Read  (ised=') != -1:
             slsn_phase1 = False
             slsn_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n'][1]
@@ -1341,7 +1341,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished writing') != -1 or line.find('Read (ised=') != -1:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -1365,7 +1365,7 @@ while running:
             total = info[4]
             completed = info[2]
             slsn_tr_progress = '%.2f %%' % (float(completed) / float(total) * 80.0 + 20.0)
-        elif slsn_tr_phase2 or last_line.find('Read (ised=') != -1:
+        elif slsn_tr_phase2 or last_line.find('Read  (ised=') != -1:
             slsn_tr_phase1 = False
             slsn_tr_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n'][1]
@@ -1406,7 +1406,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished writing') != -1 or line.find('Read (ised=') != -1:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -1430,7 +1430,7 @@ while running:
             total = info[4]
             completed = info[2]
             tde_progress = '%.2f %%' % (float(completed) / float(total) * 80.0 + 20.0)
-        elif tde_phase2 or last_line.find('Read (ised=') != -1:
+        elif tde_phase2 or last_line.find('Read  (ised=') != -1:
             tde_phase1 = False
             tde_phase2 = True
             try:
@@ -1471,7 +1471,7 @@ while running:
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:
-            if line.find('Finished writing') != -1 or line.find('Read (ised=') != -1:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
                 last_line = line
                 found_last_line = True
                 break
@@ -1495,7 +1495,7 @@ while running:
             total = info[4]
             completed = info[2]
             tde_tr_progress = '%.2f %%' % (float(completed) / float(total) * 80.0 + 20.0)
-        elif tde_tr_phase2 or last_line.find('Read (ised=') != -1:
+        elif tde_tr_phase2 or last_line.find('Read  (ised=') != -1:
             tde_tr_phase1 = False
             tde_tr_phase2 = True
             try:
