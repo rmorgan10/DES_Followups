@@ -78,6 +78,15 @@ else:
             sys.exit()
 
 assert len(boost.split(',')) == len(sim_include), "Boosts must map 1-1 with sims"
+
+# Protect against triggered Ia sims
+if 'Ia-tr' in sim_include:
+    print("WARNING: Triggered SNe-Ia simulations are not supported by SNANA")
+    idx = sim_include.index('Ia-tr')
+    garb = sim_include.pop(idx)
+    boost_list = boost.split(',')
+    garb = boost_list.pop(idx)
+    boost = ','.join(boost_list)
     
 
 if mode == 'interactive':
