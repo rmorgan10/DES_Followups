@@ -388,7 +388,7 @@ while running:
             cc_tr_phase3 = True
             cc_tr_running = False ## it should finish up in time where this is okay
             cc_tr_progress = 'Finishing'
-        elif cc_tr_phase2 or last_line.find('Finished generating') != -1:
+        elif cc_tr_phase2 or last_line.find('Finished writing') != -1:
             cc_tr_phase1 = False
             cc_tr_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n']
