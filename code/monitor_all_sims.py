@@ -635,7 +635,7 @@ while running:
             cart_tr_phase2 = False
             cart_tr_phase3 = False
             cart_tr_phase4 = True
-            cart_Tr_running = False ## it should finish up in time where this is okay
+            cart_tr_running = False ## it should finish up in time where this is okay
             cart_tr_progress = 'Finishing'
         elif cart_tr_phase3 or last_line.find('Finished writing') != -1:
             cart_tr_phase1 = False
