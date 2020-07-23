@@ -14,7 +14,7 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import confusion_matrix
 
 def calc_best_thresh(fpr, tpr, thresh):
-    fpr_tolerance = 0.001
+    fpr_tolerance = 0.01
     cond = (fpr < fpr_tolerance)
 
     trimmed_tpr = tpr[cond]

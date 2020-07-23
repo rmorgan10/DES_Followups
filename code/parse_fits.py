@@ -13,12 +13,18 @@ import sys
 #deal with input data
 event_name = sys.argv[1]
 fits_dir_prefix = sys.argv[2]
+if len(sys.argv) > 3:
+    stop_point = int(float(sys.argv[3]))
+else:
+    stop_point = -1
+
 phot_file = '../events/%s/sims_and_data/%s_FITS/%s_PHOT.FITS' %(event_name, fits_dir_prefix, fits_dir_prefix)
 head_file = '../events/%s/sims_and_data/%s_FITS/%s_HEAD.FITS' %(event_name, fits_dir_prefix, fits_dir_prefix)
 
 #deal with output data
 transient_class = fits_dir_prefix.split('_')[-1]
 process_log_file = '../events/%s/logs/parse_%s.log' %(event_name, transient_class)
+
 
 
 if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix)):
@@ -40,6 +46,9 @@ if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_
     head_data = hdu[1].data
     hdu.close()
     head_df = pd.DataFrame(data=head_data, columns=head_columns)
+    # hack to fix issue of spectroscopic redshifts in real data have z_err = 99
+    if 'REDSHIFT_FINAL_ERR' in head_columns:
+        head_df['REDSHIFT_FINAL_ERR'].replace(to_replace=99.0, value=1.e-4, inplace=True)
 
     #read phot file
     lcs = []
@@ -53,6 +62,7 @@ if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_
     total = len(phot_data)
     counter = 0
     for data_line in phot_data:
+
         #track progress
         counter += 1
         progress = float(counter) / total * 100
@@ -80,11 +90,17 @@ if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_
         else:
             lc_data.append(data_line)
 
+        if len(lcs) == stop_point: break
+
     #construct out dictionary
     out_dict = {}
     for index, row in head_df.iterrows():
+
+        if index == stop_point: break
+
         if type(lcs[index]) != type('SKIP'):
             out_dict[row['SNID'].strip()] = {'metadata': row, 'lightcurve': lcs[index]}
+
 
     #save out dict
     np.save('../events/%s/sims_and_data/%s_PYTHON/%s.npy' %(event_name, fits_dir_prefix, fits_dir_prefix), out_dict)

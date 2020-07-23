@@ -37,7 +37,9 @@ def fit(avg, std, H0=70, Tcmb0=2.725, Om0=0.3):
             attempt += 1
 
     if attempt == 11:
-        print("Error in curve fit. Defaulting to LIGO_mean +/- 2 sigma")
+        print("Error in curve fit of avg = %s, std = %s. Defaulting to LIGO_mean +/- 2 sigma" %(avg, std))
+        
+        popt, pcov = curve_fit(double_poly_fit, midpoints, counts, maxfev=10000)
         assert False
 
     res = np.array([double_poly_fit(x, *popt) for x in midpoints])
@@ -66,6 +68,9 @@ def get_zmin_zmax(resid, clean_midpoints, resid_thresh=2.0, z_thresh=0.005):
         z_prev = z + 0.0
         
     if not zmin_found:
+        z_min = 0.003
+
+    if z_min < 0.003:
         z_min = 0.003
         
     #z max
@@ -125,10 +130,10 @@ def write_report(event_name, zmin, zmax, zmin_found, zmax_found, popt):
 
     return
 
-def update_snana(event_name, popt, zmin, zmax):
+def update_snana(obj_filename, event_name, popt, zmin, zmax):
     simgen_dir = '../events/%s/sim_gen/' %event_name
-    filename = simgen_dir + 'SIMGEN_DES_KN.input'
-    
+    filename = simgen_dir + obj_filename
+
     stream = open(filename, 'r')
     lines = stream.readlines()
     stream.close()
@@ -154,11 +159,11 @@ def update_snana(event_name, popt, zmin, zmax):
     
     
 
-def run(event_name, avg, std):
+def run(obj_filename, event_name, avg, std):
     popt, midpoints, counts, res = fit(avg, std)
     
     zmin, zmax = check(event_name, midpoints, counts, res, popt)
     
-    update_snana(event_name, popt, zmin, zmax)
+    update_snana(obj_filename, event_name, popt, zmin, zmax)
     
     return

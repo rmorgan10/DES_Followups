@@ -22,8 +22,8 @@ cut_results = np.load('../events/%s/cut_results/%s_cut_results.npy' %(event_name
 cut_filename = '../events/%s/cuts.csv' %event_name
 cut_df = pd.read_csv(cut_filename)
 
-print("Cuts to be placed:")
-print(cut_df)
+#print("Cuts to be placed:")
+#print(cut_df)
 
 cut_by_dict = { str(x) : 0 for x in cut_df['NUMBER'].values }
 

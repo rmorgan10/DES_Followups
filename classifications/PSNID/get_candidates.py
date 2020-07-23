@@ -36,6 +36,7 @@ dat_files = ['des_real_00%s.dat' % str(x) for x in snids]
 
 stream = open('../../events/%s/dat_file_path.txt' %event_name, 'r')
 path = stream.readlines()[0].strip()
+if path[-1] != '/': path += '/'
 stream.close()
 
 

@@ -42,29 +42,17 @@ else:
 
     #parse for bosst, num_kn, and num_agn
     parser = OptionParser(__doc__)
-    parser.add_option('--boost', default=10, help="Number of seasons to simulate for SNe")
-    parser.add_option('--num_kn', default=10000, help="Number of KNe to simulate")
-    parser.add_option('--num_agn', default=0, help="Number of AGN to simulate")
+    parser.add_option('--boost', default='', help="Number of objects")
     parser.add_option('--clean_up', default="None", help="Things to be cleaned up")
-    parser.add_option('--propid', default="", help="PropID for observations")
-    parser.add_option('--first_exposure', default=0, help="First expnum of observations")
-    parser.add_option('--last_exposure', default=0, help="Last expnum of observations")
-    parser.add_option('--num_mdwarf', default=0, help="Number of Mdwarfs to simulate")
     parser.add_option('--sim_include', default="KN,Ia,CC,AGN", help="Transient classes to simulate")
     parser.add_option('--force_conditions', default='real', help="PSF,SKYMAG,DELTAT")
     parser.add_option('--clobber', action='store_true')
-    parser.add_option('--nobs_force', default='', help='Number of obs to require in libids')
+    parser.add_option('--nobs_force', default='2', help='Number of obs to require in libids')
     parser.add_option('--run_psnid', action='store_true')
     parser.add_option('--classify_cutoff', default=100, help='Final cut to apply before classification')
     options, args = parser.parse_args(sys.argv[2:])
-    boost = float(options.boost)
-    num_kn = int(float(options.num_kn))
-    num_agn = int(float(options.num_agn))
+    boost = options.boost
     clean_up = str(options.clean_up)
-    propid = str(options.propid)
-    first_exposure = int(options.first_exposure)
-    last_exposure = int(options.last_exposure)
-    num_mdwarf = int(options.num_mdwarf)
     sim_include = str(options.sim_include).strip().split(',')
     forced_conditions = str(options.force_conditions)
     clobber = options.clobber
@@ -72,8 +60,13 @@ else:
     run_psnid = options.run_psnid
     classify_cutoff = int(options.classify_cutoff)
 
+    # format boost if a single number is specified for all classes
+    if len(boost.split(',')) == 1:
+        boost = ','.join([boost] * len(sim_include))
+
 # Command-line argument error checking
 allowed_sims = ['KN', 'Ia', 'CC', 'AGN', 'CaRT', 'ILOT', 'Mdwarf', 'SN91bg', 'Iax', 'PIa', 'SLSN', 'TDE']
+allowed_sims += [x + '-tr' for x in allowed_sims] #let any object be triggered
 if len(sim_include) == 1:
     if sim_include[0] == 'all':
         sim_include = allowed_sims[:]
@@ -84,15 +77,24 @@ else:
             print(allowed_sims)
             sys.exit()
 
-    
+assert len(boost.split(',')) == len(sim_include), "Boosts must map 1-1 with sims"
 
+# Protect against triggered Ia sims
+if 'Ia-tr' in sim_include:
+    print("WARNING: Triggered SNe-Ia simulations are not supported by SNANA")
+    idx = sim_include.index('Ia-tr')
+    garb = sim_include.pop(idx)
+    boost_list = boost.split(',')
+    garb = boost_list.pop(idx)
+    boost = ','.join(boost_list)
+    
 
 if mode == 'interactive':
     print("Running in interactive mode.\n")
     #prompt the user for all needed values and create necessary files
     
-
-
+    print("This is not implemented yet. You must make all input files yourself")
+    sys.exit()
 
     #set mode to normal so that the main codes will execute
     print("Interactive mode completed. Switching to normal mode.\n")
@@ -110,12 +112,8 @@ if mode == 'normal':
     if clean_up != "None":
         os.system("python clean_up.py %s %s" %(event_name, clean_up))
     
-    #get full exptable if desired
-    if first_exposure != 0 and last_exposure != 0 and propid != "":
-        os.system('python get_exposures.py %s %s %i %i' %(event_name, propid, first_exposure, last_exposure))
-
     #interpret metadata
-    os.system('python interpret_metadata.py %s --boost %.3f --num_kn %i --num_agn %i --num_mdwarf %i' %(event_name, boost, num_kn, num_agn, num_mdwarf))
+    os.system('python interpret_metadata.py %s --boost %s --sim_include %s' %(event_name, boost, ','.join(sim_include)))
 
     #generate sims
     os.system('python generate_all_sims.py %s %s %s %s' %(event_name, forced_conditions, nobs_force, ' '.join(sim_include)))
@@ -124,10 +122,10 @@ if mode == 'normal':
     os.system('python run_all_cuts.py %s both %s' %(event_name, ' '.join(sim_include)))
 
     #analyze results
-    os.system('python analyze_results.py %s' %event_name)
+    os.system('python analyze_results.py %s %s' %(event_name, ','.join(sim_include)))
 
     #write out a report with uncertainties
-    os.system('python write_report.py %s' %event_name)
+    os.system('python write_report.py %s %s terse' %(event_name, ','.join(sim_include)))
 
     #classify with psnid if desired
     if run_psnid:

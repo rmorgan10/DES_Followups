@@ -9,9 +9,8 @@
 GENRANGE_PEAKMJD: 58700 58740
 GENRANGE_MJD: 58700 58740
 GENVERSION:  RM_test_CART
-EXPOSURE_TIME: 1.5
 SOLID_ANGLE:  0.0082
-NGEN_SEASON:  0.1
+NGEN_LC:  10
 
 #--------------------------------------------------------------------
 # Don't need to change anything after this point  (I sure hope)
@@ -19,44 +18,26 @@ NGEN_SEASON:  0.1
 
 SIMLIB_FILE:  sim_gen/SIMLIB.txt
 
-#HOSTLIB_FILE:           $DES_ROOT/simlibs/DES_SVA1GOLD_DEEP_TRAIN.HOSTLIB
-#HOSTLIB_FILE:            DES_SVA1GOLD_DEEP_TRAIN.HOSTLIB
-# HOSTNOISE_FILE:         $SNDATA_ROOT/simlib/DES/DES_Y1reproc2_SBNOISEMODEL.DAT
-# HOSTNOISE_FILE:         /project/rkessler/SN/INTERNAL/GW170814/analysis/DES_Y1reproc2_SBNOISEMODEL.DAT
-FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT
-#HOSTLIB_ZPHOTEFF_FILE:  $DES_ROOT/simlibs/DESB12_zPHOT_EFF1.DAT
-#                        !SEARCHEFF_zPHOT_KNANA.DAT
+#FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT
 HOSTLIB_MSKOPT:  256
 
 # 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border
-#SOLID_ANGLE:  0.000860    # steridians: .00082 = 3 sqdeg
-#SOLID_ANGLE: 0.007181396
 
-#GENRANGE_PEAKMJD: 58598 58628
-#EXPOSURE_TIME: 0.67
 GENRANGE_TREST:  -100. 100.
 FORMAT_MASK: 32
 
-#NGENTOT_LC: 100
-#NGEN_LC: 10000
-#NGEN_SEASON: 10
-
-
 GENSOURCE:   RANDOM
-
 
 GENMODEL: $PLASTICC_MODELS/SIMSED.CART-MOSFIT
 GENAV_WV07:   1       # WV07, Eq. 2
 #GENRANGE_AV:  0  3    # CCM89 AV-extinctionrange
 
-SIMSED_USE_BINARY:   1
-SIMSED_PATH_BINARY:  $PLASTICC_MODELS/SIMSED_BINARIES
+SIMSED_USE_BINARY:   0
+#SIMSED_PATH_BINARY:  $PLASTICC_MODELS/SIMSED_BINARIES
 
 # Volumetric rate
 DNDZ: MD14    2.3E-6  # MD14 SFR(z) with 2.3E-6/yr/Mpc^3 at z=0
 GENRANGE_REDSHIFT:  0.015   0.77
-
-
 
 
 # ==============================
@@ -65,16 +46,10 @@ GENRANGE_REDSHIFT:  0.015   0.77
 
 SIMSED_GRIDONLY:  Cart_INDEX
 
-
 GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 
-# 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
-#SOLID_ANGLE:  0.0082    # steridians 
-
-
-
 GENFILTERS:  griz
-KCOR_FILE:   DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz  # DES/kcor_DES_grizY.fits
 
 RANSEED: 12945       # random number seed
 
@@ -93,7 +68,6 @@ APPLY_CUTWIN_OPT: 1   #PSNID dies if you turn this off, fun fact
 CUTWIN_NOBSDIF: 2, 9999
 
 
-
 # cosmological params for lightcurve generation and redshift distribution
 OMEGA_MATTER:  0.3
 OMEGA_LAMBDA:  0.7
@@ -103,13 +77,9 @@ H0:           70.0
 # ======
 
 
-CLEARPROMPT:    0
-
-
 GENRANGE_RA:      -360.   360.0   deg
 GENRANGE_DECL:    -360.   360.5
 #GENRANGE_TREST:   -50.0   50.
-
 
 
 # ==============================

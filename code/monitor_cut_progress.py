@@ -67,7 +67,7 @@ while running:
 
     #write progress to screen
     string_output = ['%s -- %s' %(k, v) for k, v in progress_dict.iteritems()]
-    progress_out = 'Processing:  ' + ' | '.join(string_output) + ' ' * 30
+    progress_out = 'Processing:  ' + ' | '.join(string_output) + ' |' + ' ' * 30
     sys.stdout.write('\r' + progress_out)
     sys.stdout.flush()
 
@@ -82,4 +82,4 @@ while running:
 
 
 #final done statement
-sys.stdout.write('\rProcessing:  ' + ' | '.join([k + ' -- Done!' for k in sim_include]) + ' ' * 30 + '\n')
+sys.stdout.write('\rProcessing:  ' + ' | '.join([k + ' -- Done!' for k in sim_include]) + ' |' + ' ' * 30 + '\n')
