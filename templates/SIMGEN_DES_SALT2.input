@@ -31,7 +31,7 @@ GENMODEL:    SALT2.Guy10_UV2IR
 GENMAG_SMEAR_MODELNAME:  G10
 
 GENFILTERS:  griz                 # RM-set to gri from griz to match obs?
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits #DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz #DES/kcor_DES_grizY.fits
 
 GENSIGMA_SEARCH_PEAKMJD:  0.1     # sigma-smearing for  SEARCH_PEAKMJD (days)
 

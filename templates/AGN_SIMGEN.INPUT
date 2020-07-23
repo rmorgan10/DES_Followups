@@ -26,6 +26,8 @@ FORMAT_MASK: 32
 # Rel rate = 5th order polynominal in cos(b)
 DNDB: COSBPOLY 1  0 0 0 0 0        # AGN are isotropic
 
+GENAV_WV07:   1       # WV07, Eq. 2
+
 # restrict AGN redshift to ZTRUE range of G18 photo-z library
 LCLIB_CUTWIN:  REDSHIFT 0.0 1.5  #3.45
 
@@ -38,7 +40,7 @@ GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 GENSOURCE:   RANDOM   
 
 GENFILTERS:  griz
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits #DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz #DES/kcor_DES_grizY.fits
 
 RANSEED: 12945       # random number seed
 
