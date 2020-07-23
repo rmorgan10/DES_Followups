@@ -123,9 +123,9 @@ for filename, obj in zip(file_list, objs):
 
 
 # do LIGO specific distribution
-if 'LIGO_distance_(Mpc)' in df.columns:
-    # Run on all triggered input files
-    for obj_filename in ['TR_' + x for x in trigger_files]:
+if 'LIGO_distance_(Mpc)' in df.columns and ('KN-tr' in trigger_objs or 'BBH-tr' in trigger_objs):
+    # Run on triggered input files
+    for obj_filename in ['TR_SIMGEN_DES_KN.input']:
         force_ligo_dist.run(obj_filename, event_name, df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0])
 
 
