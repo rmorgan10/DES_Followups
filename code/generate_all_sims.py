@@ -121,6 +121,8 @@ obj_simfile_map = {'AGN': 'AGN_SIMGEN.INPUT',
                    'PIa': 'SN_PIaSIMGEN.INPUT',
                    'SLSN': 'SN_SLSNSIMGEN.INPUT',
                    'TDE': 'TDE_SIMGEN.INPUT'}
+for k in obj_simfile_map.keys():
+    obj_simfile_map[k + '-tr'] = 'TR_' + obj_simfile_map[k]
 
 obj_logfile_map = {'AGN': 'sim_agn.log',
                    'KN': 'sim_kn.log',
@@ -134,6 +136,8 @@ obj_logfile_map = {'AGN': 'sim_agn.log',
                    'PIa': 'sim_pia.log',
                    'SLSN': 'sim_slsn.log',
                    'TDE': 'sim_tde.log'}
+for k in obj_logfile_map.keys():
+    obj_logfile_map[k +'-tr'] = 'sim_tr_' + obj_logfile_map[k].split('_')[-1]
 
 args = []
 for obj in obj_to_simulate:

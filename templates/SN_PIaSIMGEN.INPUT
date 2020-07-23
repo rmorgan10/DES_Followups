@@ -9,9 +9,8 @@
 GENRANGE_PEAKMJD: 58700 58740
 GENRANGE_MJD: 58700 58740
 GENVERSION:  RM_test_SNPIa
-EXPOSURE_TIME: 1.5
 SOLID_ANGLE:  0.0082
-NGEN_SEASON:  100.0
+NGEN_LC:  100
 
 #--------------------------------------------------------------------
 # Don't need to change anything after this point  (I sure hope)
@@ -26,8 +25,8 @@ GENMODEL: $PLASTICC_MODELS/SIMSED.PISN-MOSFIT
 GENAV_WV07:   1       # WV07, Eq. 2
 GENRANGE_AV:  0  3    # CCM89 AV-extinctionrange
 
-SIMSED_USE_BINARY:   1
-SIMSED_PATH_BINARY:  $PLASTICC_MODELS/SIMSED_BINARIES
+SIMSED_USE_BINARY:   0
+#SIMSED_PATH_BINARY:  $PLASTICC_MODELS/SIMSED_BINARIES
 
 # Volumetric rate: # arxiv.org/pdf/1111.3648.pdf, Fig 2
 #DNDZ: IPP             # Instability pair production (hide in code)
@@ -50,13 +49,10 @@ GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 # 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
 #SOLID_ANGLE:  0.0082    # steridians 
 
-
-#NGENTOT_LC:  1000
-#GENVERSION:  ZD_KNDES_TEST
 GENSOURCE:   RANDOM   
 
 GENFILTERS:  griz
-KCOR_FILE:   DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz
 
 RANSEED: 12945       # random number seed
 
@@ -85,13 +81,10 @@ H0:           70.0
 
 #FORMAT_MASK:  2  # 2=TEXT  8=BLIND  16=CIDRAN; 32=FITS
 
-CLEARPROMPT:    0
 
 
 GENRANGE_RA:      -360.   360.0   deg
 GENRANGE_DECL:    -360.   360.5
-#GENRANGE_TREST:   -50.0   50.
-
 
 
 # ==============================

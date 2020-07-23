@@ -8,14 +8,17 @@ import sys
 
 event_name = sys.argv[1]
 
+sim_include = sys.argv[2]
+
 try:
-    mode = sys.argv[2]
+    mode = sys.argv[3]
 except:
     mode = 'normal'
 
 
 df = pd.read_csv('../events/%s/cut_results/MERGED_CUT_RESULTS.csv' %event_name)
-
+# Trim sim_include to only sims that didn't fail
+sim_include = ','.join([x for x in sim_include.split(',') if x in df.columns])
 
 def format_uncertainty(value, plus, minus):
     #update this function to handle rounding of values
@@ -37,8 +40,8 @@ def format_uncertainty(value, plus, minus):
     return "%s +/- %s" %(res, err)
 
 if mode == 'terse':
-    def format_uncertainty(value, plus, minus):
-        return "%.2f" %value
+    def format_uncertainty(value, plus=None, minus=None):
+        return value #"%.2f" %value
     
 
 #Write report
@@ -57,14 +60,15 @@ outlines.append("\n")
 outlines.append("   -----------------------------------------------------   ")
 outlines.append("                      Cut Efficiency                       ")
 outlines.append("   -----------------------------------------------------   \n")
-outlines.append(" No.\tData\tKN Efficiency\t\tSNe-Ia\t\tSNe-CC\t\tAGN")
-outlines.append(" ---\t----\t-------------\t\t------\t\t------\t\t---")
+outlines.append(" No.\tData\t" + '\t'.join(sim_include.split(',')))
+outlines.append(" ---\t----\t" + '\t'.join(['-' * len(x) for x in sim_include.split(',')]))
 for index, row in df.iterrows():
-    outlines.append(" %s\t%s\t%s\t%s\t%s\t%s" %(row['CUT'], row['DATA'], 
-                                  format_uncertainty(row['KN_scaled'], row['KN_scaled_err_plus'], row['KN_scaled_err_minus']),
-                                  format_uncertainty(row['Ia_scaled'], row['Ia_scaled_err_plus'], row['Ia_scaled_err_minus']),
-                                  format_uncertainty(row['CC_scaled'], row['CC_scaled_err_plus'], row['CC_scaled_err_minus']),
-                                  format_uncertainty(row['AGN_scaled'], row['AGN_scaled_err_plus'], row['AGN_scaled_err_minus'])))
+    
+    out_line = ' %s\t%s\t' %(row['CUT'], row['DATA'])
+    for obj in sim_include.split(','):
+        out_line += '%s\t' %format_uncertainty(row[obj])
+            
+    outlines.append(out_line)
 
 #Print report to screen
 for line in outlines:

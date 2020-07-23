@@ -6,7 +6,7 @@ import pandas as pd
 import sys
 import utils
 
-import force_kn_dist
+import force_ligo_dist
 
 #read input data
 event_name = sys.argv[1]
@@ -35,28 +35,43 @@ eff_area = float([x for x in simlib_info[-5:] if x[0:15] == 'EFFECTIVE_AREA:'][0
 file_prefix = '../events/%s/sim_gen/' %event_name
 file_list = ['AGN_SIMGEN.INPUT', 'SIMGEN_DES_KN.input', 'SIMGEN_DES_NONIA.input', 'SIMGEN_DES_SALT2.input',
              'CART_SIMGEN.INPUT', 'ILOT_SIMGEN.INPUT', 'Mdwarf_SIMGEN.INPUT', 'SN_Ia91bgSIMGEN.INPUT',
-             'SN_IaxSIMGEN.INPUT', 'SN_PIaSIMGEN.INPUT', 'SN_SLSNSIMGEN.INPUT', 'TDE_SIMGEN.INPUT']
+             'SN_IaxSIMGEN.INPUT', 'SN_PIaSIMGEN.INPUT', 'SN_SLSNSIMGEN.INPUT', 'TDE_SIMGEN.INPUT'] 
 objs = ['AGN', 'KN', 'CC', 'Ia', 'CaRT', 'ILOT', 'Mdwarf', 'SN91bg', 'Iax', 'PIa', 'SLSN', 'TDE']
+
+# Add trigger files
+boosts = {x[7:]: df[x].values[0] for x in df.columns if x.find('BOOST') != -1}
+trigger_files, trigger_objs = [], []
+for k, v in boosts.iteritems():
+    if k.find('-tr') != -1:
+        trigger_files.append(file_list[objs.index(k[0:-3])])
+        trigger_objs.append(k)
+
+file_list += trigger_files
+objs += trigger_objs
 
 #iterate through files and update:
 # - genversion (update during loop)
-# - exposure time
 # - gnerange_peakmjd
 # - genrange_mjd
 # - solid_angle (conversion: .00082 sterradians = 3 sqdeg )
 # - mjd explode (kn only)
 
-exp_time = '1' #str(round(df['EXPTIME_(sec)'].values[0] / 60.0, 3))
 mjd_min = str(int(float(df['MJD_EXPLODE'].values[0])) - 60)
 mjd_max = str(int(float(df['MJD_EXPLODE'].values[0])) + 30)
 mjd_exp = str(df['MJD_EXPLODE'].values[0])
 solid_angle = str(round(eff_area / 3.0 * .00082, 6))
-min_z, max_z = utils.get_ligo_z_range(df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0]) 
-
-
+if 'LIGO_distance_(Mpc)' in df.columns:
+    min_z, max_z = utils.get_ligo_z_range(df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0]) 
+else:
+    min_z = None
+    max_z = None
 
 
 for filename, obj in zip(file_list, objs):
+
+    if obj not in boosts.keys():
+        # Only edit files that requested simulations
+        continue
     
     #construct new input information
     header = ['#',
@@ -70,23 +85,17 @@ for filename, obj in zip(file_list, objs):
               'GENRANGE_PEAKMJD: ' + mjd_min + ' ' + mjd_max,
               'GENRANGE_MJD: ' + mjd_min + ' ' + mjd_max,
               'GENVERSION: %s_DESGW_' %username  + event_name + '_' + obj,
-              'EXPOSURE_TIME: ' + exp_time,
-              'SOLID_ANGLE: ' + solid_angle]
+              'SOLID_ANGLE: ' + solid_angle,
+              'NGEN_LC: ' + str(boosts[obj])]
 
-    if obj == 'KN':
-        header.append('MJD_EXPLODE: ' + mjd_exp)
+    
+    # LIGO redshift bounds
+    if obj in ['KN', 'BBH', 'KN-tr', 'BBH-tr']:
         header.append('GENRANGE_REDSHIFT: ' + str(min_z) + ' ' + str(max_z))
-        header.append('NGEN_LC: ' + str(df['NUM_KN'].values[0]))
-    elif obj == 'AGN':
-        header.append('NGEN_LC: ' + str(df['NUM_AGN'].values[0]))
-    elif obj == 'CC' or obj == 'Ia':
-        header.append('NGEN_SEASON: ' + str(df['BOOST'].values[0]))
-    elif obj == 'Mdwarf':
-        header.append('NGEN_LC: ' + str(df['NUM_Mdwarf'].values[0]))
-    elif obj in ['PIa', 'Iax', 'SN91bg']:
-        header.append('NGEN_LC: ' + str(df['BOOST'].values[0] * 1000))
-    elif obj in ['TDE', 'SLSN', 'ILOT', 'CaRT']:
-        header.append('NGEN_LC: ' + str(df['BOOST'].values[0] * 1000))
+
+    # Triggers
+    if obj.find('-tr') != -1:
+        header.append('MJD_EXPLODE: ' + mjd_exp)
 
     buffer_lines = ['#--------------------------------------------------------------------',
                     "# Don't need to change anything after this point  (I sure hope)",
@@ -103,13 +112,21 @@ for filename, obj in zip(file_list, objs):
     output_lines = input_lines + template_lines[len(input_lines) + 1:]
 
     #write to output file
-    outfile = open(file_prefix + filename, 'w+')
+    if obj.find('-tr') == -1:
+        out_filename = filename
+    else:
+        out_filename = 'TR_' + filename
+ 
+    outfile = open(file_prefix + out_filename, 'w+')
     outfile.writelines(output_lines)
     outfile.close()
 
 
-# do kn specific distribution
-force_kn_dist.run(event_name, df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0])
+# do LIGO specific distribution
+if 'LIGO_distance_(Mpc)' in df.columns and ('KN-tr' in trigger_objs or 'BBH-tr' in trigger_objs):
+    # Run on triggered input files
+    for obj_filename in ['TR_SIMGEN_DES_KN.input']:
+        force_ligo_dist.run(obj_filename, event_name, df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0])
 
 
 #File header looks like this:

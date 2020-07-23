@@ -9,9 +9,7 @@
 GENRANGE_PEAKMJD: 58598 58628
 GENRANGE_MJD: 58598 58628
 GENVERSION:  RM_Net_AGN
-EXPOSURE_TIME: 1.0
 SOLID_ANGLE:  0.0082
-MJD_EXPLODE: 55555
 GENRANGE_REDSHIFT:  0.05   0.26
 NGEN_LC: 10000
 
@@ -30,6 +28,9 @@ SIMSED_USE_BINARY:   0
 # to approximately account for large kicks.
 WV07_REWGT_EXPAV:  0.5
 GENRANGE_AV:  0  3    # CCM89 AV-extinctionrange
+GENPEAK_RV: 1.6
+GENSIGMA_RV: 0.1 0.9
+GENRANGE_RV: 1.3 4.5
 
 # Volumetric rate (per yr per Mpc^3) base on
 #  Abbott 2016
@@ -51,35 +52,22 @@ SIMSED_GRIDONLY:  KN_INDEX
 # so force min mag/day slope for late-time extrapolation.
 MINSLOPE_EXTRAPMAG_LATE: 0.1
 
-#GENVERSION:  RM_DESGW_190510_KN_SIMS
-#GENRANGE_PEAKMJD: 58600  58630
-#MJD_EXPLODE:  58613
-#EXPOSURE_TIME: 0.67
 GENRANGE_TREST  -100. 100.
 
 FORMAT_MASK: 32
 
 
-#--------------------------------------------------------------------
-# Don't need to change anything after this point  (I sure hope)
-#--------------------------------------------------------------------
-
 SIMLIB_FILE:  sim_gen/SIMLIB.txt
 
-#GENRANGE_PEAKMJD:  56520    57060     # all of Y1 & Y2
 GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 
 # 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
-#SOLID_ANGLE:  0.0082    # steridians 
 
 
-#NGEN_LC:  10000
-#NGENTOT_LC: 100
-#GENVERSION:  ZD_KNDES_TEST
 GENSOURCE:   RANDOM   
 
 GENFILTERS:  griz
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits #DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz #DES/kcor_DES_grizY.fits
 
 RANSEED: 12945       # random number seed
 
@@ -104,10 +92,6 @@ W0_LAMBDA:    -1.00
 H0:           70.0   
 
 # ======
-
-#FORMAT_MASK:  2  # 2=TEXT  8=BLIND  16=CIDRAN; 32=FITS
-
-CLEARPROMPT:    0
 
 
 GENRANGE_RA:      -360.   360.0   deg
