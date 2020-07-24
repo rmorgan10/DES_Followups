@@ -17,17 +17,22 @@ np.set_printoptions(precision=2)
 
 event_name = sys.argv[1]
 event_dir = '../../events/%s/PSNID' %event_name
+signal = sys.argv[2]
+background = sys.argv[3] #comma-separated list of background objects
+sim_include = signal + ',' + background
+
+#One-hot encoding
+encode = {obj: idx for idx, obj in enumerate(sorted(sim_include.split(',')))}
 
 data = pd.read_csv('%s/opt_pred_data.csv' %event_dir)
 test = pd.read_csv('%s/opt_pred_test.csv' %event_dir)
 train = pd.read_csv('%s/opt_pred_train.csv' %event_dir)
 feat_df = pd.read_csv('%s/opt_feat_importances.csv' %event_dir).sort_values(by='IMPORTANCE', ascending=False).reset_index(drop=True)
-#temp hack
-try:
-    candidate_cut_res_df = pd.read_csv('../../events/%s/cut_results/LightCurvesReal_candidate_summary.txt' %event_name)
-    candidate_snids = np.array(candidate_cut_res_df['SNID'].values, dtype=int)
-except:
-    candidate_snids = np.array([666914, 635380, 627337, 628584, 635044])
+
+
+candidate_cut_res_df = pd.read_csv('../../events/%s/cut_results/LightCurvesReal_candidate_summary.txt' %event_name)
+candidate_snids = np.array(candidate_cut_res_df['SNID'].values, dtype=int)
+
 
 
 def get_operating_threshold(fpr, tpr, thresholds):
@@ -129,23 +134,13 @@ def plot_confusion_matrix(y_true, y_pred, classes,
     plt.close()
 
     return 
-
-def encode(label):
-    if label == 'CC':
-        return 0
-    elif label == 'Ia':
-        return 1
-    elif label == 'KN':
-        return 2
-    else:
-        print("ERROR: unexpected label")
         
 
 
 # ROC Curve
 
-binary_labels = np.array([int(x == 'KN') for x in test['CLASS'].values])
-binary_scores = np.array(test['PROB_KN'].values, dtype=float)
+binary_labels = np.array([int(x == signal) for x in test['CLASS'].values])
+binary_scores = np.array(test['PROB_%s' %signal].values, dtype=float)
 
 fpr, tpr, thresholds = roc_curve(binary_labels, binary_scores)
 auc = roc_auc_score(binary_labels, binary_scores)
@@ -179,10 +174,10 @@ plt.plot([0,1], [0,1], ls='--', lw=2, color='gray', label='Random Guessing (AUC 
 
 plt.scatter([op_fpr], [op_tpr], marker='*', color='black', s=80, zorder=40, label='Operating Threshold = %.3f' %op_threshold)
 
-plt.xlabel("KN False Positive Rate", fontsize=14)
-plt.ylabel("KN True Positive Rate", fontsize=14)
+plt.xlabel("%s False Positive Rate" %signal, fontsize=14)
+plt.ylabel("%s True Positive Rate" %signal, fontsize=14)
 
-plt.colorbar(garb, label='KN Probability Threshold')
+plt.colorbar(garb, label='%s Probability Threshold' %signal)
 
 plt.legend()
 
@@ -228,12 +223,12 @@ plt.close()
 
 # Confusion Matrix
 
-class_names = np.array(['CC', 'Ia', 'KN'])
-y_test_label = [encode(x) for x in test['CLASS'].values]
+class_names = np.array(sorted(sim_include.split(',')))
+y_test_label = [encode[x] for x in test['CLASS'].values]
 y_test_pred = []
 for index, row in test.iterrows():
-    y_test_pred.append(class_names[np.argmax(np.array(row[['PROB_CC', 'PROB_Ia', 'PROB_KN']]))])
-y_test_pred_label = [encode(x) for x in y_test_pred]
+    y_test_pred.append(class_names[np.argmax(np.array(row[['PROB_%s' %obj for obj in sorted(sim_include.split(',')]]))])
+y_test_pred_label = [encode[x] for x in y_test_pred]
 
 plot_confusion_matrix(y_test_label, y_test_pred_label, classes=class_names, normalize=True)
 
@@ -248,21 +243,21 @@ for index, row in data.iterrows():
         confirmed_spec.append(0)
 data['SPEC'] = confirmed_spec
         
-sorted_data = data.sort_values(by='PROB_KN', ascending=False)
+sorted_data = data.sort_values(by='PROB_%s' %signal, ascending=False)
 sorted_data['INDEX'] = np.arange(data.shape[0])
 
 plt.figure(figsize=(6,4), dpi=120)
 
 plt.bar(sorted_data['INDEX'].values[sorted_data['SPEC'].values == 1], 
-        sorted_data['PROB_KN'].values[sorted_data['SPEC'].values == 1],
+        sorted_data['PROB_%s' %signal].values[sorted_data['SPEC'].values == 1],
         color='#d95f02', label=None)
 plt.bar(sorted_data['INDEX'].values[sorted_data['SPEC'].values == 0], 
-        sorted_data['PROB_KN'].values[sorted_data['SPEC'].values == 0], 
+        sorted_data['PROB_%s' %signal].values[sorted_data['SPEC'].values == 0], 
         color='#7570b3', label=None)
 
 color_dict = {0:'#7570b3', 1:'#d95f02'}
 for index, row in sorted_data.iterrows():
-    if row['PROB_KN'] == 0.0:
+    if row['PROB_%s' %signal] == 0.0:
         plt.arrow(row['INDEX'], 0.15, 0, -0.1,
                   color=color_dict[row['SPEC']], head_length=0.025, width=0.1,
                   length_includes_head=True)
@@ -271,7 +266,7 @@ plt.axhline(y=op_threshold, color='black', ls='--', lw=2)
 
 plt.xticks(sorted_data['INDEX'], sorted_data['CID'], rotation=45, fontsize=12)
 
-plt.ylabel("PSNID+RFC KN Probability", fontsize=14)
+plt.ylabel("PSNID+RFC %s Probability" %signal, fontsize=14)
 plt.xlabel("DESGW Candidate", fontsize=14)
 
 plt.text(np.max(sorted_data['INDEX']) + 0.5, op_threshold + 0.01, 'Operating Threshold = %.3f' %op_threshold, 
@@ -292,10 +287,10 @@ plt.savefig('%s/res_candidate_probabilities.pdf' %event_dir)
 plt.close()
 
 # Numeric metrics
-tp = float(np.sum(np.ones(test.shape[0])[(test['CLASS'].values == 'KN') & (test['PROB_KN'].values > op_threshold)]))
-fp = float(np.sum(np.ones(test.shape[0])[(test['CLASS'].values != 'KN') & (test['PROB_KN'].values > op_threshold)]))
-tn = float(np.sum(np.ones(test.shape[0])[(test['CLASS'].values != 'KN') & (test['PROB_KN'].values < op_threshold)]))
-fn = float(np.sum(np.ones(test.shape[0])[(test['CLASS'].values == 'KN') & (test['PROB_KN'].values < op_threshold)]))
+tp = float(np.sum(np.ones(test.shape[0])[(test['CLASS'].values == signal) & (test['PROB_%s' %signal].values > op_threshold)]))
+fp = float(np.sum(np.ones(test.shape[0])[(test['CLASS'].values != signal) & (test['PROB_%s' %signal].values > op_threshold)]))
+tn = float(np.sum(np.ones(test.shape[0])[(test['CLASS'].values != signal) & (test['PROB_%s' %signal].values < op_threshold)]))
+fn = float(np.sum(np.ones(test.shape[0])[(test['CLASS'].values == signal) & (test['PROB_%s' %signal].values < op_threshold)]))
 
 purity = tp / (tp + fp)
 completeness = tp / (tp + fn)

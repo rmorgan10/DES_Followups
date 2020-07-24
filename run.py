@@ -49,6 +49,8 @@ else:
     parser.add_option('--clobber', action='store_true')
     parser.add_option('--nobs_force', default='2', help='Number of obs to require in libids')
     parser.add_option('--run_psnid', action='store_true')
+    parser.add_option('--signal', default='None', help='Object class to use as signal in ML')
+    parser.add_option('--background', default='None', help='Object class list (comma-separated) to use as background in ML')
     parser.add_option('--classify_cutoff', default=100, help='Final cut to apply before classification')
     options, args = parser.parse_args(sys.argv[2:])
     boost = options.boost
@@ -59,6 +61,8 @@ else:
     nobs_force = options.nobs_force
     run_psnid = options.run_psnid
     classify_cutoff = int(options.classify_cutoff)
+    signal = options.signal
+    background = options.background
 
     # format boost if a single number is specified for all classes
     if len(boost.split(',')) == 1:
@@ -78,6 +82,18 @@ else:
             sys.exit()
 
 assert len(boost.split(',')) == len(sim_include), "Boosts must map 1-1 with sims"
+
+if run_psnid:
+    if signal == 'None' or background == 'None':
+        print("You must specify both the --signal and the --background to use the --run_psnid argument")
+        sys.exit()
+    if signal not in sim_include:
+        print("--signal must be one of the --sim_include objects")
+        sys.exit()
+    for obj in background.split(','):
+        if obj not in sim_include:
+            print("%s is not in --sim_include so it cannot be part of --background" %obj)
+            sys.exit()
 
 # Protect against triggered Ia sims
 if 'Ia-tr' in sim_include:
@@ -130,6 +146,6 @@ if mode == 'normal':
     #classify with psnid if desired
     if run_psnid:
         os.chdir('../classifications/PSNID')
-        os.system('python run_PSNID.py %s %i' %(event_name, classify_cutoff))
-        os.system('python featurize.py %s' %event_name)
-        os.system('python classify.py %s' %event_name)
+        os.system('python run_PSNID.py %s %i %s %s' %(event_name, classify_cutoff, signal, background))
+        os.system('python featurize.py %s %s %s' %(event_name, signal, background))
+        os.system('python classify.py %s %s %s' %(event_name, signal, background))

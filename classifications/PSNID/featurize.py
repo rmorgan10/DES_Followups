@@ -7,12 +7,15 @@ import sys
 
 event_name = sys.argv[1]
 event_dir = '../../events/%s/PSNID' %event_name
+signal = sys.argv[2]
+background = sys.argv[3] #comma-separated list of background objects
+sim_include = signal + ',' + background
 
 # Load, label, and concatenate dataframes
 data_df = pd.read_csv('%s/DATA.FITRES' %event_dir, delim_whitespace=True, comment='#')
 
 dfs = []
-for obj in ['CC', 'KN', 'Ia']:
+for obj in sim_include.split(','):
     df = pd.read_csv('%s/%s.FITRES' %(event_dir, obj), delim_whitespace=True, comment='#').replace(np.nan, 0)
     df['CLASS'] = obj
     dfs.append(df)
@@ -37,11 +40,11 @@ meaningful_columns = ['PKMJDINI', 'SNRMAX1', 'SNRMAX2', 'SNRMAX3', 'ITYPE_BEST',
 # Select 15 features with largest difference between means of the distributions
 diff_data = []
 for col in meaningful_columns[0:-1]:
-    kn_mean = np.mean(df[col].values[df['CLASS'].values == 'KN'])
-    sn_mean = np.mean(df[col].values[df['CLASS'].values != 'KN'])
-    kn_sn_diff = np.abs((kn_mean - sn_mean) / np.abs(np.mean(df[col].values)))
+    sig_mean = np.mean(df[col].values[df['CLASS'].values == signal])
+    bkg_mean = np.mean(df[col].values[df['CLASS'].values != signal])
+    sig_bkg_diff = np.abs((sig_mean - bkg_mean) / np.abs(np.mean(df[col].values)))
 
-    diff_data.append([col, kn_sn_diff])
+    diff_data.append([col, sig_bkg_diff])
 
 diff_df = pd.DataFrame(data=diff_data, columns=['FEATURE', 'DIFF'])
 sorted_diff_df = diff_df.sort_values(by='DIFF', ascending=False)
@@ -51,16 +54,14 @@ chosen_feats = list(sorted_diff_df['FEATURE'].values[0:15])
 feat_df = df[chosen_feats + ['CID', 'CLASS']].copy().reset_index(drop=True)
 
 #output full feat_dfs
-feat_df[feat_df['CLASS'] == 'KN'].to_csv('%s/full_feat_df_KN.csv' %event_dir, index=False)
-feat_df[feat_df['CLASS'] == 'Ia'].to_csv('%s/full_feat_df_Ia.csv' %event_dir, index=False)
-feat_df[feat_df['CLASS'] == 'CC'].to_csv('%s/full_feat_df_CC.csv' %event_dir, index=False)
-
+for obj in sim_include.split(','):
+    feat_df[feat_df['CLASS'] == obj].to_csv('%s/full_feat_df_%s.csv' %(event_dir, obj), index=False)
 
 #balance classes
-feat_df_sn = feat_df[feat_df['CLASS'] != 'KN']
-feat_df_kn = feat_df[feat_df['CLASS'] == 'KN']
-sample_size = np.min([feat_df_sn.shape[0], feat_df_kn.shape[0]])
-feat_df = pd.concat([feat_df_sn.sample(sample_size), feat_df_kn.sample(sample_size)]).copy().reset_index(drop=True)
+feat_df_bkg = feat_df[feat_df['CLASS'] != signal]
+feat_df_sig = feat_df[feat_df['CLASS'] == signal]
+sample_size = np.min([feat_df_bkg.shape[0], feat_df_sig.shape[0]])
+feat_df = pd.concat([feat_df_bkg.sample(sample_size), feat_df_sig.sample(sample_size)]).copy().reset_index(drop=True)
 
 
 # Output training and test sets as csv files
