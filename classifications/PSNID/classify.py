@@ -109,7 +109,7 @@ def calibrate_bkg(bkg_prob_list, probs, calibrate_sig=calibrate):
 #save results
 sorted_bkg = sorted(background.split(','))
 sorted_sim_include = sorted(sim_include.split(','))
-train_bkg_prob_list = [[train_pred[obj_idx, class_idx] for class_idx in [sorted_sim_include.index(x) for x in sorted_bkg]] for obj_idx in len(train_pred)]
+train_bkg_prob_list = [[train_pred[obj_idx, class_idx] for class_idx in [sorted_sim_include.index(x) for x in sorted_bkg]] for obj_idx in range(len(train_pred))]
 for obj in background.split(','):
     obj_probs = train_pred[:, sorted_sim_include.index(obj)]
     train_df['PROB_%s' %obj] = calibrate_bkg(train_bkg_prob_list, obj_probs)
@@ -119,7 +119,7 @@ train_df['PROB_%s' %signal] = calibrate_sig(train_pred[:, sorted_sim_include.ind
 #train_df['PROB_Ia'] = calibrate_sn(train_pred[:,0], train_pred[:,1], train_pred[:,1])
 #train_df['PROB_KN'] = calibrate_kn(train_pred[:,2])
 
-test_bkg_prob_list = [[test_pred[obj_idx, class_idx] for class_idx in [sorted_sim_include.index(x) for x in sorted_bkg]] for obj_idx in len(test_pred)]
+test_bkg_prob_list = [[test_pred[obj_idx, class_idx] for class_idx in [sorted_sim_include.index(x) for x in sorted_bkg]] for obj_idx in range(len(test_pred))]
 for obj in background.split(','):
     obj_probs = test_pred[:, sorted_sim_include.index(obj)]
     test_df['PROB_%s' %obj] = calibrate_bkg(test_bkg_prob_list, obj_probs)
@@ -129,8 +129,8 @@ test_df['PROB_%s' %signal] = calibrate_sig(test_pred[:, sorted_sim_include.index
 #test_df['PROB_Ia'] = calibrate_sn(test_pred[:,0], test_pred[:,1], test_pred[:,1])
 #test_df['PROB_KN'] = calibrate_kn(test_pred[:,2])
 
-data_bkg_prob_list = [[data_pred[obj_idx, class_idx] for class_idx in [sorted_sim_include.index(x) for x in sorted_bkg]] for obj_idx in len(data_pred)]
-for objin background.split(','):
+data_bkg_prob_list = [[data_pred[obj_idx, class_idx] for class_idx in [sorted_sim_include.index(x) for x in sorted_bkg]] for obj_idx in range(len(data_pred))]
+for obj in background.split(','):
     obj_probs = data_pred[:, sorted_sim_include.index(obj)]
     data_df['PROB_%s' %obj] = calibrate_bkg(data_bkg_prob_list, obj_probs)
 data_df['PROB_%s' %signal] = calibrate_sig(data_pred[:, sorted_sim_include.index(signal)])
@@ -139,7 +139,7 @@ data_df['PROB_%s' %signal] = calibrate_sig(data_pred[:, sorted_sim_include.index
 #data_df['PROB_Ia'] = calibrate_sn(data_pred[:,0], data_pred[:,1], data_pred[:,1])
 #data_df['PROB_KN'] = calibrate_kn(data_pred[:,2])
 
-sig_bkg_prob_list = [[sig_pred[obj_idx, class_idx] for class_idx in [sorted_sim_include.index(x) for x in sorted_bkg]] for obj_idx in len(sig_pred)]
+sig_bkg_prob_list = [[sig_pred[obj_idx, class_idx] for class_idx in [sorted_sim_include.index(x) for x in sorted_bkg]] for obj_idx in range(len(sig_pred))]
 for obj in background.split(','):
     obj_probs = sig_pred[:, sorted_sim_include.index(obj)]
     sig_df['PROB_%s' %obj] = calibrate_bkg(sig_bkg_prob_list, obj_probs)
@@ -149,12 +149,12 @@ sig_df['PROB_%s' %signal] = calibrate_sig(sig_pred[:, sorted_sim_include.index(s
 #kn_df['PROB_Ia'] = calibrate_sn(kn_pred[:,0], kn_pred[:,1], kn_pred[:,1])
 #kn_df['PROB_KN'] = calibrate_kn(kn_pred[:,2])
 
-for mainobj in bkg_info.keys():
-    mainobj_bkg_prob_list = [[bkg_info[mainobj]['pred'][obj_idx, class_idx] for class_idx in [sorted_sim_include.index(x) for x in sorted_bkg]] for obj_idx in len(bkg_info[mainobj]['pred'])]
+for mainobj in bkg_info['pred'].keys():
+    mainobj_bkg_prob_list = [[bkg_info['pred'][mainobj][obj_idx, class_idx] for class_idx in [sorted_sim_include.index(x) for x in sorted_bkg]] for obj_idx in range(len(bkg_info['pred'][mainobj]))]
     for obj in background.split(','):
-        obj_probs = bkg_info[mainobj]['pred'][:, sorted_sim_include.index(obj)]
-        bkg_info[mainobj]['df']['PROB_%s' %obj] = calibrate_bkg(mainobj_bkg_prob_list, obj_probs)
-    bkg_info[mainobj]['df']['PROB_%s' %signal] = calibrate_sig(bkg_info[mainobj]['pred'][:,sorted_sim_include.index(signal)])
+        obj_probs = bkg_info['pred'][mainobj][:, sorted_sim_include.index(obj)]
+        bkg_info['df'][mainobj]['PROB_%s' %obj] = calibrate_bkg(mainobj_bkg_prob_list, obj_probs)
+    bkg_info['df'][mainobj]['PROB_%s' %signal] = calibrate_sig(bkg_info['pred'][mainobj][:,sorted_sim_include.index(signal)])
 
 #ia_df['PROB_CC'] = calibrate_sn(ia_pred[:,0], ia_pred[:,1], ia_pred[:,0])
 #ia_df['PROB_Ia'] = calibrate_sn(ia_pred[:,0], ia_pred[:,1], ia_pred[:,1])
@@ -171,7 +171,7 @@ data_df.to_csv('%s/pred_data.csv' %event_dir, index=False)
 sig_df.to_csv('%s/pred_full_%s.csv' %(event_dir, signal), index=False)
 #kn_df.to_csv('%s/pred_full_KN.csv' %event_dir, index=False)
 
-for mainobj in bkg_info.keys():
-    bkg_info[mainobj]['df'].to_csv('%s/pred_full_%s.csv' %(event_dir, mainobj), index=False)
+for mainobj in bkg_info['df'].keys():
+    bkg_info['df'][mainobj].to_csv('%s/pred_full_%s.csv' %(event_dir, mainobj), index=False)
 #ia_df.to_csv('%s/pred_full_Ia.csv' %event_dir, index=False)
 #cc_df.to_csv('%s/pred_full_CC.csv' %event_dir, index=False)

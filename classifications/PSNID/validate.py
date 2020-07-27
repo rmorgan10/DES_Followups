@@ -227,7 +227,7 @@ class_names = np.array(sorted(sim_include.split(',')))
 y_test_label = [encode[x] for x in test['CLASS'].values]
 y_test_pred = []
 for index, row in test.iterrows():
-    y_test_pred.append(class_names[np.argmax(np.array(row[['PROB_%s' %obj for obj in sorted(sim_include.split(',')]]))])
+    y_test_pred.append(class_names[np.argmax(np.array([row['PROB_%s' %obj] for obj in sorted(sim_include.split(','))]))])
 y_test_pred_label = [encode[x] for x in y_test_pred]
 
 plot_confusion_matrix(y_test_label, y_test_pred_label, classes=class_names, normalize=True)
