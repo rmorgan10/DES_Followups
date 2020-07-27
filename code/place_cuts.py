@@ -5,10 +5,14 @@ import pandas as pd
 import numpy as np
 import sys
 
-import cuts
+#import cuts
 
 event_name = sys.argv[1]
 fits_dir_prefix = sys.argv[2]
+
+# Default to local cuts first
+sys.path = ['../events/%s' %event_name] + sys.path
+import cuts
 
 #deal with output data
 transient_class = fits_dir_prefix.split('_')[-1]
@@ -31,6 +35,8 @@ for index, row in cut_df.iterrows():
 if len(undefined_cuts) != 0:
     print("ERROR: The following cuts are not defined in cuts.py: ")
     print(undefined_cuts)
+
+    print("Note: If you have a `cuts.py` file in your event directory, the program will find that first")
     sys.exit()
 
 
