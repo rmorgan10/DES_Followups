@@ -2,7 +2,7 @@ JOBNAME_LCFIT:  psnid.exe
 OUTDIR:   REPLACEME
 
 NODELIST:  des50 des51 des41 des40  des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40  des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40  des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40  des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40  des50 des51 des41 des40 des50 des51 des41 des40 des50 des51 des41 des40
-SNANA_LOGIN_SETUP: source /home/s1/rkessler/bin/setup_SNANA-EUPS.sh
+SNANA_LOGIN_SETUP: source /home/s1/rmorgan/bin/RM_setup_SNANA-EUPS.sh
 
 VERSION:  REPLACEME
 
