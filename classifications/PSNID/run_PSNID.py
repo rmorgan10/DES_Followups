@@ -15,14 +15,17 @@ try:
 except:
     print("second command line argument must be an integer")
     sys.exit()
+
+signal = sys.argv[3] # single obj
+background = sys.argv[4] # comma-separated list of objects
 username = getpass.getuser()
 
 print("Updating PSNID input files")
 # update paths in PSNID files
-modes = {'DATA': {'filename': 'psnid_DATA.nml', 'version': 'VERSION: LightCurvesReal', 'list': "   SNCID_LIST_FILE = 'good_snids_DATA.txt'"},
-         'Ia': {'filename': 'psnid_Ia.nml', 'version': 'VERSION: %s_DESGW_%s_Ia' %(username, event_name), 'list': "   SNCID_LIST_FILE = 'good_snids_Ia.txt'"},
-         'CC': {'filename': 'psnid_CC.nml', 'version': 'VERSION: %s_DESGW_%s_CC' %(username, event_name), 'list': "   SNCID_LIST_FILE = 'good_snids_CC.txt'"},
-         'KN': {'filename': 'psnid_KN.nml', 'version': 'VERSION: %s_DESGW_%s_KN' %(username, event_name), 'list': "   SNCID_LIST_FILE = 'good_snids_KN.txt'"}}
+modes = {'DATA': {'filename': 'psnid_DATA.nml', 'version': 'VERSION: LightCurvesReal', 'list': "   SNCID_LIST_FILE = 'good_snids_DATA.txt'"}}
+modes[signal] = {'filename': 'psnid_%s.nml' %signal, 'version': 'VERSION: %s_DESGW_%s_%s' %(username, event_name, signal), 'list': "   SNCID_LIST_FILE = 'good_snids_%s.txt'" %signal}
+for obj in background.split(','):
+    modes[obj] = {'filename': 'psnid_%s.nml' %obj, 'version':'VERSION: %s_DESGW_%s_%s' %(username, event_name, obj), 'list': "   SNCID_LIST_FILE = 'good_snids_%s.txt'" %obj}
 
 for obj, mode in modes.iteritems():
     stream = open('template_psnid.nml', 'r')
@@ -50,11 +53,12 @@ for obj, mode in modes.iteritems():
 #garb = raw_input("Waiting...")
 print("Collecting simulations")
 # collect sims
-os.system('python get_sims.py %s' %event_name)
+sim_include = signal + ',' + background 
+os.system('python get_sims.py %s %s' %(event_name, sim_include))
 
 #make good snid lists for sims
 print("Making good snid lists")
-for obj in ['Ia', 'CC', 'KN']:
+for obj in sim_include.split(','):
     print(obj)
     good_snids = []
     d = np.load('../../events/%s/cut_results/%s_DESGW_%s_%s_cut_results.npy' %(event_name, username, event_name, obj)).item()
@@ -105,32 +109,39 @@ for obj, mode in modes.iteritems():
 #garb = raw_input("Waiting...")
 print("Cleaning up...")
 # clean up
-os.system('rm psnid_DATA.nml')
-os.system('rm psnid_KN.nml')
-os.system('rm psnid_Ia.nml')
-os.system('rm psnid_CC.nml')
-
-os.system('rm good_snids_*.txt')
+for k in modes.keys():
+    os.system('rm psnid_%s.nml' %k)
 
 event_dir = '../../events/%s/PSNID' %event_name
 if not os.path.exists(event_dir):
     os.system('mkdir %s' %event_dir)
+    os.system('mkdir %s/psnid_logs' %event_dir)
 
+# send good snids to event directory
+os.system('mv good_snids_*.txt %s' %event_dir)
 
-os.system('mv OUTPUT_KN/%s_DESGW_%s_KN/FITOPT000.FITRES %s/KN.FITRES' %(username, event_name, event_dir))
-os.system('mv OUTPUT_Ia/%s_DESGW_%s_Ia/FITOPT000.FITRES %s/Ia.FITRES' %(username, event_name, event_dir))
-os.system('mv OUTPUT_CC/%s_DESGW_%s_CC/FITOPT000.FITRES %s/CC.FITRES' %(username, event_name, event_dir))
+# send fit results to event directory
+for k in sim_include.split(','):
+    os.system('mv OUTPUT_%s/%s_DESGW_%s_%s/FITOPT000.FITRES %s/%s.FITRES' %(k, username, event_name, k, event_dir, k))
 os.system('mv OUTPUT_DATA/LightCurvesReal/FITOPT000.FITRES %s/DATA.FITRES' %event_dir)
 
+# send logs to event directory
+for k in sim_include.split(',') + ['DATA']:
+    log_dir = '%s/psnid_logs/%s' %(event_dir, k)
+    os.system('mkdir %s' %log_dir)
+    os.system('mv OUTPUT_%s/SPLIT_JOBS_LCFIT.tar.gz %s' %(k, log_dir))
+    os.system('mv OUTPUT_%s/*.LOG %s' %(k, log_dir))
+    os.system('mv OUTPUT_%s/*.nml %s' %(k, log_dir))
+
+# remove non-essential outputs
 os.system('rm -rf OUTPUT_*')
 
-os.system('rm %s_DESGW_%s_CC_FITS.tar.gz' %(username, event_name))
-os.system('rm %s_DESGW_%s_KN_FITS.tar.gz' %(username, event_name))
-os.system('rm %s_DESGW_%s_Ia_FITS.tar.gz' %(username, event_name))
+# Remove sims and data that were copied to the local directory
+for k in sim_include.split(','):
+    os.system('rm %s_DESGW_%s_%s_FITS.tar.gz' %(username, event_name, k)) 
 
-os.system('rm -rf %s_DESGW_%s_CC' %(username, event_name))
-os.system('rm -rf %s_DESGW_%s_KN' %(username, event_name))
-os.system('rm -rf %s_DESGW_%s_Ia' %(username, event_name))
+for k in sim_include.split(','):
+    os.system('rm -rf %s_DESGW_%s_%s' %(username, event_name, k)) 
 os.system('rm -rf LightCurvesReal')
 
 print("Done!")

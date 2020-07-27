@@ -16,6 +16,9 @@ NGEN_SEASON: 10
 # Don't need to change anything after this point  (I sure hope)
 #--------------------------------------------------------------------
 
+
+
+
 SIMLIB_FILE:  sim_gen/SIMLIB.txt
 
 #FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT

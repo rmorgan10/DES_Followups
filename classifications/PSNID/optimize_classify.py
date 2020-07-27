@@ -22,24 +22,19 @@ def calc_best_thresh(fpr, tpr, thresh):
 
     return trimmed_thresholds[np.argmax(trimmed_tpr)]
 
-def encode(label):
-    if label == 'CC':
-        return 0
-    elif label == 'Ia':
-        return 1
-    elif label == 'KN':
-        return 2
-    else:
-        print("ERROR: unexpected label")
-        
-
 def calc_best_cm(y_true, y_pred):
     cm = confusion_matrix(y_true, y_pred)
     cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    return cm[0][0] + cm[1][1] + cm[2][2]
+    return sum(cm.diagonal()) 
 
 event_name = sys.argv[1]
 event_dir = '../../events/%s/PSNID' %event_name
+signal = sys.argv[2]
+background = sys.argv[3] #comma-separated list of background objects
+sim_include = signal + ',' + background
+
+#One-hot encoding
+encode = {obj: idx for idx, obj in enumerate(sorted(sim_include.split(',')))}
 
 
 best_value = 0.0
@@ -47,20 +42,19 @@ counter = 0
 while counter <= 100:
     counter += 1
     
-    os.system('python featurize.py %s' %event_name)
-    os.system('python classify.py %s' %event_name)
+    os.system('python featurize.py %s %s %s' %(event_name, signal, background))
+    os.system('python classify.py %s %s %s' %(event_name, signal, background))
 
-    
     test = pd.read_csv('%s/pred_test.csv' %event_dir)
-    binary_labels = np.array([int(x == 'KN') for x in test['CLASS'].values])
-    binary_scores = np.array(test['PROB_KN'].values, dtype=float)
+    binary_labels = np.array([int(x == signal) for x in test['CLASS'].values])
+    binary_scores = np.array(test['PROB_%s' %signal].values, dtype=float)
 
-    class_names = np.array(['CC', 'Ia', 'KN'])
-    y_test_label = [encode(x) for x in test['CLASS'].values]
+    class_names = np.array(sorted(sim_include.split(',')))
+    y_test_label = [encode[x] for x in test['CLASS'].values]
     y_test_pred = []
     for index, row in test.iterrows():
-        y_test_pred.append(class_names[np.argmax(np.array(row[['PROB_CC', 'PROB_Ia', 'PROB_KN']]))])
-    y_test_pred_label = [encode(x) for x in y_test_pred]
+        y_test_pred.append(class_names[np.argmax(np.array(row[['PROB_%s' %obj for obj in sorted(sim_include.split(','))]]))])
+    y_test_pred_label = [encode[x] for x in y_test_pred]
 
     #fpr, tpr, thresholds = roc_curve(binary_labels, binary_scores)
 
