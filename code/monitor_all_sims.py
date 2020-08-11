@@ -18,6 +18,7 @@ iax_log_file = '../events/%s/logs/sim_iax.log' %event_name
 pia_log_file = '../events/%s/logs/sim_pia.log' %event_name
 slsn_log_file = '../events/%s/logs/sim_slsn.log' %event_name
 tde_log_file = '../events/%s/logs/sim_tde.log' %event_name
+bbh_log_file = '../events/%s/logs/sim_bbh.log' %event_name
 agn_tr_log_file = '../events/%s/logs/sim_tr_agn.log' %event_name
 kn_tr_log_file = '../events/%s/logs/sim_tr_kn.log' %event_name
 ia_tr_log_file = '../events/%s/logs/sim_tr_ia.log' %event_name
@@ -30,6 +31,7 @@ iax_tr_log_file = '../events/%s/logs/sim_tr_iax.log' %event_name
 pia_tr_log_file = '../events/%s/logs/sim_tr_pia.log' %event_name
 slsn_tr_log_file = '../events/%s/logs/sim_tr_slsn.log' %event_name
 tde_tr_log_file = '../events/%s/logs/sim_tr_tde.log' %event_name
+bbh_tr_log_file = '../events/%s/logs/sim_tr_bbh.log' %event_name
 
 #determine which sims are being run
 agn_running = True if 'AGN' in sys.argv else False
@@ -44,6 +46,7 @@ iax_running = True if 'Iax' in sys.argv else False
 pia_running = True if 'PIa' in sys.argv else False
 slsn_running = True if 'SLSN' in sys.argv else False
 tde_running = True if 'TDE' in sys.argv else False
+bbh_running = True if 'BBH' in sys.argv else False
 agn_tr_running = True if 'AGN-tr' in sys.argv else False
 ia_tr_running = True if 'Ia-tr' in sys.argv else False
 cc_tr_running = True if 'CC-tr' in sys.argv else False
@@ -56,6 +59,7 @@ iax_tr_running = True if 'Iax-tr' in sys.argv else False
 pia_tr_running = True if 'PIa-tr' in sys.argv else False
 slsn_tr_running = True if 'SLSN-tr' in sys.argv else False
 tde_tr_running = True if 'TDE-tr' in sys.argv else False
+bbh_tr_running = True if 'BBH-tr' in sys.argv else False
 
 
 #track errors
@@ -71,6 +75,7 @@ iax_error = False
 pia_error = False
 slsn_error = False
 tde_error = False
+bbh_error = False
 agn_tr_error = False
 ia_tr_error = False
 cc_tr_error = False
@@ -83,10 +88,11 @@ iax_tr_error = False
 pia_tr_error = False
 slsn_tr_error = False
 tde_tr_error = False
+bbh_tr_error = False
 
 #start monitoring
-running = agn_running or kn_running or ia_running or cc_running or cart_running or ilot_running or mdwarf_running or sn91bg_running or iax_running or pia_running or slsn_running or tde_running
-running = running or agn_tr_running or kn_tr_running or ia_tr_running or cc_tr_running or cart_tr_running or ilot_tr_running or mdwarf_tr_running or sn91bg_tr_running or iax_tr_running or iax_tr_running or pia_tr_running or slsn_tr_running or tde_tr_running
+running = agn_running or kn_running or ia_running or cc_running or cart_running or ilot_running or mdwarf_running or sn91bg_running or iax_running or pia_running or slsn_running or tde_running or bbh_running
+running = running or agn_tr_running or kn_tr_running or ia_tr_running or cc_tr_running or cart_tr_running or ilot_tr_running or mdwarf_tr_running or sn91bg_tr_running or iax_tr_running or iax_tr_running or pia_tr_running or slsn_tr_running or tde_tr_running or bbh_tr_running
 agn_phase1, agn_phase2, agn_phase3 = True, False, False
 kn_phase1, kn_phase2, kn_phase3, kn_phase4 = True, False, False, False
 ia_phase1, ia_phase2, ia_phase3 = True, False, False
@@ -99,6 +105,7 @@ iax_phase1, iax_phase2, iax_phase3, iax_phase4 = True, False, False, False
 pia_phase1, pia_phase2, pia_phase3, pia_phase4 = True, False, False, False
 slsn_phase1, slsn_phase2, slsn_phase3, slsn_phase4 = True, False, False, False
 tde_phase1, tde_phase2, tde_phase3, tde_phase4 = True, False, False, False
+bbh_phase1, bbh_phase2, bbh_phase3, bbh_phase4 = True, False, False, False
 
 agn_tr_phase1, agn_tr_phase2, agn_tr_phase3 = True, False, False
 kn_tr_phase1, kn_tr_phase2, kn_tr_phase3, kn_tr_phase4 = True, False, False, False
@@ -112,6 +119,7 @@ iax_tr_phase1, iax_tr_phase2, iax_tr_phase3, iax_tr_phase4 = True, False, False,
 pia_tr_phase1, pia_tr_phase2, pia_tr_phase3, pia_tr_phase4 = True, False, False, False
 slsn_tr_phase1, slsn_tr_phase2, slsn_tr_phase3, slsn_tr_phase4 = True, False, False, False
 tde_tr_phase1, tde_tr_phase2, tde_tr_phase3, tde_tr_phase4 = True, False, False, False
+bbh_tr_phase1, bbh_tr_phase2, bbh_tr_phase3, bbh_tr_phase4 = True, False, False, False
 
 #let the sims get started
 time.sleep(6)
@@ -1517,6 +1525,138 @@ while running:
     else:
         tde_tr_progress = 'Done!'
         if tde_tr_error: tde_tr_progress = 'ERROR'
+
+    """
+    BBH Progress Tracking
+    """
+    if bbh_running:
+        bbh_log = open(bbh_log_file, 'r')
+        bbh_info = bbh_log.readlines()
+
+        #check for errors and exit the loop if necessary
+        for line in bbh_info[-30:]:
+            if line.find('FATAL') != -1:
+                print("WARNING: ERROR found in sim_bbh.log")
+                bbh_running = False
+                bbh_error = True
+
+        last_lines = bbh_info[-30:]
+        last_lines.reverse()
+        found_last_line = False
+        for line in last_lines:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
+                last_line = line
+                found_last_line = True
+                break
+        if not found_last_line:
+            last_line = last_lines[0]
+        
+        #last_line = kn_info[-2]
+        bbh_log.close()
+        
+        if bbh_phase4 or (not bbh_phase1 and not bbh_phase2 and last_line.find('Finished writing') == -1):
+            bbh_phase1 = False
+            bbh_phase2 = False
+            bbh_phase3 = False
+            bbh_phase4 = True
+            bbh_running = False ## it should finish up in time where this is okay
+            bbh_progress = 'Finishing'
+        elif bbh_phase3 or last_line.find('Finished writing') != -1:
+            bbh_phase1 = False
+            bbh_phase2 = False
+            bbh_phase3 = True
+            info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n']
+            total = info[4]
+            completed = info[2]
+            bbh_progress = '%.2f %%' % (float(completed) / float(total) * 20.0 + 80.0)
+        elif bbh_phase2 or last_line.find('Read  (ised=') != -1:
+            bbh_phase1 = False
+            bbh_phase2 = True
+            info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n'][1]
+            more_info = info.split('=')[-1].split(')')[0].split('/')
+            total = more_info[1]
+            completed = more_info[0]
+            if total == 'with':
+                bbh_progress = 'Done!'
+                bbh_running = False
+            else:
+                bbh_progress = '%.2f %%' % (float(completed) / float(total) * 80.0)
+        elif bbh_phase1 == True:
+            bbh_progress = 'Initializing'
+        else:
+            print("\nNot sure how we got here, last status was:")
+            print("\tPhase1: %i, Phase2: %i, Phase3: %i, Phase4: %i" %(int(bbh_phase1), int(bbh_phase2), int(bbh_phase3), int(bbh_phase4)))
+            print("\tLast line: %s" %last_line)
+            bbh_running = False
+    else:
+        bbh_progress = 'Done!'
+        if bbh_error: kn_progress = 'ERROR'
+
+    """
+    BBH-tr Progress Tracking
+    """
+    if bbh_tr_running:
+        bbh_tr_log = open(bbh_tr_log_file, 'r')
+        bbh_tr_info = bbh_tr_log.readlines()
+
+        #check for errors and exit the loop if necessary
+        for line in bbh_tr_info[-30:]:
+            if line.find('FATAL') != -1:
+                print("WARNING: ERROR found in sim_tr_bbh.log")
+                bbh_tr_running = False
+                bbh_tr_error = True
+
+        last_lines = bbh_tr_info[-30:]
+        last_lines.reverse()
+        found_last_line = False
+        for line in last_lines:
+            if line.find('Finished writing') != -1 or line.find('Read  (ised=') != -1:
+                last_line = line
+                found_last_line = True
+                break
+        if not found_last_line:
+            last_line = last_lines[0]
+        
+        #last_line = kn_info[-2]
+        bbh_tr_log.close()
+        
+        if bbh_tr_phase4 or (not bbh_tr_phase1 and not bbh_tr_phase2 and last_line.find('Finished writing') == -1):
+            bbh_tr_phase1 = False
+            bbh_tr_phase2 = False
+            bbh_tr_phase3 = False
+            bbh_tr_phase4 = True
+            bbh_tr_running = False ## it should finish up in time where this is okay
+            bbh_tr_progress = 'Finishing'
+        elif bbh_tr_phase3 or last_line.find('Finished writing') != -1:
+            bbh_tr_phase1 = False
+            bbh_tr_phase2 = False
+            bbh_tr_phase3 = True
+            info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n']
+            total = info[4]
+            completed = info[2]
+            bbh_tr_progress = '%.2f %%' % (float(completed) / float(total) * 20.0 + 80.0)
+        elif bbh_tr_phase2 or last_line.find('Read  (ised=') != -1:
+            bbh_tr_phase1 = False
+            bbh_tr_phase2 = True
+            info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n'][1]
+            more_info = info.split('=')[-1].split(')')[0].split('/')
+            total = more_info[1]
+            completed = more_info[0]
+            if total == 'with':
+                bbh_tr_progress = 'Done!'
+                bbh_tr_running = False
+            else:
+                bbh_tr_progress = '%.2f %%' % (float(completed) / float(total) * 80.0)
+        elif bbh_tr_phase1 == True:
+            bbh_tr_progress = 'Initializing'
+        else:
+            print("\nNot sure how we got here, last status was:")
+            print("\tPhase1: %i, Phase2: %i, Phase3: %i, Phase4: %i" %(int(bbh_tr_phase1), int(bbh_tr_phase2), int(bbh_tr_phase3), int(bbh_tr_phase4)))
+            print("\tLast line: %s" %last_line)
+            bbh_tr_running = False
+    else:
+        bbh_tr_progress = 'Done!'
+        if bbh_tr_error: bbh_tr_progress = 'ERROR'
     
     
     #output progress
@@ -1532,6 +1672,7 @@ while running:
                     'PIa': pia_progress,
                     'SLSN': slsn_progress,
                     'TDE': tde_progress,
+                    'BBH': bbh_progress,
                     'AGN-tr': agn_tr_progress,
                     'KN-tr': kn_tr_progress,
                     'Ia-tr': ia_tr_progress,
@@ -1543,7 +1684,8 @@ while running:
                     'Iax-tr': iax_tr_progress,
                     'PIa-tr': pia_tr_progress,
                     'SLSN-tr': slsn_tr_progress,
-                    'TDE-tr': tde_tr_progress}
+                    'TDE-tr': tde_tr_progress,
+                    'BBH-tr': bbh_tr_progress}
 
     name_map = {obj : progress_map[obj] for obj in sys.argv[2:]}
     
@@ -1552,8 +1694,8 @@ while running:
     sys.stdout.write('\r%s' %progress)
     sys.stdout.flush()
 
-    running = agn_running or kn_running or ia_running or cc_running or cart_running or ilot_running or mdwarf_running or sn91bg_running or iax_running or pia_running or slsn_running or tde_running
-    running = running or agn_tr_running or kn_tr_running or ia_tr_running or cc_tr_running or cart_tr_running or ilot_tr_running or mdwarf_tr_running or sn91bg_tr_running or iax_tr_running or iax_tr_running or pia_tr_running or slsn_tr_running or tde_tr_running
+    running = agn_running or kn_running or ia_running or cc_running or cart_running or ilot_running or mdwarf_running or sn91bg_running or iax_running or pia_running or slsn_running or tde_running or bbh_running
+    running = running or agn_tr_running or kn_tr_running or ia_tr_running or cc_tr_running or cart_tr_running or ilot_tr_running or mdwarf_tr_running or sn91bg_tr_running or iax_tr_running or iax_tr_running or pia_tr_running or slsn_tr_running or tde_tr_running or bbh_tr_running
     time.sleep(2)
     
 #sys.stdout.write('\rSimulating:  AGN -- Done! | KN -- Done! |  Ia -- Done!  |  CC -- Done!  |                         \n')
@@ -1576,7 +1718,7 @@ try:
         if v != 'ERROR':
             good_sims.append(k)
 except:
-    good_sims = ['AGN', 'SN91bg', 'CC', 'PIa', 'ILOT', 'CaRT', 'TDE', 'KN', 'SLSN', 'Mdwarf', 'Ia', 'Iax']
+    good_sims = ['AGN', 'SN91bg', 'CC', 'PIa', 'ILOT', 'CaRT', 'TDE', 'KN', 'SLSN', 'Mdwarf', 'Ia', 'Iax', 'BBH']
     good_sims += [x + '-tr' for x in good_sims]
 
 stream = open('../events/%s/logs/monitor_all_sims_report.log' %event_name, 'w+')

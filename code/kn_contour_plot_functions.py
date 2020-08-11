@@ -206,8 +206,8 @@ def make_plot_full(all_info, plot_contour_list=[True], hist_param_list=[{}], out
     
     #VK vs LOGMASS
     ax = axs[2,0]
-    ax.set_xlabel('EJECTA VELOCITY', fontsize=14)
-    ax.set_ylabel('EJECTA MASS [Solar Masses]', fontsize=16)
+    ax.set_xlabel('$v_{ej}$ [$c$]', fontsize=14)
+    ax.set_ylabel("$M_{ej}$ [$M_\odot$]", fontsize=16)
     ax.set_xticklabels(['%.2f' %x for x in ax.get_xticks()], fontsize=12)
     ax.set_yticklabels(['%.3f' %(10**x) for x in ax.get_yticks()], fontsize=12)
     ax.set_xlim(0.03, 0.3)
@@ -217,7 +217,7 @@ def make_plot_full(all_info, plot_contour_list=[True], hist_param_list=[{}], out
     
     #VK vs LOGXLAN
     ax = axs[1,0]
-    ax.set_ylabel('LOG LANTHANIDE ABUNDANCE', fontsize=14)
+    ax.set_ylabel('$\log (X_{lan})$', fontsize=14)
     ax.set_xlim(0.03, 0.3)
     ax.set_ylim(-9, -1)
     ax.set_xticklabels([''])
@@ -227,7 +227,7 @@ def make_plot_full(all_info, plot_contour_list=[True], hist_param_list=[{}], out
     
     #LOGXLAN vs LOGMASS
     ax = axs[2,1]
-    ax.set_xlabel('LOG LANTHANIDE ABUNDANCE', fontsize=14)
+    ax.set_xlabel('$\log (X_{lan})$', fontsize=14)
     ax.set_xlim(-9, -1)
     ax.set_ylim(-3,-1)
     ax.set_xticklabels(['%i' %x for x in ax.get_xticks()], fontsize=12)
@@ -258,7 +258,7 @@ def make_plot_full(all_info, plot_contour_list=[True], hist_param_list=[{}], out
     labels = ['%.3f' %(10**x) for x in ax.get_xticks()]
     fmt_labels = [labels[i] if i % 2 == 0 else '' for i in range(len(labels))]
     ax.set_xticklabels(fmt_labels, fontsize=12)
-    ax.set_xlabel('EJECTA MASS [Solar Masses]', fontsize=14)
+    ax.set_xlabel("$M_{ej}$ [$M_\odot$]", fontsize=14)
     
     #Other subplots
     axs[0,1].set_visible(False)

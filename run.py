@@ -69,7 +69,7 @@ else:
         boost = ','.join([boost] * len(sim_include))
 
 # Command-line argument error checking
-allowed_sims = ['KN', 'Ia', 'CC', 'AGN', 'CaRT', 'ILOT', 'Mdwarf', 'SN91bg', 'Iax', 'PIa', 'SLSN', 'TDE']
+allowed_sims = ['KN', 'Ia', 'CC', 'AGN', 'CaRT', 'ILOT', 'Mdwarf', 'SN91bg', 'Iax', 'PIa', 'SLSN', 'TDE', 'BBH']
 allowed_sims += [x + '-tr' for x in allowed_sims] #let any object be triggered
 if len(sim_include) == 1:
     if sim_include[0] == 'all':

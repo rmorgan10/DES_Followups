@@ -18,6 +18,7 @@ os.system("python kn_properties.py %s" %event_name)
 # make KN model efficiency plots
 os.system("python kn_template_efficiencies.py %s" %event_name)
 
+sys.exit()
 
 # extract light curves from data
 os.system('python extract_lc_points.py %s data' %event_name)

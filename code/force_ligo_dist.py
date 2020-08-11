@@ -96,7 +96,7 @@ def get_zmin_zmax(resid, clean_midpoints, resid_thresh=2.0, z_thresh=0.005):
         
     return z_min, z_max, zmin_found, zmax_found
 
-def check(event_name, midpoints, counts, res, popt):
+def check(event_name, midpoints, counts, res, popt, obj):
     test_arr = np.array(res)
     midpoint_arr = np.array(midpoints)
     cond = (test_arr >= 0.0)
@@ -106,14 +106,14 @@ def check(event_name, midpoints, counts, res, popt):
     resid = clean_counts / clean_test
 
     zmin, zmax, zmin_found, zmax_found = get_zmin_zmax(resid, clean_midpoints)
-    write_report(event_name, zmin, zmax, zmin_found, zmax_found, popt)
+    write_report(event_name, zmin, zmax, zmin_found, zmax_found, popt, obj)
     
     return zmin, zmax
 
 def convert_to_snana_float(num):
     return '%.3E' %num
 
-def write_report(event_name, zmin, zmax, zmin_found, zmax_found, popt):
+def write_report(event_name, zmin, zmax, zmin_found, zmax_found, popt, obj):
     log_dir = '../events/%s/logs/' %event_name
 
     outlines = ['LIGO DISTANCE POSTERIOR FIT REPORT',
@@ -124,7 +124,7 @@ def write_report(event_name, zmin, zmax, zmin_found, zmax_found, popt):
                 'poly1 = %s' %' '.join([convert_to_snana_float(x) for x in popt[:4]]),
                 'poly2 = %s' %' '.join([convert_to_snana_float(x) for x in popt[4:]])]
 
-    stream = open(log_dir + 'force_kn_dist.log', 'w+')
+    stream = open(log_dir + 'force_dist_%s.log' %obj, 'w+')
     stream.writelines([x + '\n' for x in outlines])
     stream.close()
 
@@ -161,8 +161,10 @@ def update_snana(obj_filename, event_name, popt, zmin, zmax):
 
 def run(obj_filename, event_name, avg, std):
     popt, midpoints, counts, res = fit(avg, std)
+
+    obj = obj_filename.split('.')[0]
     
-    zmin, zmax = check(event_name, midpoints, counts, res, popt)
+    zmin, zmax = check(event_name, midpoints, counts, res, popt, obj)
     
     update_snana(obj_filename, event_name, popt, zmin, zmax)
     
