@@ -35,8 +35,8 @@ eff_area = float([x for x in simlib_info[-5:] if x[0:15] == 'EFFECTIVE_AREA:'][0
 file_prefix = '../events/%s/sim_gen/' %event_name
 file_list = ['AGN_SIMGEN.INPUT', 'SIMGEN_DES_KN.input', 'SIMGEN_DES_NONIA.input', 'SIMGEN_DES_SALT2.input',
              'CART_SIMGEN.INPUT', 'ILOT_SIMGEN.INPUT', 'Mdwarf_SIMGEN.INPUT', 'SN_Ia91bgSIMGEN.INPUT',
-             'SN_IaxSIMGEN.INPUT', 'SN_PIaSIMGEN.INPUT', 'SN_SLSNSIMGEN.INPUT', 'TDE_SIMGEN.INPUT'] 
-objs = ['AGN', 'KN', 'CC', 'Ia', 'CaRT', 'ILOT', 'Mdwarf', 'SN91bg', 'Iax', 'PIa', 'SLSN', 'TDE']
+             'SN_IaxSIMGEN.INPUT', 'SN_PIaSIMGEN.INPUT', 'SN_SLSNSIMGEN.INPUT', 'TDE_SIMGEN.INPUT', 'SIMGEN_DES_BBH.input'] 
+objs = ['AGN', 'KN', 'CC', 'Ia', 'CaRT', 'ILOT', 'Mdwarf', 'SN91bg', 'Iax', 'PIa', 'SLSN', 'TDE', 'BBH']
 
 # Add trigger files
 boosts = {x[7:]: df[x].values[0] for x in df.columns if x.find('BOOST') != -1}
@@ -125,9 +125,12 @@ for filename, obj in zip(file_list, objs):
 # do LIGO specific distribution
 if 'LIGO_distance_(Mpc)' in df.columns and ('KN-tr' in trigger_objs or 'BBH-tr' in trigger_objs):
     # Run on triggered input files
-    for obj_filename in ['TR_SIMGEN_DES_KN.input']:
-        force_ligo_dist.run(obj_filename, event_name, df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0])
-
+    for obj_filename in ['TR_SIMGEN_DES_KN.input', 'TR_SIMGEN_DES_BBH.input']:
+        try:
+            force_ligo_dist.run(obj_filename, event_name, df['LIGO_distance_(Mpc)'].values[0], df['LIGO_sigma_(Mpc)'].values[0])
+        except IOError:
+            # triggered version was not requested
+            continue
 
 #File header looks like this:
 """
