@@ -38,6 +38,8 @@ log_path = '../events/%s/logs' %event_name
 if not os.path.exists(log_path):
     os.system('mkdir %s' %log_path)
 
+if os.path.exists('../events/%s/SIMLIB.txt' %event_name):
+    os.system('cp ../events/%s/SIMLIB.txt ../events/%s/sim_gen/' %(event_name, event_name))
 
 if not os.path.exists('../events/%s/sim_gen/SIMLIB.txt' %event_name):
     print("Querying DB for observing conditions")
