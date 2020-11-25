@@ -34,7 +34,7 @@ GENMODEL:    NON1A
 GENFILTERS:  griz                 # RM-change to gri from griz to match obs?
 INPUT_FILE_INCLUDE:  sim_gen/SIMGEN_INCLUDE_NON1A.INPUT
 
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz #DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits #DES/kcor_DES_grizY.fits
 
 # selection criteria for generation
 GENSIGMA_SEARCH_PEAKMJD:  0.1     # sigma-smearing for  SEARCH_PEAKMJD (days)

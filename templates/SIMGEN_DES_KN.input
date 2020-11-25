@@ -27,10 +27,10 @@ SIMSED_USE_BINARY:   0
 # Extinction from WV07 model, with half expon component
 # to approximately account for large kicks.
 WV07_REWGT_EXPAV:  0.5
-GENRANGE_AV:  0  3    # CCM89 AV-extinctionrange
-GENPEAK_RV: 1.6
-GENSIGMA_RV: 0.1 0.9
-GENRANGE_RV: 1.3 4.5
+#GENRANGE_AV:  0  3    # CCM89 AV-extinctionrange
+#GENPEAK_RV: 1.6
+#GENSIGMA_RV: 0.1 0.9
+#GENRANGE_RV: 1.3 4.5
 
 # Volumetric rate (per yr per Mpc^3) base on
 #  Abbott 2016
@@ -67,7 +67,7 @@ GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 GENSOURCE:   RANDOM   
 
 GENFILTERS:  griz
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz #DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits #DES/kcor_DES_grizY.fits
 
 RANSEED: 12945       # random number seed
 
