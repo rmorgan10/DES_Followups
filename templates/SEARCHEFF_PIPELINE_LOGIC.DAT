@@ -1,3 +1,25 @@
+DOCUMENTATION:
+    PURPOSE: trigger logic for surveys
+    INTENT:  Nominal
+    USAGE_KEY:  SEARCH_PIPELINE_LOGIC
+    USAGE_CODE: snlc_sim.exe
+    TEST_CODE:     used in multiple SNIa-cosmology analyses
+    TEST_SCIENCE:  used in multiple SNIa-cosmology analyses
+    NOTES:
+    - This is fake documentation added by NFS on 11.11.21
+    - First number of survey name is number of epochs required.
+    - Second arguyment is the logic for a single-epoch detection.
+    - Example  gr -> require both g and r detections.
+    - Example  gr+ri -> require g & r, or require r & i.
+    - Eff vs SNR/MAG is defined in SEARCHEFF_[SNR,MAG]_[SURVEY].DAT
+    - Does not include image scanning from humans or automation.
+    VERSIONS:
+    - DATE: 2008
+      AUTHORS: R. Kessler
+
+DOCUMENTATION_END:
+
+
 # ------------------
 # May 22, 2008 R.Kessler
 #

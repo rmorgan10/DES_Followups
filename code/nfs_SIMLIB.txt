@@ -1,0 +1,12 @@
+
+    DOCUMENTATION:
+    PURPOSE:  BBH SNANA simulation
+    INTENT:   Nominal
+    USAGE_KEY:  SIMLIB_FILE
+    USAGE_CODE: snlc_sim.exe
+    VALIDATE_SCIENCE: included in JLA & Pantheon cosmology analyses (maybe)
+    VERSIONS:
+    - DATE:  2012-03-12
+      AUTHORS: R. Kessler (and me?)
+DOCUMENTATION_END:
+    

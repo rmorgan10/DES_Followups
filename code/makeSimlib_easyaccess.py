@@ -188,7 +188,7 @@ def point_within_quad(pointx, pointy, x1, y1, x2, y2, x3, y3, x4, y4):
 def main():
     cmd = " ".join(sys.argv)
     options, args = parser.parse_args(sys.argv[1:])
-    conn = ea.connect(section='destest')
+    conn = ea.connect(section='dessci')
     cursor = conn.cursor() # create a cursor object to handle db
     
     fname = options.outfile

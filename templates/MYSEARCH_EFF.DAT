@@ -1,5 +1,14 @@
+DOCUMENTATION:
+    PURPOSE:  BBH SNANA simulation
+    INTENT:   Nominal
+    USAGE_KEY:  SIMLIB_FILE
+    USAGE_CODE: snlc_sim.exe
+    VALIDATE_SCIENCE: included in JLA & Pantheon cosmology analyses (maybe)
+    VERSIONS:
+    - DATE:  2012-03-12
+      AUTHORS: R.
 PHOTFLAG_DETECT: 4096  # set this PHOTFLAG bit for each detection
-
+DOCUMENTATION_END:
 MAPNAME_DETECT: EFFDETECT_SNR-g
 FILTER: g
 SNR:	0.00	0.0005

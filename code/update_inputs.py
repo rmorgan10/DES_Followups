@@ -26,11 +26,16 @@ simlib_info = simlib_file.readlines()
 simlib_file.close()
 eff_area = float([x for x in simlib_info[-5:] if x[0:15] == 'EFFECTIVE_AREA:'][0].split(' ')[1][0:-1])
 
-#files needing to be updated:
-# - AGN_SIMGEN.INPUT
-# - SIMGEN_DES_KN.input
-# - SIMGEN_DES_NONIA.input
-# - SIMGEN_DES_SALT2.input
+docana_lines = ['DOCUMENTATION:',
+'    PURPOSE:  BBH SNANA simulation',
+'    INTENT:   Nominal',
+ '   USAGE_KEY:  SIMLIB_FILE',
+'    USAGE_CODE: snlc_sim.exe',
+'    VALIDATE_SCIENCE: included in JLA & Pantheon cosmology analyses (maybe)',
+'    VERSIONS:',
+'    - DATE:  2012-03-12',
+'    AUTHORS: R. Kessler (and me?)',
+'DOCUMENTATION_END:', '']
 
 file_prefix = '../events/%s/sim_gen/' %event_name
 file_list = ['AGN_SIMGEN.INPUT', 'SIMGEN_DES_KN.input', 'SIMGEN_DES_NONIA.input', 'SIMGEN_DES_SALT2.input',
@@ -101,7 +106,7 @@ for filename, obj in zip(file_list, objs):
                     "# Don't need to change anything after this point  (I sure hope)",
                     '#--------------------------------------------------------------------']
 
-    input_lines = [x + '\n' for x in header + buffer_lines]
+    input_lines = [x + '\n' for x in docana_lines + header + buffer_lines]
 
     #open template file
     template_file = open(file_prefix + filename, 'r')
@@ -109,7 +114,7 @@ for filename, obj in zip(file_list, objs):
     template_file.close()
     
     #construct output file
-    output_lines = input_lines + template_lines[len(input_lines) + 1:]
+    output_lines = input_lines + template_lines[len(input_lines) + 1 - len(docana_lines):]
 
     #write to output file
     if obj.find('-tr') == -1:

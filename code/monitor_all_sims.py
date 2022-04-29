@@ -327,7 +327,8 @@ while running:
                 cc_error = True
 
         ####last_line must pick the final 'Finished generating' line
-        last_lines = cc_info[-70:]
+        #last_lines = cc_info[-70:]
+        last_lines = cc_info[-100:]
         last_lines.reverse()
         found_last_line = False
         for line in last_lines:

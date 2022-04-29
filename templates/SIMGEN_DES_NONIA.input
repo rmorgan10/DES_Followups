@@ -22,19 +22,20 @@ NGEN_SEASON: 10
 SIMLIB_FILE:  sim_gen/SIMLIB.txt
 
 #FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT
-HOSTLIB_MSKOPT:  256
+#HOSTLIB_MSKOPT:  256
 
 # 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
 
 GENRANGE_TREST:  -100. 100.
 
 GENSOURCE:   RANDOM   
-GENMODEL:    NON1A
+#GENMODEL:    NON1A
+GENMODEL: /data/des41.b/data/SNDATA_ROOT/models/NON1ASED/NON1ASED.K10_CC
 
 GENFILTERS:  griz                 # RM-change to gri from griz to match obs?
 INPUT_FILE_INCLUDE:  sim_gen/SIMGEN_INCLUDE_NON1A.INPUT
 
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz #DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits #DES/kcor_DES_grizY.fits
 
 # selection criteria for generation
 GENSIGMA_SEARCH_PEAKMJD:  0.1     # sigma-smearing for  SEARCH_PEAKMJD (days)

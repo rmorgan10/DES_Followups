@@ -19,7 +19,7 @@ NGEN_LC:  10
 SIMLIB_FILE:  sim_gen/SIMLIB.txt
 
 #FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT
-HOSTLIB_MSKOPT:  256
+#HOSTLIB_MSKOPT:  256
 
 # 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border
 
@@ -49,7 +49,7 @@ SIMSED_GRIDONLY:  Cart_INDEX
 GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 
 GENFILTERS:  griz
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz  # DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits  # DES/kcor_DES_grizY.fits
 
 RANSEED: 12945       # random number seed
 

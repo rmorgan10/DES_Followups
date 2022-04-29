@@ -19,7 +19,7 @@ NGEN_LC:  10
 SIMLIB_FILE:  sim_gen/SIMLIB.txt
 
 #FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT
-HOSTLIB_MSKOPT:  256 
+#HOSTLIB_MSKOPT:  256 
 
 # 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
 
@@ -31,7 +31,7 @@ GENMODEL:    SALT2.Guy10_UV2IR
 GENMAG_SMEAR_MODELNAME:  G10
 
 GENFILTERS:  griz                 # RM-set to gri from griz to match obs?
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz #DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits #DES/kcor_DES_grizY.fits
 
 GENSIGMA_SEARCH_PEAKMJD:  0.1     # sigma-smearing for  SEARCH_PEAKMJD (days)
 
@@ -74,7 +74,7 @@ SIMGEN_DUMPALL:  37
 # ======
 
 # Set a fixed tolerance for hostgal redshift SN redshift difference
-HOSTLIB_DZTOL: 0.01 0 0
+#HOSTLIB_DZTOL: 0.01 0 0
 
 #FORMAT_MASK:  32  # 2=terse  8=BLIND  16=CIDRAN; 32=FITS
 

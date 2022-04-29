@@ -338,6 +338,10 @@ class CutList:
                 return True
             else:
                 return False
+    
+    def gw200224_lim_mag(self, lc, md):
+        
+        return lc['MAG'].values.min() < 22.6
 
     #0510 candidates
     def gw0510_vetting(self, lc, md):

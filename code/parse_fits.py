@@ -29,6 +29,11 @@ process_log_file = '../events/%s/logs/parse_%s.log' %(event_name, transient_clas
 
 if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix)):
     os.system('mkdir ../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_dir_prefix))
+
+    # NS 14.01.22
+    if os.path.exists(head_file + '.gz'):
+        os.system('gunzip ' + head_file + '.gz')
+        os.system('gunzip ' + phot_file + '.gz')
     
     #check if sim tar files need to be unpacked
     if not os.path.exists(head_file):
@@ -36,6 +41,7 @@ if not os.path.exists('../events/%s/sims_and_data/%s_PYTHON' %(event_name, fits_
         os.chdir('../events/%s/sims_and_data' %event_name)
         os.system('pwd')
         os.system('ls')
+        #sys.exit()
         os.system('rm -rf %s_FITS' %fits_dir_prefix)
         os.system('tar -xzf %s.tar.gz' %fits_dir_prefix)
         os.chdir('../../../code')

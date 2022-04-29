@@ -22,11 +22,11 @@ SIMLIB_FILE:  sim_gen/SIMLIB.txt
 
 GENMODEL: $PLASTICC_MODELS/SIMSED.TDE-MOSFIT
 #GENAV_WV07:   1      # WV07, Eq. 2
-GENTAU_AV:    0.4     # expon component only, no Gauss core
-GENRANGE_AV:  0 3     # CCM89 AV-extinctionrange
-GENPEAK_RV: 1.6
-GENSIGMA_RV: 0.1 0.9
-GENRANGE_RV: 1.3 4.5
+#GENTAU_AV:    0.4     # expon component only, no Gauss core
+#GENRANGE_AV:  0 3     # CCM89 AV-extinctionrange
+#GENPEAK_RV: 1.6
+#GENSIGMA_RV: 0.1 0.9
+#GENRANGE_RV: 1.3 4.5
 
 
 SIMSED_USE_BINARY:   0
@@ -42,7 +42,7 @@ SIMSED_USE_BINARY:   0
 #DNDZ: EPM  1.0E-6  # acronym to hide in code
 #DNDZ: EPM 0.8E-7  # from van Velson 2017, Sec 5.2
 DNDZ: TDE  1.0E-6 # eventual acronym after PLASTICC
-GENRANGE_REDSHIFT:  0.015   0.8
+GENRANGE_REDSHIFT:  0.015  0.3  # 0.8
 
 # ==============================
 # SIMSED GRID PARAMETERS
@@ -65,7 +65,7 @@ GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 GENSOURCE:   RANDOM   
 
 GENFILTERS:  griz
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits
 
 RANSEED: 12945       # random number seed
 
@@ -79,7 +79,7 @@ SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
 SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
 
 APPLY_CUTWIN_OPT: 1   #PSNID dies if you turn this off, fun fact
-#CUTWIN_SNRMAX:   3 griz 1 -20. 60.  # require 1 of griz with S/N > 3
+CUTWIN_SNRMAX:   3.5 griz 1 -20. 60.  # require 1 of griz with S/N > 2
 #CUTWIN_NEPOCH:    2  +2  #Require    two epochs with    SNR > 2
 CUTWIN_NOBSDIF: 2, 9999
 

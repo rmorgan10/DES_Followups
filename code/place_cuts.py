@@ -39,7 +39,6 @@ if len(undefined_cuts) != 0:
     print("Note: If you have a `cuts.py` file in your event directory, the program will find that first")
     sys.exit()
 
-
 #load light curve dictionary
 data_dict = np.load('../events/%s/sims_and_data/%s_PYTHON/%s.npy' %(event_name, fits_dir_prefix, fits_dir_prefix)).item()
 
@@ -74,6 +73,6 @@ for snid, info in data_dict.iteritems():
 if not os.path.exists('../events/%s/cut_results' %event_name):
     os.system('mkdir ../events/%s/cut_results' %event_name)
 
-np.save('../events/%s/cut_results/%s_cut_results.npy' %(event_name, fits_dir_prefix), cut_results)
+np.save('../events/%s/cut_results/%s_cut_results.npy' %(event_name, fits_dir_prefix), cut_results, allow_pickle=True)
 
 os.system('touch ../events/%s/logs/cut_%s.DONE' %(event_name, transient_class))

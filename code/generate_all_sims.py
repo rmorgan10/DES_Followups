@@ -27,9 +27,6 @@ except:
 
 #check for and nuke existing sims directory
 sim_path = '../events/%s/sim_gen' % event_name
-#if os.path.exists(sim_path):
-#    os.system('rm -r %s' %sim_path)
-#os.system('mkdir %s' %sim_path)
 if not os.path.exists(sim_path):
     os.system('mkdir %s' %sim_path)
 
@@ -84,6 +81,42 @@ if not os.path.exists('../events/%s/sim_gen/SIMLIB.txt' %event_name):
         new_simlib_file.close()
         counter += 1
     os.system('mv ../events/%s/sim_gen/SIMLIB_%i.txt ../events/%s/sim_gen/SIMLIB.txt' %(event_name, counter, event_name))
+    nfs_simlib = open('../events/%s/sim_gen/nfs_SIMLIB.txt' %event_name,'w')
+    DOCANA_TEXT = '''DOCUMENTATION:
+    PURPOSE: DES 5-year cadence for SNANA simulation
+    REF:
+    - AUTHOR: Kessler et al. 2015 (DIFFIMG pipeline)
+      ADS:    https://ui.adsabs.harvard.edu/abs/2015AJ....150..172K
+    INTENT:   Nominal
+    USAGE_KEY:  SIMLIB_FILE
+    USAGE_CODE: snlc_sim.exe
+    VALIDATE_SCIENCE:
+    - Y1 only, Figs 11,12,13 (arxiv.org/abs/1507.05137)
+    - DES-SN3YR cosmology results (arxiv.org/abs/1811.02374)
+    - SNANA sim for DES bias corrections (arxiv.org/abs/1811.02379)
+    - CC and host sims (arxiv.org/abs/2012.07180)
+    NOTES:
+    - based on Difference Imaging
+    VERSIONS:
+    - DATE:  2020-02
+      AUTHORS: R. Kessler
+DOCUMENTATION_END:
+
+# =======================================
+
+'''
+    nfs_simlib.write(DOCANA_TEXT)
+    
+    real_simlib = open('../events/%s/sim_gen/SIMLIB.txt' %event_name,'r')
+    nfs_lines = real_simlib.readlines()
+    real_simlib.close()
+    for nfs_line in nfs_lines:
+        nfs_simlib.write(nfs_line)
+
+    nfs_simlib.close()
+    
+    os.system('mv ../events/%s/sim_gen/SIMLIB.txt ../events/%s/sim_gen/SIMLIB_OLD.txt' %(event_name, event_name))
+    os.system('mv ../events/%s/sim_gen/nfs_SIMLIB.txt ../events/%s/sim_gen/SIMLIB.txt' %(event_name, event_name))
 else:
     print("Existing SIMLIB found, skipping simlib generation")
 

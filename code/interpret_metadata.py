@@ -49,6 +49,8 @@ if not os.path.exists('../events/%s/sims_and_data/LightCurvesReal' %event_name):
 sys.stdout.write("\rCopying dat files:  Done!               \n")
 sys.stdout.flush()
 
+#os.system("python removeNITE.py %s" %(event_name))
+
 
 if not os.path.exists('../events/%s/exptable.txt' %event_name) and not os.path.exists('../events/%s/sim_gen/SIMLIB.txt' %event_name):
     
