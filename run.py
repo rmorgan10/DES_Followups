@@ -34,39 +34,41 @@ print(header)
 print('\n')
 
 #Determine mode of operation based on presence of event_name
-if len(sys.argv) == 1:
+event_name = sys.argv[1]
+if not os.path.exists('../events/%s' %event_name):
     mode = 'interactive'
 else:
-    event_name = sys.argv[1]
     mode = 'normal'
 
-    #parse for bosst, num_kn, and num_agn
-    parser = OptionParser(__doc__)
-    parser.add_option('--boost', default='', help="Number of objects")
-    parser.add_option('--clean_up', default="None", help="Things to be cleaned up")
-    parser.add_option('--sim_include', default="KN,Ia,CC,AGN", help="Transient classes to simulate")
-    parser.add_option('--force_conditions', default='real', help="PSF,SKYMAG,DELTAT")
-    parser.add_option('--clobber', action='store_true')
-    parser.add_option('--nobs_force', default='2', help='Number of obs to require in libids')
-    parser.add_option('--run_psnid', action='store_true')
-    parser.add_option('--signal', default='None', help='Object class to use as signal in ML')
-    parser.add_option('--background', default='None', help='Object class list (comma-separated) to use as background in ML')
-    parser.add_option('--classify_cutoff', default=100, help='Final cut to apply before classification')
-    options, args = parser.parse_args(sys.argv[2:])
-    boost = options.boost
-    clean_up = str(options.clean_up)
-    sim_include = str(options.sim_include).strip().split(',')
-    forced_conditions = str(options.force_conditions)
-    clobber = options.clobber
-    nobs_force = options.nobs_force
-    run_psnid = options.run_psnid
-    classify_cutoff = int(options.classify_cutoff)
-    signal = options.signal
-    background = options.background
+#parse for bosst, num_kn, and num_agn
+parser = OptionParser(__doc__)
+parser.add_option('--boost', default='', help="Number of objects")
+parser.add_option('--clean_up', default="None", help="Things to be cleaned up")
+parser.add_option('--sim_include', default="KN,Ia,CC,AGN", help="Transient classes to simulate")
+parser.add_option('--force_conditions', default='real', help="PSF,SKYMAG,DELTAT")
+parser.add_option('--make_cuts', action='store_true', help='auto-generate detectability cuts from DB')
+parser.add_option('--clobber', action='store_true')
+parser.add_option('--nobs_force', default='2', help='Number of obs to require in libids')
+parser.add_option('--run_psnid', action='store_true')
+parser.add_option('--signal', default='None', help='Object class to use as signal in ML')
+parser.add_option('--background', default='None', help='Object class list (comma-separated) to use as background in ML')
+parser.add_option('--classify_cutoff', default=100, help='Final cut to apply before classification')
+options, args = parser.parse_args(sys.argv[2:])
+boost = options.boost
+clean_up = str(options.clean_up)
+sim_include = str(options.sim_include).strip().split(',')
+forced_conditions = str(options.force_conditions)
+make_cuts = options.make_cuts
+clobber = options.clobber
+nobs_force = options.nobs_force
+run_psnid = options.run_psnid
+classify_cutoff = int(options.classify_cutoff)
+signal = options.signal
+background = options.background
 
-    # format boost if a single number is specified for all classes
-    if len(boost.split(',')) == 1:
-        boost = ','.join([boost] * len(sim_include))
+# format boost if a single number is specified for all classes
+if len(boost.split(',')) == 1:
+    boost = ','.join([boost] * len(sim_include))
 
 # Command-line argument error checking
 allowed_sims = ['KN', 'Ia', 'CC', 'AGN', 'CaRT', 'ILOT', 'Mdwarf', 'SN91bg', 'Iax', 'PIa', 'SLSN', 'TDE', 'BBH']
@@ -106,46 +108,55 @@ if 'Ia-tr' in sim_include:
     
 
 if mode == 'interactive':
-    print("Running in interactive mode.\n")
+    print("Event %s not found. Do you want to run in interactive mode?\n" %event_name)
+    answer = raw_input('(y/n)')
+    while answer.lower() not in ['y', 'n']:
+        answer = raw_input("Please enter y or n: ")
+
+    if answer == 'n':
+        print("Exiting...")
+        sys.exit()
+
     #prompt the user for all needed values and create necessary files
-    
-    print("This is not implemented yet. You must make all input files yourself")
-    sys.exit()
+    err_code = os.system('python interactive_setup.py %s' %event_name)
+    if err_code:
+        sys.exit(err_code)
 
-    #set mode to normal so that the main codes will execute
-    print("Interactive mode completed. Switching to normal mode.\n")
-    mode = 'normal'
+    #generate the cuts for the user.
+    make_cuts = True
 
+print("Running in normal mode.\n")
 
-if mode == 'normal':
-    print("Running in normal mode.\n")
+#clobber all existing runs if desired
+if clobber:
+    clean_up = 'everything'
 
-    #clobber all existing runs if desired
-    if clobber:
-        clean_up = 'everything'
+#clean up if desired
+if clean_up != "None":
+    os.system("python clean_up.py %s %s" %(event_name, clean_up))
 
-    #clean up if desired
-    if clean_up != "None":
-        os.system("python clean_up.py %s %s" %(event_name, clean_up))
-    
-    #interpret metadata
-    os.system('python interpret_metadata.py %s --boost %s --sim_include %s' %(event_name, boost, ','.join(sim_include)))
+#interpret metadata
+os.system('python interpret_metadata.py %s --boost %s --sim_include %s' %(event_name, boost, ','.join(sim_include)))
 
-    #generate sims
-    os.system('python generate_all_sims.py %s %s %s %s' %(event_name, forced_conditions, nobs_force, ' '.join(sim_include)))
+#optionally set up detectability cuts
+if make_cuts:
+    os.system("python setup_cuts.py %s" % event_name)
 
-    #apply cuts to sims and data
-    os.system('python run_all_cuts.py %s both %s' %(event_name, ' '.join(sim_include)))
+#generate sims
+os.system('python generate_all_sims.py %s %s %s %s' %(event_name, forced_conditions, nobs_force, ' '.join(sim_include)))
 
-    #analyze results
-    os.system('python analyze_results.py %s %s' %(event_name, ','.join(sim_include)))
+#apply cuts to sims and data
+os.system('python run_all_cuts.py %s both %s' %(event_name, ' '.join(sim_include)))
 
-    #write out a report with uncertainties
-    os.system('python write_report.py %s %s terse' %(event_name, ','.join(sim_include)))
+#analyze results
+os.system('python analyze_results.py %s %s' %(event_name, ','.join(sim_include)))
 
-    #classify with psnid if desired
-    if run_psnid:
-        os.chdir('../classifications/PSNID')
-        os.system('python run_PSNID.py %s %i %s %s' %(event_name, classify_cutoff, signal, background))
-        os.system('python featurize.py %s %s %s' %(event_name, signal, background))
-        os.system('python classify.py %s %s %s' %(event_name, signal, background))
+#write out a report with uncertainties
+os.system('python write_report.py %s %s terse' %(event_name, ','.join(sim_include)))
+
+#classify with psnid if desired
+if run_psnid:
+    os.chdir('../classifications/PSNID')
+    os.system('python run_PSNID.py %s %i %s %s' %(event_name, classify_cutoff, signal, background))
+    os.system('python featurize.py %s %s %s' %(event_name, signal, background))
+    os.system('python classify.py %s %s %s' %(event_name, signal, background))
