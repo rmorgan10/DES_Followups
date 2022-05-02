@@ -114,7 +114,20 @@ for filename, obj in zip(file_list, objs):
     template_file.close()
     
     #construct output file
-    output_lines = input_lines + template_lines[len(input_lines) + 1 - len(docana_lines):]
+    output_lines_ = input_lines + template_lines[len(input_lines) + 1 - len(docana_lines):]
+
+    # final check to remove any duplicated lines (keep the first instance)
+    output_lines = []
+    output_keys = []
+    for line in output_lines_:
+        line_info = line.split(':')
+        if len(line_info) == 1:
+            output_lines.append(line)
+        else:
+            key = line_info[0]
+            if key not in output_keys:
+                output_lines.append(line)
+                output_keys.append(key)
 
     #write to output file
     if obj.find('-tr') == -1:
